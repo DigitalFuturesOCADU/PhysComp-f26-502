@@ -28,6 +28,9 @@
 - [Arduino 101 - Getting Started](https://youtu.be/ZrV5b2IBK2A?si=wyUqIB4jszqndFyG)
 - [Arduino 101 - Reading Sensors](https://youtu.be/5PWXryJvnrA?si=qD4dNKlLfvzE5kbZ)
 
+## Arduino Libraries
+[The Arduino Library](https://thearduinolibrary.com/)
+
 ## Electronics Fundamentals
 
 ### Sparkfun

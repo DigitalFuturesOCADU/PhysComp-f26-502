@@ -29,7 +29,7 @@ Create a custom controller for the classic arcade game [Pong](https://en.wikiped
 
 | Date | Topic |
 |------|-------|
-| January 9 | [Class 01 - Introduction & Setup](classes/class01-Jan9.md) |
+| January 9 | [Class 01 - Introduction & Setup] |
 | January 16 | [Class 02 - Workshop 1](classes/class02-Jan16.md) |
 | January 23 | [Class 03 - Workshop 2](classes/class03-Jan23.md) |
 | January 30 | [Class 04 - Project Exhibition](classes/class04-Jan30.md) |
@@ -40,7 +40,7 @@ Create a custom controller for the classic arcade game [Pong](https://en.wikiped
 
 | Class | Slides |
 |-------|--------|
-| Class 01 | *Link to slides* |
+| Class 01 | [Intro](https://ocaduniversity-my.sharepoint.com/:p:/g/personal/npuckett_ocadu_ca/IQDYqOr4kJzvSq6QeORfYk76AYdi21MG46QeiC9140UFt7o?e=ZL2nRH) |
 | Class 02 | *Link to slides* |
 | Class 03 | *Link to slides* |
 | Class 04 | *Link to slides* |
