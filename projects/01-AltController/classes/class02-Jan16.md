@@ -8,7 +8,7 @@ Today's class takes introduces the basics of working with Arduino hardware and s
 
 We will cover:
 - Setting up the Arduino IDE : [Get Started](../GetStarted.md)
-- Basic Arduino programming concepts
+- Basic Arduino programming concepts [Core Methods & Vocabulary](../CoreMethodsVocabulary.md)
 - - Reading digital data
 - - Interpreting it using conditional statements
 - - Writing to the Console Monitor
