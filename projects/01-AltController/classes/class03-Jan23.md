@@ -560,29 +560,47 @@ The [DFPongController](https://github.com/DigitalFuturesOCADU/df-pong-controller
 
 ### Setup Checklist
 
-#### Step 1: Install the Library
+#### Step 1: Verify You Have a Supported Browser
+
+The DF Pong game uses the [Web Bluetooth API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Bluetooth_API), which has limited browser support.
+
+| Browser | Desktop | Mobile |
+|---------|---------|--------|
+| Chrome | ✅ Supported | ✅ Android only |
+| Edge | ✅ Supported | ✅ Android only |
+| Opera | ✅ Supported | ✅ Android only |
+| Safari | ❌ Not supported | ❌ Not supported |
+| Firefox | ❌ Not supported | ❌ Not supported |
+| iOS (all browsers) | ❌ Not supported | ❌ Not supported |
+
+**Important Notes:**
+- **iOS devices** (iPhone/iPad) do not support Web Bluetooth in any browser, including Chrome
+- **Use Chrome on desktop** for the most reliable experience
+- On Android, use Chrome, Edge, or Opera
+
+#### Step 2: Install the Library
 - [ ] Open Arduino IDE
 - [ ] Go to **Sketch → Include Library → Manage Libraries...**
 - [ ] Search for **"DFPongController"**
-- [ ] Click **Install**
+- [ ] Click **Install With Dependencies**
 
-#### Step 2: Load the Example Sketch
-- [ ] Go to **File → Examples → DFPongController → SimpleDigital**
+#### Step 3: Load the Example Sketch
+- [ ] Go to **File → Examples → DFPongController → 01_SimpleDigital**
 
-#### Step 3: Configure Your Controller Number
-- [ ] Find the line: `controller.setControllerNumber(1);`
+#### Step 4: Configure Your Controller Number
+- [ ] Find the line: `int controllerNumber = 1;`
 - [ ] Change `1` to your assigned number (see Controller Number Assignments table)
 
-#### Step 4: Check Pin Wiring
+#### Step 5: Check Pin Wiring
 - [ ] Default pins are **2** (UP) and **3** (DOWN)
 - [ ] Adjust code OR wiring to match your setup
 
-#### Step 5: Upload the Code
+#### Step 6: Upload the Code
 - [ ] Select your board: **Tools → Board → Arduino UNO R4 WiFi**
 - [ ] Select your port: **Tools → Port → (your Arduino)**
 - [ ] Click **Upload** (→ arrow button)
 
-#### Step 6: Verify LED Status
+#### Step 7: Verify LED Status
 
 | LED Pattern | Meaning |
 |-------------|---------|
@@ -590,7 +608,7 @@ The [DFPongController](https://github.com/DigitalFuturesOCADU/df-pong-controller
 | Fast blink (100ms) | Connected, handshaking |
 | Solid ON | Ready to play! |
 
-#### Step 7: Connect to the Game
+#### Step 8: Connect to the Game
 - [ ] Open the game: https://digitalfuturesocadu.github.io/df-pong/game/physComp26-502/
 - [ ] Select your controller number from the dropdown
 - [ ] Click **Connect**
@@ -691,7 +709,7 @@ Get your first switches controlling the Pong Game: https://digitalfuturesocadu.g
 
 ### Loading the Example Sketch
 
-1. Open File > Examples > DFPongController > SimpleDigital
+1. Open File > Examples > DFPongController > 01_SimpleDigital
 2. Adjust either your wiring or the pin numbers in the code to match your setup
    - The example code uses pins 2 and 3 for the two directions
 3. Change your controller number to match your assigned number (see table below)
