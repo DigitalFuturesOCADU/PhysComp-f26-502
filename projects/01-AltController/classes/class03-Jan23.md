@@ -623,6 +623,8 @@ The DF Pong game uses the [Web Bluetooth API](https://developer.mozilla.org/en-U
 int upButtonPin = 2;
 int downButtonPin = 3;
 
+int controllerNumber = 1;  // <-- CHANGE THIS TO YOUR ASSIGNED NUMBER!
+
 DFPongController controller;
 
 void setup() 
@@ -630,9 +632,7 @@ void setup()
     pinMode(upButtonPin, INPUT_PULLUP);
     pinMode(downButtonPin, INPUT_PULLUP);
     
-    // IMPORTANT: Set YOUR unique controller number (1-242)
-    controller.setControllerNumber(1);  // <-- CHANGE THIS!
-    
+    controller.setControllerNumber(controllerNumber);
     controller.setStatusLED(LED_BUILTIN);
     controller.begin();
 }
