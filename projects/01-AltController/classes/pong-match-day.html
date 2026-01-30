@@ -290,6 +290,21 @@
             }
         }
 
+        function clearAllSelections() {
+            document.querySelectorAll('select').forEach(select => {
+                select.value = '';
+            });
+            localStorage.removeItem('pongMatchSelections');
+        }
+
+        // Listen for 'C' key to clear all entries
+        document.addEventListener('keydown', function(event) {
+            // Only trigger if not focused on a form element
+            if (event.key.toLowerCase() === 'c' && document.activeElement.tagName !== 'SELECT') {
+                clearAllSelections();
+            }
+        });
+
         initializeCourts();
     </script>
 </body>
