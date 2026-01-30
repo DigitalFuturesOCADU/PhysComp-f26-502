@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pong Match Day</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #000;
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        header {
+            text-align: center;
+            padding: 2rem;
+            border-bottom: 2px solid #333;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+
+        header p {
+            color: #888;
+            margin-top: 0.5rem;
+        }
+
+        .container {
+            display: flex;
+            min-height: calc(100vh - 120px);
+        }
+
+        .court {
+            flex: 1;
+            padding: 2rem;
+        }
+
+        .court:first-child {
+            border-right: 2px dashed #444;
+        }
+
+        .court h2 {
+            text-align: center;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #333;
+            letter-spacing: 0.1em;
+        }
+
+        .matches {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .match {
+            background-color: #111;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .match-number {
+            background-color: #222;
+            color: #888;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .players {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .player-select {
+            flex: 1;
+        }
+
+        .player-select label {
+            display: block;
+            font-size: 0.75rem;
+            color: #666;
+            margin-bottom: 0.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .player-select select {
+            width: 100%;
+            padding: 0.5rem;
+            background-color: #1a1a1a;
+            color: #fff;
+            border: 1px solid #333;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .player-select select:hover {
+            border-color: #555;
+        }
+
+        .player-select select:focus {
+            outline: none;
+            border-color: #fff;
+        }
+
+        .vs {
+            color: #444;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .court:first-child {
+                border-right: none;
+                border-bottom: 2px dashed #444;
+            }
+
+            .players {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .vs {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Pong Match Day</h1>
+        <p>Sign up for 1 match on each court</p>
+    </header>
+
+    <div class="container">
+        <div class="court" id="court1">
+            <h2>Court 1</h2>
+            <div class="matches" id="matches-court1"></div>
+        </div>
+
+        <div class="court" id="court2">
+            <h2>Court 2</h2>
+            <div class="matches" id="matches-court2"></div>
+        </div>
+    </div>
+
+    <script>
+        const players = [
+            { number: 1, name: "Nick" },
+            { number: 2, name: "Marie-Josepha" },
+            { number: 3, name: "Pj" },
+            { number: 4, name: "Lisa" },
+            { number: 5, name: "Maddox" },
+            { number: 6, name: "Jena" },
+            { number: 7, name: "Casimir" },
+            { number: 8, name: "Jackson" },
+            { number: 9, name: "Nico" },
+            { number: 10, name: "Estelle" },
+            { number: 11, name: "Cathy" },
+            { number: 12, name: "Ashna" },
+            { number: 13, name: "Rea" },
+            { number: 14, name: "Chante" },
+            { number: 15, name: "Vivian" },
+            { number: 16, name: "Nayha" },
+            { number: 17, name: "Jhonna" },
+            { number: 18, name: "Aisha" },
+            { number: 19, name: "Tiffany" },
+            { number: 20, name: "Emma" },
+            { number: 21, name: "Nia" },
+            { number: 22, name: "Saif" },
+            { number: 23, name: "Malini" },
+            { number: 24, name: "Emily" },
+            { number: 25, name: "Alicia" },
+            { number: 26, name: "Brooklyn" },
+            { number: 27, name: "Quinn" },
+            { number: 28, name: "Vedanti" },
+            { number: 29, name: "Shaine" },
+            { number: 30, name: "Natalie" },
+            { number: 31, name: "Cenker" },
+            { number: 32, name: "Aubrie" },
+            { number: 33, name: "Saarukan" },
+            { number: 34, name: "Hayah" },
+            { number: 35, name: "Elaine" },
+            { number: 36, name: "Rhaven" },
+            { number: 37, name: "Cedric" }
+        ];
+
+        function createPlayerOptions() {
+            let options = '<option value="">-- Select Player --</option>';
+            players.forEach(player => {
+                options += `<option value="${player.number}">${player.number}. ${player.name}</option>`;
+            });
+            return options;
+        }
+
+        function createMatch(courtId, matchNumber) {
+            const playerOptions = createPlayerOptions();
+            return `
+                <div class="match">
+                    <div class="match-number">${matchNumber}</div>
+                    <div class="players">
+                        <div class="player-select">
+                            <label>Player 1</label>
+                            <select id="court${courtId}-match${matchNumber}-p1">
+                                ${playerOptions}
+                            </select>
+                        </div>
+                        <span class="vs">VS</span>
+                        <div class="player-select">
+                            <label>Player 2</label>
+                            <select id="court${courtId}-match${matchNumber}-p2">
+                                ${playerOptions}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function initializeCourts() {
+            const court1Container = document.getElementById('matches-court1');
+            const court2Container = document.getElementById('matches-court2');
+
+            let court1HTML = '';
+            let court2HTML = '';
+
+            for (let i = 1; i <= 9; i++) {
+                court1HTML += createMatch(1, i);
+                court2HTML += createMatch(2, i);
+            }
+
+            court1Container.innerHTML = court1HTML;
+            court2Container.innerHTML = court2HTML;
+
+            // Load saved selections from localStorage
+            loadSelections();
+
+            // Add change listeners to all dropdowns
+            document.querySelectorAll('select').forEach(select => {
+                select.addEventListener('change', saveSelections);
+            });
+        }
+
+        function saveSelections() {
+            const selections = {};
+            document.querySelectorAll('select').forEach(select => {
+                selections[select.id] = select.value;
+            });
+            localStorage.setItem('pongMatchSelections', JSON.stringify(selections));
+        }
+
+        function loadSelections() {
+            const saved = localStorage.getItem('pongMatchSelections');
+            if (saved) {
+                const selections = JSON.parse(saved);
+                Object.keys(selections).forEach(id => {
+                    const select = document.getElementById(id);
+                    if (select && selections[id]) {
+                        select.value = selections[id];
+                    }
+                });
+            }
+        }
+
+        initializeCourts();
+    </script>
+</body>
+</html>
