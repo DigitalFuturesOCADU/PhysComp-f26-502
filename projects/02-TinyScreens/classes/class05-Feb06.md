@@ -4,13 +4,18 @@
 
 ## Overview
 
-Today's class introduces the Tiny Screens project and the fundamentals of working with the LED Matrix on the Arduino UNO R4 WiFi using the TinyFilmFestival library.
+This is the first workshop for the [Tiny Screens](../TinyScreens.md) project. Over the coming weeks you will build an interactive object driven by sensor input and the Arduino's built-in 12×8 LED matrix. Before you can make it interactive, you need to know how to put things on the screen.
 
-We will cover:
-- The LED Matrix layout and coordinate system
-- Installing the TinyFilmFestival library
-- The 3 drawing methods: Simple LED, Animation Mode, and Canvas Mode
-- Creating animations with the LED Matrix Editor
+Today is focused on **output only** — learning the three ways to draw on the LED matrix using the TinyFilmFestival library. Sensors and interactivity come next class.
+
+### What We'll Cover
+
+1. [Getting Started](#getting-started) — install the library and understand the LED grid
+2. [Key Concepts](#key-concepts) — how drawing methods relate, how timing works, and the `for` loop
+3. [Method 1 — Simple LED](#method-1--simple-led-mode) — turn individual LEDs on and off
+4. [Method 2 — Animation Mode](#method-2--animation-mode) — play pre-made frame animations from the LED Matrix Editor
+5. [Method 3 — Canvas Mode](#method-3--canvas-mode) — draw shapes, text, and motion with code
+6. [Workshop](#putting-it-all-together) — what to do for today's submission
 
 ## Lecture Slides
 
@@ -19,15 +24,22 @@ We will cover:
 ## Resources
 
 - [TinyFilmFestival Documentation](https://digitalfuturesocadu.github.io/TinyFilmFestival/docs/#home)
-- [TinyFilmFestival GitHub](https://github.com/DigitalFuturesOCADU/TinyFilmFestival/)
 - [LED Matrix Editor](https://ledmatrix-editor.arduino.cc/)
-- [LED Matrix Editor Guide](https://digitalfuturesocadu.github.io/TinyFilmFestival/docs/#editor-guide)
-- [Simple LED API](https://digitalfuturesocadu.github.io/TinyFilmFestival/docs/#simple-led-mode)
-- [Animation Mode API](https://digitalfuturesocadu.github.io/TinyFilmFestival/docs/#animation-mode)
-- [Canvas Mode API](https://digitalfuturesocadu.github.io/TinyFilmFestival/docs/#canvas-mode)
 - [Delay vs Millis](../../01-AltController/DelayVsMillis.md)
 
-## LED Matrix Layout
+---
+
+## Getting Started
+
+### Installation
+
+1. Open Arduino IDE → **Sketch → Include Library → Manage Libraries...**
+2. Search for **"TinyFilmFestival"**
+3. Click **Install** → Choose **"Install all"** when prompted for dependencies
+
+> **Important:** Select "Install all" so that ArduinoGraphics and other required libraries are installed automatically.
+
+### LED Matrix Layout
 
 The Arduino UNO R4 WiFi has a built-in 12×8 LED matrix (96 LEDs total). Each LED can be addressed using `(x, y)` coordinates or a linear index (0–95).
 
@@ -55,15 +67,11 @@ y=7 | 84 | 85 | 86 | 87 | 88 | 89 | 90 | 91 | 92 | 93 | 94 | 95 |
 - **(x, y)** — `x` is the column (0–11), `y` is the row (0–7)
 - **Linear index** — the number inside each cell (0–95), used with `ledWrite(index, state)`
 
-## Installation
+---
 
-1. Open Arduino IDE → **Sketch → Include Library → Manage Libraries...**
-2. Search for **"TinyFilmFestival"**
-3. Click **Install** → Choose **"Install all"** when prompted for dependencies
+## Key Concepts
 
-> **Important:** Select "Install all" so that ArduinoGraphics and other required libraries are installed automatically.
-
-## The 3 Drawing Methods
+### The 3 Drawing Methods
 
 The TinyFilmFestival library provides three ways to draw on the LED matrix. Each method works differently and is suited to different use cases.
 
@@ -77,7 +85,7 @@ The TinyFilmFestival library provides three ways to draw on the LED matrix. Each
 
 ---
 
-## Thinking in Frames
+### Thinking in Frames
 
 When working with the LED matrix, it helps to think of your `loop()` function as a **frame renderer**. Every time `loop()` runs, it draws one frame of your animation. The Arduino calls `loop()` over and over as fast as it can — each call is a chance to decide what the screen looks like *right now*.
 
@@ -114,6 +122,46 @@ loop():    ■────────■────────■────
 The key rule: **never use `delay()` in `loop()`**. `delay()` freezes the entire Arduino — it can't read buttons, update animations, or respond to sensors while waiting. `millis()` lets you check time *without stopping*, so your code stays responsive and interactive. See [Delay vs Millis](../../01-AltController/DelayVsMillis.md) for a full explanation.
 
 > The TinyFilmFestival library handles frame timing for you in Animation Mode (`screen.update()`) and provides `oscillateInt()` / `Ease` for Canvas Mode — both use `millis()` under the hood so you don't have to manage timing manually in most cases.
+
+### The `for` Loop
+
+A `for` loop repeats a block of code a set number of times. It's perfect for working with the LED matrix because you often want to do the same thing across a row or column of LEDs without writing out every single call by hand.
+
+For example, to light up the entire top row **without** a `for` loop, you'd write:
+
+```cpp
+ledWrite(0, 0, HIGH);
+ledWrite(1, 0, HIGH);
+ledWrite(2, 0, HIGH);
+ledWrite(3, 0, HIGH);
+ledWrite(4, 0, HIGH);
+ledWrite(5, 0, HIGH);
+ledWrite(6, 0, HIGH);
+ledWrite(7, 0, HIGH);
+ledWrite(8, 0, HIGH);
+ledWrite(9, 0, HIGH);
+ledWrite(10, 0, HIGH);
+ledWrite(11, 0, HIGH);
+```
+
+With a `for` loop, the same result in 4 lines:
+
+```cpp
+for (int x = 0; x < 12; x++)
+{
+    ledWrite(x, 0, HIGH); // x changes each pass: 0, 1, 2, ... 11
+}
+```
+
+The three parts inside the parentheses are:
+
+| Part | What it does | Example |
+|------|-------------|--------|
+| **Start** | Create a counter variable and set its initial value | `int x = 0` |
+| **Condition** | Keep looping as long as this is true | `x < 12` |
+| **Step** | Change the counter after each pass | `x++` (add 1) |
+
+> A `for` loop runs **instantly** — all 12 passes happen within the same frame. It doesn't add any delay. See the [full for loop documentation](https://docs.arduino.cc/language-reference/en/structure/control-structure/for/) for more details.
 
 ---
 
@@ -238,28 +286,6 @@ void loop()
     }
 }
 ```
-
-### The `for` Loop
-
-A `for` loop repeats a block of code a set number of times. It's perfect for working with the LED matrix because you often want to do the same thing across a row or column of LEDs without writing out every single call by hand.
-
-```cpp
-for (int x = 0; x < 12; x++)
-{
-    // This code runs 12 times
-    // x starts at 0 and increases by 1 each time: 0, 1, 2, ... 11
-}
-```
-
-The three parts inside the parentheses are:
-
-| Part | What it does | Example |
-|------|-------------|---------|
-| **Start** | Create a counter variable and set its initial value | `int x = 0` |
-| **Condition** | Keep looping as long as this is true | `x < 12` |
-| **Step** | Change the counter after each pass | `x++` (add 1) |
-
-> A `for` loop runs **instantly** — all 12 passes happen within the same frame. It doesn't add any delay. See the [full for loop documentation](https://docs.arduino.cc/language-reference/en/structure/control-structure/for/) for more details.
 
 ### Example: Draw a Plus Sign
 
