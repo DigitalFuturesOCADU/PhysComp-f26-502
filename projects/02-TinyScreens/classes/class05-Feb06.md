@@ -287,6 +287,8 @@ void loop()
 }
 ```
 
+> **Coding Concept — State Machine:** This example introduces a simple [state machine](../TinyScreens.md#state-machines), one of the key coding concepts for this project. The `clearing` variable acts as a two-state switch: when `false`, the sketch is in the **"lighting"** state (turning on LEDs one at a time); when `true`, it enters the **"clearing"** state (waiting, then resetting). Each state has its own behavior and its own transition condition to move to the other state. In later classes, you'll expand this pattern to manage more complex phases of interaction — like idle, sensing, and responding — each with their own animations and transition logic.
+
 ### Example: Draw a Plus Sign
 
 This example uses two `for` loops — one to draw a vertical line and one to draw a horizontal line. Both run in `setup()` because the pattern is static.
