@@ -531,6 +531,19 @@ void loop()
 }
 ```
 
+The line `x = (x + 1) % 12` does two things:
+- `x + 1` moves the dot one pixel to the right
+- `% 12` is the **modulo** operator — it gives the remainder after dividing by 12. So when `x` reaches 12, `12 % 12 = 0`, and the dot wraps back to the left edge
+
+| x before | x + 1 | % 12 | Result |
+|----------|-------|------|--------|
+| 0 | 1 | 1 | Moves right |
+| 5 | 6 | 6 | Moves right |
+| 10 | 11 | 11 | Moves right |
+| 11 | 12 | **0** | **Wraps to start** |
+
+This is a common pattern for looping a value within a range.
+
 ### Example: Bouncing Dot Using oscillateInt()
 
 `oscillateInt()` smoothly cycles an integer between a min and max value over a period of time. It's a simple way to create animation without manually tracking position or direction.
