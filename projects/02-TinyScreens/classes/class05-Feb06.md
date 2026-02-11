@@ -337,7 +337,7 @@ Animation Mode lets you play pre-made frame-by-frame animations. You create anim
 | `screen.pause()` | Pause the current animation |
 | `screen.resume()` | Resume a paused animation |
 | `screen.stop()` | Stop the animation and clear the display |
-| `screen.setSpeed(multiplier)` | Change playback speed (1.0 = normal, 2.0 = double, 0.5 = half) |
+| `screen.setSpeed(speedMs)` | Milliseconds per frame (smaller = faster). Use a negative value to play backward. Use `0` to pause. |
 
 ### Play Modes
 
@@ -371,7 +371,7 @@ Animation myAnim = animation;  // 'animation' is the variable name inside the .h
 
 // --- Playback Settings (adjust these!) ---
 PlayMode playMode = LOOP;           // LOOP, ONCE, or BOOMERANG
-float playSpeed = 1.0;         // 1.0 = normal, 2.0 = double, 0.5 = half
+float playSpeed = 500;         // Millis per frame. Negative = backwards. 50 = very fast, 500 = slow.
 
 void setup()
 {
@@ -399,7 +399,7 @@ Animation myAnim = animation;
 
 // --- Playback Settings (adjust these!) ---
 PlayMode playMode = BOOMERANG;      // LOOP, ONCE, or BOOMERANG
-float playSpeed = 0.5;         // 0.5 = half speed for slow, smooth playback
+float playSpeed = 500;         // Millis per frame. Negative = backwards. 50 = very fast, 500 = slow.
 
 void setup()
 {
@@ -425,7 +425,7 @@ Animation myAnim = animation;
 
 // --- Playback Settings (adjust these!) ---
 PlayMode playMode = LOOP;           // LOOP, ONCE, or BOOMERANG
-float playSpeed = 1.0;         // 1.0 = normal speed
+float playSpeed = 500;         // Millis per frame. Negative = backwards. 50 = very fast, 500 = slow.
 int startFrame = 2;            // First frame to play (1-indexed)
 int endFrame = 6;              // Last frame to play
 
