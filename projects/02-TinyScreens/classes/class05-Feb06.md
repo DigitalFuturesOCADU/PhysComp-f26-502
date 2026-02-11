@@ -370,7 +370,7 @@ TinyScreen screen;
 Animation myAnim = animation;  // 'animation' is the variable name inside the .h file
 
 // --- Playback Settings (adjust these!) ---
-int playMode = LOOP;           // LOOP, ONCE, or BOOMERANG
+PlayMode playMode = LOOP;           // LOOP, ONCE, or BOOMERANG
 float playSpeed = 1.0;         // 1.0 = normal, 2.0 = double, 0.5 = half
 
 void setup()
@@ -398,7 +398,7 @@ TinyScreen screen;
 Animation myAnim = animation;
 
 // --- Playback Settings (adjust these!) ---
-int playMode = BOOMERANG;      // LOOP, ONCE, or BOOMERANG
+PlayMode playMode = BOOMERANG;      // LOOP, ONCE, or BOOMERANG
 float playSpeed = 0.5;         // 0.5 = half speed for slow, smooth playback
 
 void setup()
@@ -424,7 +424,7 @@ TinyScreen screen;
 Animation myAnim = animation;
 
 // --- Playback Settings (adjust these!) ---
-int playMode = LOOP;           // LOOP, ONCE, or BOOMERANG
+PlayMode playMode = LOOP;           // LOOP, ONCE, or BOOMERANG
 float playSpeed = 1.0;         // 1.0 = normal speed
 int startFrame = 2;            // First frame to play (1-indexed)
 int endFrame = 6;              // Last frame to play
