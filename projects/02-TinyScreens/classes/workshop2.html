@@ -1,0 +1,77 @@
+<!-- Workshop Goal -->
+<div style="margin-bottom: 24px; border: 1px solid #e5e5e5; background: #fff;">
+    <div style="padding: 12px 16px; background: #ffffff; border-bottom: 1px solid #e5e5e5;"><span style="font-size: 18pt; color: #333333;">Workshop Goal</span></div>
+    <div style="padding: 16px;">
+        <p style="margin: 0; font-size: 13pt; line-height: 1.6; color: #333333;">Create your first dynamically controlled visuals on the LED matrix — using sensor input to drive what appears on screen. Focus on building a clear, intentional relationship between the type of input and the output it controls.</p>
+    </div>
+</div>
+
+<!-- Resources -->
+<div style="margin-bottom: 24px; border: 1px solid #e5e5e5; background: #fff;">
+    <div style="padding: 12px 16px; background: #ffffff; border-bottom: 1px solid #e5e5e5;"><span style="font-size: 18pt; color: #333333;">Resources</span></div>
+    <div style="padding: 16px;">
+        <ul style="margin: 0; padding-left: 20px; font-size: 11pt; line-height: 1.8; color: #333333;">
+            <li>Arduino UNO R4 WiFi</li>
+            <li>HC-SR04 distance sensor + 4 plug/header jumper wires</li>
+            <li>Pressure sensor kit — Velostat, copper tape, conductive materials (get from Nick)</li>
+            <li>Alligator clip jumper wires</li>
+            <li>10kΩ resistor (for pressure sensor voltage divider)</li>
+            <li><a href="class06-Feb13.md" target="_blank" rel="noopener">Class 06 Notes — Sensor examples and code patterns</a></li>
+            <li><a href="https://digitalfuturesocadu.github.io/TinyFilmFestival/docs/#home" target="_blank" rel="noopener">TinyFilmFestival Documentation</a></li>
+        </ul>
+    </div>
+</div>
+
+<!-- Activity -->
+<div style="margin-bottom: 24px; border: 1px solid #e5e5e5; background: #fff;">
+    <div style="padding: 12px 16px; background: #ffffff; border-bottom: 1px solid #e5e5e5;"><span style="font-size: 18pt; color: #333333;">Activity</span></div>
+    <div style="padding: 16px;">
+
+        <p style="margin: 0 0 12px 0; font-size: 11pt; line-height: 1.6; color: #333333;">Starting from the examples covered in class, create a simple sensor-driven interaction for <strong>both</strong> the distance sensor and the pressure sensor. You can use the animation method, canvas method, or both — but the visuals should be <strong>different</strong> for each sensor. Simple is fine. A clear connection between input and output is what matters.</p>
+
+        <!-- Part 1 -->
+        <p style="margin: 0 0 8px 0; font-size: 11pt; font-weight: 600; color: #333333;">Part 1 — Distance Sensor Interaction</p>
+        <ol style="margin: 0 0 16px 0; padding-left: 20px; font-size: 11pt; line-height: 1.8; color: #333333;">
+            <li>Wire up the HC-SR04 and run the <a href="class06-Feb13.md#quick-serial-test--distance" target="_blank" rel="noopener">Quick Serial Test</a> to confirm it works.</li>
+            <li>Write a one-sentence description of your interaction: <em>"When I ______, the screen shows ______."</em></li>
+            <li>Write out the steps in plain language (pseudo code) — what does the code need to read, translate, and draw?</li>
+            <li>Build the simplest version of the code that achieves the interaction.</li>
+            <li>Make it better — adjust thresholds, tweak the mapping, refine the visual.</li>
+        </ol>
+
+        <!-- Part 2 -->
+        <p style="margin: 0 0 8px 0; font-size: 11pt; font-weight: 600; color: #333333;">Part 2 — Pressure Sensor Interaction</p>
+        <ol style="margin: 0 0 16px 0; padding-left: 20px; font-size: 11pt; line-height: 1.8; color: #333333;">
+            <li>Build your custom FSR and wire it with the voltage divider circuit. Run the <a href="class06-Feb13.md#quick-serial-test--pressure" target="_blank" rel="noopener">Quick Serial Test</a> to confirm it reads pressure changes.</li>
+            <li>Write a one-sentence description of your interaction: <em>"When I ______, the screen shows ______."</em></li>
+            <li>Write out the steps in plain language (pseudo code) — what does the code need to read, translate, and draw?</li>
+            <li>Build the simplest version of the code that achieves the interaction.</li>
+            <li>Make it better — adjust thresholds, tweak the mapping, refine the visual.</li>
+        </ol>
+
+        <p style="margin: 12px 0 0 0; font-size: 11pt; line-height: 1.6; color: #666666;"><strong>Tip:</strong> Use Serial Monitor to find your real sensor values before writing screen code. Don't guess — measure first, code second.</p>
+
+    </div>
+</div>
+
+<!-- Submission -->
+<div style="margin-bottom: 24px; border: 1px solid #e5e5e5; background: #fff;">
+    <div style="padding: 12px 16px; background: #ffffff; border-bottom: 1px solid #e5e5e5;"><span style="font-size: 18pt; color: #333333;">Submission</span></div>
+    <div style="padding: 16px;">
+        <p style="margin: 0 0 12px 0; font-size: 11pt; line-height: 1.6; color: #333333;">Post the following to the Discussion on Canvas:</p>
+
+        <p style="margin: 0 0 4px 0; font-size: 11pt; font-weight: 600; color: #333333;">Distance Sensor</p>
+        <ul style="margin: 0 0 16px 0; padding-left: 20px; font-size: 11pt; line-height: 1.8; color: #333333;">
+            <li>Your one-sentence interaction description</li>
+            <li>Your pseudo code — written as text or an image of a drawing/diagram</li>
+            <li>An image or short video showing the input (your hand/object) and the sensor in action</li>
+        </ul>
+
+        <p style="margin: 0 0 4px 0; font-size: 11pt; font-weight: 600; color: #333333;">Pressure Sensor</p>
+        <ul style="margin: 0 0 0 0; padding-left: 20px; font-size: 11pt; line-height: 1.8; color: #333333;">
+            <li>Your one-sentence interaction description</li>
+            <li>Your pseudo code — written as text or an image of a drawing/diagram</li>
+            <li>An image or short video showing the input (your hand/object) and the sensor in action</li>
+        </ul>
+    </div>
+</div>

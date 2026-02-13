@@ -114,19 +114,7 @@ void loop()
 
 A force-sensing resistor (FSR) changes its resistance based on how hard it is pressed. More pressure = lower resistance = higher analog reading. You are building **custom** FSRs using Velostat, copper tape, and conductive materials.
 
-```
-    Custom FSR Cross-Section
-   ┌──────────────────────┐
-   │   Conductive Layer   │  ← Copper tape (top contact)
-   ├──────────────────────┤
-   │      Velostat        │  ← Pressure-sensitive material
-   ├──────────────────────┤
-   │   Conductive Layer   │  ← Copper tape (bottom contact)
-   └──────────────────────┘
-         │         │
-      Analog     GND
-       Pin         (via resistor)
-```
+![Custom FSR cross-section showing conductive layers, Velostat, and wiring](../assets/SensorLayers.png)
 
 > **Why custom?** The focus on building your own pressure sensors is the ability to **customize their size, shape, and material** to cleanly integrate into your object. A store-bought FSR has a fixed form — yours can be any shape and size your design needs.
 

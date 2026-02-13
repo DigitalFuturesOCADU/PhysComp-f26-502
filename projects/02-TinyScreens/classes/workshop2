@@ -1,0 +1,32 @@
+# Workshop Goal
+Create your first dynamically controlled visuals on the LED Matrix. It can done using the animation method, canvas method, or both. This can be simple, but focus on creating a clear relationship between the type of input and output.
+
+# Resources
+- Arduino
+- Distance Sensor
+- 4 Plug/Header jumper wires
+- pressure sensor kit (get it from Nick)
+- Alligator clip jumper wires
+- 220 ohm resistor
+
+# Activity
+start from the examples shown from today, but create a simple first interaction for both the distance sensor and the pressure sensor. 
+- Start by writing out a simple description of what the interaction is: for example, "When I XXXXXX the screen shows YYYYYY" etc. 
+- Write out the simple pseudo code in plain language the steps needed to achieve it
+- Create a simple version of the code that does the simplest version of the interaction
+- Make it better
+
+Do this for both sensors. The visuals should be different for the different interactions
+
+# Submission
+Your post should consist of the following components
+
+- Distance Sensor
+- - Your 1 sentence description of the interaction
+- - Your pseudo code. This can be written out as text or an image of a drawing/diagram
+- - An image that shows your input and sensor
+
+- Pressure Sensor
+- - Your 1 sentence description of the interaction
+- - Your pseudo code. This can be written out as text or an image of a drawing/diagram
+- - An image that shows your input and sensor
