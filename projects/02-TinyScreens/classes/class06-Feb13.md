@@ -127,7 +127,7 @@ A force-sensing resistor (FSR) changes its resistance based on how hard it is pr
 
 | Connection | Arduino Pin | Notes |
 |------------|-------------|-------|
-| One conductive layer | Analog pin (e.g. A5) + 10kΩ pull-down to GND | Signal side |
+| One conductive layer | Analog pin (e.g. A0) + 10kΩ pull-down to GND | Signal side |
 | Other conductive layer | 5V | Power side |
 
 > Connect one side of the Velostat sandwich to 5V, the other to an analog pin. Add a 10kΩ resistor between the analog pin and GND (a pull-down resistor). This creates a voltage divider that lets `analogRead()` measure the change in resistance.
@@ -142,7 +142,7 @@ Copy/paste this to confirm the pressure sensor is wired correctly. Open **Tools 
 
 ```cpp
 // --- Pin configuration ---
-int FSR_PIN = A5;
+int FSR_PIN = A0;
 
 // --- Timing ---
 int READ_INTERVAL = 50;  // ms between readings
@@ -197,12 +197,12 @@ int gapBetween = ultrasonic.getDistanceCM();        // "between" concept
 
 ```cpp
 // ❌ Generic
-int reading = analogRead(A5);
+int reading = analogRead(A0);
 
 // ✅ Descriptive
-int gripStrength = analogRead(A5);     // "against" concept
-int squeezeForce = analogRead(A5);     // "into" concept
-int weightOnSurface = analogRead(A5);  // "upon" concept
+int gripStrength = analogRead(A0);     // "against" concept
+int squeezeForce = analogRead(A0);     // "into" concept
+int weightOnSurface = analogRead(A0);  // "upon" concept
 ```
 
 ### Output Language
@@ -757,7 +757,7 @@ These numbers go directly into your `map()` calls and `if` comparisons. Every cu
 Because every custom FSR has a slightly different resting value, you can read the sensor once during `setup()` and use that as your baseline. This way your thresholds are **relative** to the sensor's actual resting state rather than a hard-coded guess:
 
 ```cpp
-int FSR_PIN = A5;
+int FSR_PIN = A0;
 int baseline = 0;          // Will be set in setup()
 int PRESS_OFFSET = 100;    // How far above baseline counts as "pressed"
 
@@ -804,7 +804,7 @@ Animation idle = animation;     // from idleAnim.h
 Animation pressed = animation;  // from pressedAnim.h
 
 // --- Pin configuration ---
-int FSR_PIN = A5;
+int FSR_PIN = A0;
 
 // --- Threshold (set from Serial Monitor) ---
 int PRESS_THRESHOLD = 200;  // Adjust based on your sensor!
@@ -862,7 +862,7 @@ In Class 05, the [Animated Circle](class05-Feb06.md#example-animated-circle-with
 TinyScreen screen;
 
 // --- Pin configuration ---
-int FSR_PIN = A5;
+int FSR_PIN = A0;
 
 // --- Calibration (adjust to YOUR sensor!) ---
 int PRESSURE_MIN = 50;   // Your sensor's resting value
@@ -905,7 +905,7 @@ In Class 05, you used a [`for` loop](class05-Feb06.md#the-for-loop) to light up 
 TinyScreen screen;
 
 // --- Pin configuration ---
-int FSR_PIN = A5;
+int FSR_PIN = A0;
 
 // --- Calibration (from Serial Monitor) ---
 int PRESSURE_MIN = 50;
@@ -954,7 +954,7 @@ TinyScreen screen;
 Animation anim = animation;
 
 // --- Pin configuration ---
-int FSR_PIN = A5;
+int FSR_PIN = A0;
 
 // --- Calibration (from Serial Monitor) ---
 int PRESSURE_MIN = 50;
