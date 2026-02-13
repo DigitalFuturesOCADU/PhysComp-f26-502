@@ -550,6 +550,9 @@ int MAX_DISTANCE = 100;  // cm
 // --- Threshold (set from Serial Monitor) ---
 int CLOSE_THRESHOLD = 20;  // cm — closer than this = "close"
 
+// --- Timing ---
+int READ_INTERVAL = 20;  // ms between sensor reads
+
 // --- Track animation ---
 String mood = "calm";
 String lastMood = "";
@@ -564,32 +567,39 @@ void setup()
 
 void loop()
 {
-    float distance = ultrasonic.getDistanceCM();
+    static unsigned long lastRead = 0;
 
-    // Check threshold
-    if (distance < CLOSE_THRESHOLD)
+    if (millis() - lastRead >= READ_INTERVAL)
     {
-        mood = "alert";
-    }
-    else
-    {
-        mood = "calm";
-    }
+        lastRead = millis();
 
-    // Only switch animation when mood changes
-    if (mood != lastMood)
-    {
-        if (mood == "alert")
+        float distance = ultrasonic.getDistanceCM();
+
+        // Check threshold
+        if (distance < CLOSE_THRESHOLD)
         {
-            screen.play(alert, LOOP);
-            screen.setSpeed(2.0);
+            mood = "alert";
         }
         else
         {
-            screen.play(calm, LOOP);
-            screen.setSpeed(1.0);
+            mood = "calm";
         }
-        lastMood = mood;
+
+        // Only switch animation when mood changes
+        if (mood != lastMood)
+        {
+            if (mood == "alert")
+            {
+                screen.play(alert, LOOP);
+                screen.setSpeed(2.0);
+            }
+            else
+            {
+                screen.play(calm, LOOP);
+                screen.setSpeed(1.0);
+            }
+            lastMood = mood;
+        }
     }
 
     screen.update();
@@ -621,6 +631,9 @@ int MAX_DISTANCE = 100;  // cm
 int SCREEN_MIN_X = 0;
 int SCREEN_MAX_X = 11;
 
+// --- Timing ---
+int READ_INTERVAL = 20;  // ms between sensor reads
+
 void setup()
 {
     Serial.begin(9600);
@@ -630,17 +643,24 @@ void setup()
 
 void loop()
 {
-    float distance = ultrasonic.getDistanceCM();
-    
-    // Map distance to x position: close = right side, far = left side
-    int dotX = map(distance, MIN_DISTANCE, MAX_DISTANCE, SCREEN_MAX_X, SCREEN_MIN_X);
-    dotX = constrain(dotX, SCREEN_MIN_X, SCREEN_MAX_X);
+    static unsigned long lastRead = 0;
 
-    screen.beginDraw();
-    screen.background(OFF);
-    screen.stroke(ON);
-    screen.point(dotX, 4);
-    screen.endDraw();
+    if (millis() - lastRead >= READ_INTERVAL)
+    {
+        lastRead = millis();
+
+        float distance = ultrasonic.getDistanceCM();
+
+        // Map distance to x position: close = right side, far = left side
+        int dotX = map(distance, MIN_DISTANCE, MAX_DISTANCE, SCREEN_MAX_X, SCREEN_MIN_X);
+        dotX = constrain(dotX, SCREEN_MIN_X, SCREEN_MAX_X);
+
+        screen.beginDraw();
+        screen.background(OFF);
+        screen.stroke(ON);
+        screen.point(dotX, 4);
+        screen.endDraw();
+    }
 }
 ```
 
@@ -671,6 +691,9 @@ int MAX_DISTANCE = 100;  // cm
 int SPEED_MIN = 50;   // 50% speed when far
 int SPEED_MAX = 300;  // 300% speed when close
 
+// --- Timing ---
+int READ_INTERVAL = 20;  // ms between sensor reads
+
 void setup()
 {
     Serial.begin(9600);
@@ -681,13 +704,21 @@ void setup()
 
 void loop()
 {
-    float distance = ultrasonic.getDistanceCM();
+    static unsigned long lastRead = 0;
 
-    // Closer = faster, farther = slower
-    int speedPercent = map(distance, MIN_DISTANCE, MAX_DISTANCE, SPEED_MAX, SPEED_MIN);
-    float speed = speedPercent / 100.0;
+    if (millis() - lastRead >= READ_INTERVAL)
+    {
+        lastRead = millis();
 
-    screen.setSpeed(speed);
+        float distance = ultrasonic.getDistanceCM();
+
+        // Closer = faster, farther = slower
+        int speedPercent = map(distance, MIN_DISTANCE, MAX_DISTANCE, SPEED_MAX, SPEED_MIN);
+        float speed = speedPercent / 100.0;
+
+        screen.setSpeed(speed);
+    }
+
     screen.update();
 }
 ```
@@ -717,6 +748,9 @@ int MAX_DISTANCE = 100;  // cm
 int POS_MIN = 0;
 int POS_MAX = 8;
 
+// --- Timing ---
+int READ_INTERVAL = 20;  // ms between sensor reads
+
 void setup()
 {
     Serial.begin(9600);
@@ -727,13 +761,21 @@ void setup()
 
 void loop()
 {
-    float distance = ultrasonic.getDistanceCM();
+    static unsigned long lastRead = 0;
 
-    // Map distance to horizontal position on the matrix
-    int xPos = map(distance, MIN_DISTANCE, MAX_DISTANCE, POS_MIN, POS_MAX);
-    xPos = constrain(xPos, POS_MIN, POS_MAX);
+    if (millis() - lastRead >= READ_INTERVAL)
+    {
+        lastRead = millis();
 
-    screen.setPosition(xPos, 0);
+        float distance = ultrasonic.getDistanceCM();
+
+        // Map distance to horizontal position on the matrix
+        int xPos = map(distance, MIN_DISTANCE, MAX_DISTANCE, POS_MIN, POS_MAX);
+        xPos = constrain(xPos, POS_MIN, POS_MAX);
+
+        screen.setPosition(xPos, 0);
+    }
+
     screen.update();
 }
 ```
