@@ -84,6 +84,7 @@ int MAX_DISTANCE = 100;  // cm — farthest we care about
 
 // --- Timing ---
 int READ_INTERVAL = 50;  // ms between readings
+unsigned long lastRead = 0;
 
 float distanceCM = 0;
 
@@ -95,8 +96,6 @@ void setup()
 
 void loop()
 {
-    // static means this variable keeps its value between loops (doesn't reset to 0)
-    static unsigned long lastRead = 0;
 
     if (millis() - lastRead >= READ_INTERVAL)
     {
@@ -146,6 +145,7 @@ int FSR_PIN = A0;
 
 // --- Timing ---
 int READ_INTERVAL = 50;  // ms between readings
+unsigned long lastRead = 0;
 
 int pressure = 0;
 
@@ -156,8 +156,6 @@ void setup()
 
 void loop()
 {
-    // static means this variable keeps its value between loops (doesn't reset to 0)
-    static unsigned long lastRead = 0;
 
     if (millis() - lastRead >= READ_INTERVAL)
     {
@@ -552,6 +550,7 @@ int CLOSE_THRESHOLD = 20;  // cm — closer than this = "close"
 
 // --- Timing ---
 int READ_INTERVAL = 20;  // ms between sensor reads
+unsigned long lastRead = 0;
 
 // --- Track animation ---
 String mood = "calm";
@@ -567,7 +566,6 @@ void setup()
 
 void loop()
 {
-    static unsigned long lastRead = 0;
 
     if (millis() - lastRead >= READ_INTERVAL)
     {
@@ -633,6 +631,7 @@ int SCREEN_MAX_X = 11;
 
 // --- Timing ---
 int READ_INTERVAL = 20;  // ms between sensor reads
+unsigned long lastRead = 0;
 
 void setup()
 {
@@ -643,8 +642,6 @@ void setup()
 
 void loop()
 {
-    static unsigned long lastRead = 0;
-
     if (millis() - lastRead >= READ_INTERVAL)
     {
         lastRead = millis();
@@ -693,6 +690,7 @@ int SPEED_MAX = 300;  // 300% speed when close
 
 // --- Timing ---
 int READ_INTERVAL = 20;  // ms between sensor reads
+unsigned long lastRead = 0;
 
 void setup()
 {
@@ -704,8 +702,6 @@ void setup()
 
 void loop()
 {
-    static unsigned long lastRead = 0;
-
     if (millis() - lastRead >= READ_INTERVAL)
     {
         lastRead = millis();
@@ -750,6 +746,7 @@ int POS_MAX = 8;
 
 // --- Timing ---
 int READ_INTERVAL = 20;  // ms between sensor reads
+unsigned long lastRead = 0;
 
 void setup()
 {
@@ -761,8 +758,6 @@ void setup()
 
 void loop()
 {
-    static unsigned long lastRead = 0;
-
     if (millis() - lastRead >= READ_INTERVAL)
     {
         lastRead = millis();
