@@ -521,6 +521,16 @@ Before writing any screen code, use the [Quick Serial Test](#quick-serial-test--
 
 These real-world numbers go directly into your `map()` calls and `if` threshold comparisons. Don’t guess — **measure first, code second.**
 
+### A Note on Animation Files
+
+Several examples below `#include` animation header files like `"idle.h"` or `"landscape.h"`. These come from the [TinyFilmFestival example animations](https://github.com/DigitalFuturesOCADU/TinyFilmFestival/tree/main/exampleAnimations) — or you can create your own. You have three options:
+
+1. **Create your own** using the [LED Matrix Editor](https://ledmatrix-editor.arduino.cc/) and export as a `.h` file
+2. **Copy from the Class 05 examples** you already made
+3. **Download ready-made ones** from the [TinyFilmFestival example animations](https://github.com/DigitalFuturesOCADU/TinyFilmFestival/tree/main/exampleAnimations)
+
+Place the `.h` file in the **same folder** as your `.ino` sketch so the `#include` can find it.
+
 ### Example: Distance Threshold — Switch Animations
 
 In Class 05, your sketch played a [single animation on a loop](class05-Feb06.md#example-play-animation-in-boomerang-mode-at-half-speed). Now a threshold divides the sensor range into zones, and each zone plays a different animation. The `lastMood` check prevents `screen.play()` from restarting on every pass through `loop()`:
@@ -528,14 +538,14 @@ In Class 05, your sketch played a [single animation on a loop](class05-Feb06.md#
 ```cpp
 #include "TinyFilmFestival.h"
 #include <EasyUltrasonic.h>
-#include "calmAnim.h"
-#include "alertAnim.h"
+#include "idle.h"       // download from exampleAnimations or create your own
+#include "fiz.h"        // download from exampleAnimations or create your own
 
 TinyScreen screen;
 EasyUltrasonic ultrasonic;
 
-Animation calm = animation;     // from calmAnim.h
-Animation alert = animation;    // from alertAnim.h
+Animation calm = animation;     // from idle.h
+Animation alert = animation;    // from fiz.h
 
 // --- Pin configuration ---
 int TRIG_PIN = A0;
@@ -670,11 +680,11 @@ In Class 05, you set a fixed speed with `screen.setSpeed(1.0)`. Now `map()` conn
 ```cpp
 #include "TinyFilmFestival.h"
 #include <EasyUltrasonic.h>
-#include "myAnimation.h"
+#include "landscape.h"  // download from exampleAnimations or create your own
 
 TinyScreen screen;
 EasyUltrasonic ultrasonic;
-Animation anim = animation;
+Animation anim = animation;  // from landscape.h
 
 // --- Pin configuration ---
 int TRIG_PIN = A0;
@@ -726,11 +736,11 @@ In Class 05, your animations played at a fixed position on the matrix. Using `se
 ```cpp
 #include "TinyFilmFestival.h"
 #include <EasyUltrasonic.h>
-#include "myAnimation.h"
+#include "go.h"         // download from exampleAnimations or create your own
 
 TinyScreen screen;
 EasyUltrasonic ultrasonic;
-Animation anim = animation;
+Animation anim = animation;  // from go.h
 
 // --- Pin configuration ---
 int TRIG_PIN = A0;
@@ -826,19 +836,23 @@ void loop()
 | `map(value, inMin, inMax, outMin, outMax)` | Remap a value to a new range |
 | `constrain(value, min, max)` | Clamp a value to stay within a range |
 
+### A Note on Animation Files
+
+As with the distance examples, any `#include` for an animation header file (like `"idle.h"`) requires you to create or download that file. See the [note above](#a-note-on-animation-files) for options.
+
 ### Example: Pressure Threshold — Switch Animations
 
 In Class 05, your sketch played a [single animation on a loop](class05-Feb06.md#example-play-animation-in-boomerang-mode-at-half-speed). Now a threshold divides the pressure range into zones, and each zone plays a different animation. The `lastMood` check prevents `screen.play()` from restarting on every pass through `loop()`:
 
 ```cpp
 #include "TinyFilmFestival.h"
-#include "idleAnim.h"
-#include "pressedAnim.h"
+#include "idle.h"       // download from exampleAnimations or create your own
+#include "fiz.h"        // download from exampleAnimations or create your own
 
 TinyScreen screen;
 
-Animation idle = animation;     // from idleAnim.h
-Animation pressed = animation;  // from pressedAnim.h
+Animation idle = animation;     // from idle.h
+Animation pressed = animation;  // from fiz.h
 
 // --- Pin configuration ---
 int FSR_PIN = A0;
@@ -985,10 +999,10 @@ Same idea as the [distance speed example](#example-distance-controls-animation-s
 
 ```cpp
 #include "TinyFilmFestival.h"
-#include "myAnimation.h"
+#include "landscape.h"  // download from exampleAnimations or create your own
 
 TinyScreen screen;
-Animation anim = animation;
+Animation anim = animation;  // from landscape.h
 
 // --- Pin configuration ---
 int FSR_PIN = A0;
