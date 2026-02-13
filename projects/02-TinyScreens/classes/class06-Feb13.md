@@ -214,9 +214,9 @@ Plain Language:                          Code:
  increases"                                  0, 1023, 1, 7);
                                          screen.circle(5, 3, diameter);
 
-"The dot moves toward the edge           int dotX = map(distanceToHand,
+"The circle moves toward the edge         int circleX = map(distanceToHand,
  as I get closer"                            5, 100, 11, 0);
-                                         screen.point(dotX, 4);
+                                         screen.circle(circleX, 4, 3);
 ```
 
 > **Tip:** Comments are free. Use them as your plain-language plan right in the code. Future-you will thank present-you.
@@ -227,7 +227,7 @@ A **parameter** is any value in your output code that *could* change based on in
 
 | Output Description | Fixed Code | Parameter | What Could Drive It |
 |---|---|---|---|
-| A dot at position x | `screen.point(5, 4)` | `5` (x position) | Distance sensor |
+| A circle at position x | `screen.circle(5, 4, 3)` | `5` (x position) | Distance sensor |
 | A circle with diameter d | `screen.circle(5, 3, 4)` | `4` (diameter) | Pressure sensor |
 | Animation at speed s | `screen.setSpeed(1.0)` | `1.0` (speed) | Either sensor |
 | Rectangle with width w | `screen.rect(0, 0, 8, 8)` | `8` (width) | Either sensor |
@@ -245,14 +245,15 @@ void loop()
     int distance = ultrasonic.getDistanceCM();
 
     // TRANSLATE — map sensor range to screen range
-    int dotX = map(distance, 2, 100, 11, 0);
-    dotX = constrain(dotX, 0, 11);
+    int circleX = map(distance, 2, 100, 11, 0);
+    circleX = constrain(circleX, 0, 11);
 
     // DRAW
     screen.beginDraw();
     screen.background(OFF);
     screen.stroke(ON);
-    screen.point(dotX, 4);
+    screen.fill(ON);
+    screen.circle(circleX, 4, 3);
     screen.endDraw();
 }
 ```
@@ -356,7 +357,7 @@ returnType functionName(parameterType parameterName)
 | Type | Example | Use when... |
 |------|---------|-------------|
 | **Returns a value** | `int distanceToX(int dist)` | You need a calculation back |
-| **Does something (void)** | `void drawDot(int x)` | You want to trigger an action, no result needed |
+| **Does something (void)** | `void drawCircle(int x)` | You want to trigger an action, no result needed |
 | **No parameters** | `int readDistance()` | The function gets its own data internally |
 | **Multiple parameters** | `int clampValue(int val, int lo, int hi)` | You need to pass in several pieces of info |
 
@@ -388,12 +389,13 @@ int distanceToX(int distance)
 
 // ── STEP 3 FUNCTION: Draw ──
 // Returns nothing (void), takes an int parameter
-void drawDot(int x)
+void drawCircle(int x)
 {
     screen.beginDraw();
     screen.background(OFF);
     screen.stroke(ON);
-    screen.point(x, 4);
+    screen.fill(ON);
+    screen.circle(x, 4, 3);
     screen.endDraw();
 }
 
@@ -401,8 +403,8 @@ void drawDot(int x)
 void loop()
 {
     int distance = readDistance();       // Step 1: Get data
-    int dotX = distanceToX(distance);   // Step 2: Map to output
-    drawDot(dotX);                      // Step 3: Draw
+    int circleX = distanceToX(distance); // Step 2: Map to output
+    drawCircle(circleX);                 // Step 3: Draw
 }
 ```
 
@@ -468,7 +470,7 @@ Each Class 06 example below follows this same transformation — find the parame
 
 | Class 05 (time-driven) | Class 06 (sensor-driven) | Example below |
 |---|---|---|
-| `oscillateInt(0, 11, 2000)` for dot position | `map(distance, ...)` for dot position | [Distance-Controlled Dot](#example-distance-mapped-to-canvas) |
+| `oscillateInt(0, 11, 2000)` for circle position | `map(distance, ...)` for circle position | [Distance-Controlled Circle](#example-distance-mapped-to-canvas) |
 | `oscillateInt(1, 7, 2000)` for circle diameter | `map(pressure, ...)` for circle diameter | [Pressure-Controlled Circle](#example-pressure-mapped-to-canvas) |
 | `screen.setSpeed(1.0)` fixed speed | `map(sensor, ...)` for dynamic speed | [Distance Controls Speed](#example-distance-controls-animation-speed) / [Pressure Controls Speed](#example-pressure-controls-animation-speed) |
 | `screen.play(anim, LOOP)` one animation | Threshold `if/else` picks which animation | [Distance Threshold](#example-distance-threshold--switch-animations) / [Pressure Threshold](#example-pressure-threshold--switch-animations) |
@@ -492,7 +494,8 @@ void loop()
     screen.beginDraw();
     screen.background(OFF);
     screen.stroke(ON);
-    screen.point(xPos, yPos);
+    screen.fill(ON);
+    screen.circle(xPos, yPos, 3);
     screen.endDraw();
 }
 ```
@@ -618,7 +621,7 @@ void loop()
 
 ### Example: Distance Mapped to Canvas
 
-In Class 05, the [Bouncing Dot](class05-Feb06.md#example-bouncing-dot-using-oscillateint) used `oscillateInt()` to move a dot back and forth on a timer. Here, `map()` replaces `oscillateInt()` — the dot's position is driven by the distance sensor instead of time:
+In Class 05, the [Bouncing Dot](class05-Feb06.md#example-bouncing-dot-using-oscillateint) used `oscillateInt()` to move a dot back and forth on a timer. Here, `map()` replaces `oscillateInt()` — the circle's position is driven by the distance sensor instead of time:
 
 ```cpp
 #include "TinyFilmFestival.h"
@@ -659,13 +662,14 @@ void loop()
         float distance = ultrasonic.getDistanceCM();
 
         // Map distance to x position: close = right side, far = left side
-        int dotX = map(distance, MIN_DISTANCE, MAX_DISTANCE, SCREEN_MAX_X, SCREEN_MIN_X);
-        dotX = constrain(dotX, SCREEN_MIN_X, SCREEN_MAX_X);
+        int circleX = map(distance, MIN_DISTANCE, MAX_DISTANCE, SCREEN_MAX_X, SCREEN_MIN_X);
+        circleX = constrain(circleX, SCREEN_MIN_X, SCREEN_MAX_X);
 
         screen.beginDraw();
         screen.background(OFF);
         screen.stroke(ON);
-        screen.point(dotX, 4);
+        screen.fill(ON);
+        screen.circle(circleX, 4, 3);
         screen.endDraw();
     }
 }
