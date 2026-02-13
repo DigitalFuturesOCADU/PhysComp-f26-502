@@ -538,6 +538,8 @@ Place the `.h` file in the **same folder** as your `.ino` sketch so the `#includ
 
 In Class 05, your sketch played a [single animation on a loop](class05-Feb06.md#example-play-animation-in-boomerang-mode-at-half-speed). Now a threshold divides the sensor range into zones, and each zone plays a different animation. The `lastMood` check prevents `screen.play()` from restarting on every pass through `loop()`:
 
+> Animation files: [Download from exampleAnimations](https://github.com/DigitalFuturesOCADU/TinyFilmFestival/tree/main/exampleAnimations) or create your own with the [LED Matrix Editor](https://ledmatrix-editor.arduino.cc/)
+
 ```cpp
 #include "TinyFilmFestival.h"
 #include <EasyUltrasonic.h>
@@ -681,6 +683,8 @@ void loop()
 
 In Class 05, you set a fixed speed with `screen.setSpeed(1.0)`. Now `map()` connects the sensor to the speed parameter — closer means faster:
 
+> Animation files: [Download from exampleAnimations](https://github.com/DigitalFuturesOCADU/TinyFilmFestival/tree/main/exampleAnimations) or create your own with the [LED Matrix Editor](https://ledmatrix-editor.arduino.cc/)
+
 ```cpp
 #include "TinyFilmFestival.h"
 #include <EasyUltrasonic.h>
@@ -736,6 +740,8 @@ void loop()
 ### Example: Distance Moves an Animation
 
 In Class 05, your animations played at a fixed position on the matrix. Using `setPosition()`, you can shift a pre-made animation's location based on the distance sensor:
+
+> Animation files: [Download from exampleAnimations](https://github.com/DigitalFuturesOCADU/TinyFilmFestival/tree/main/exampleAnimations) or create your own with the [LED Matrix Editor](https://ledmatrix-editor.arduino.cc/)
 
 ```cpp
 #include "TinyFilmFestival.h"
@@ -847,6 +853,8 @@ As with the distance examples, any `#include` for an animation header file (like
 ### Example: Pressure Threshold — Switch Animations
 
 In Class 05, your sketch played a [single animation on a loop](class05-Feb06.md#example-play-animation-in-boomerang-mode-at-half-speed). Now a threshold divides the pressure range into zones, and each zone plays a different animation. The `lastMood` check prevents `screen.play()` from restarting on every pass through `loop()`:
+
+> Animation files: [Download from exampleAnimations](https://github.com/DigitalFuturesOCADU/TinyFilmFestival/tree/main/exampleAnimations) or create your own with the [LED Matrix Editor](https://ledmatrix-editor.arduino.cc/)
 
 ```cpp
 #include "TinyFilmFestival.h"
@@ -1000,6 +1008,8 @@ void loop()
 ### Example: Pressure Controls Animation Speed
 
 Same idea as the [distance speed example](#example-distance-controls-animation-speed), but driven by pressure — harder press means faster playback:
+
+> Animation files: [Download from exampleAnimations](https://github.com/DigitalFuturesOCADU/TinyFilmFestival/tree/main/exampleAnimations) or create your own with the [LED Matrix Editor](https://ledmatrix-editor.arduino.cc/)
 
 ```cpp
 #include "TinyFilmFestival.h"
