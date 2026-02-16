@@ -4,23 +4,28 @@
 
 ## Overview
 
-This is the second workshop for the [Tiny Screens](../TinyScreens.md) project. Where Class 05 focused on **output** — putting things on the LED matrix — this class focuses on **input**: reading sensor data and using it to drive what appears on screen.
+This is the second workshop for the [Tiny Screens](../TinyScreens.md) project. In [Class 05](class05-Feb06.md), you learned how to create visuals on the UNO R4 WiFi LED matrix using TinyFilmFestival output modes. In this class, you connect those visuals to **input**.
 
-You will work with two sensor types:
-- **Distance data** from the HC-SR04 ultrasonic distance sensor
-- **Analog data** from a custom force-sensing resistor (FSR) made from Velostat, copper tape, and other conductive materials
+You will build two sensor-driven interactions:
+- **Distance Sensor (HC-SR04)** → contactless input in centimeters
+- **Custom Pressure Sensor (Velostat FSR)** → analog input from 0–1023
 
-Today is about connecting sensors to animations — building the bridge between the physical world and the LED matrix.
+The core shift today: move from **time-driven visuals** to **sensor-driven visuals** while keeping your output alive and responsive.
 
-### What We'll Cover
+This page is organized in three phases:
+1. **Sensor Foundations** — understand what each sensor measures and verify it in Serial Monitor.
+2. **Pattern Library (8 Files)** — choose step-by-step methods for map/threshold and canvas/animation.
+3. **Submission** — document and share your two tested interactions.
 
-1. [Overview of Sensors](#overview-of-sensors) — how each sensor works, wiring, and data units
-2. [Planning Your Code](#planning-your-code) — naming, the loop pattern, and connecting input to output
-3. [Writing Functions](#writing-functions) — organizing your code into reusable blocks
-4. [From Static to Dynamic](#from-static-to-dynamic) — the key shift from fixed values to sensor-driven ones
-5. [Distance Sensor](#distance-sensor--hc-sr04) — setup, reading, thresholds, and mapping
-6. [Pressure Sensor](#pressure-sensor--custom-fsr) — setup, reading, thresholds, and mapping
-7. [Workshop](#putting-it-all-together) — what to do for today's submission
+### What We’ll Cover
+
+1. [Today’s Goal in the Project Arc](#todays-goal-in-the-project-arc)
+2. [TinyFilmFestival Strategy for Class 06](#tinyfilmfestival-strategy-for-class-06)
+3. [Coding Strategy](#coding-strategy)
+4. [Sensor Foundations](#sensor-foundations)
+5. [Step-by-Step Method Library (8 Files)](#step-by-step-method-library-8-files)
+6. [Putting It All Together](#putting-it-all-together)
+7. [Submission](#submission)
 
 ## Lecture Slides
 
@@ -31,1073 +36,359 @@ Today is about connecting sensors to animations — building the bridge between 
 - [TinyFilmFestival Documentation](https://digitalfuturesocadu.github.io/TinyFilmFestival/docs/#home)
 - [EasyUltrasonic Library](https://github.com/SpulberGeorge/EasyUltrasonic)
 - [LED Matrix Editor](https://ledmatrix-editor.arduino.cc/)
+- [Class 06 Code Patterns](class06-CodePatterns.md)
+- [Class 05 Workshop 1 Notes](class05-Feb06.md)
 - [Delay vs Millis](../../01-AltController/DelayVsMillis.md)
 - [map() Reference](https://docs.arduino.cc/language-reference/en/functions/math/map/)
 - [analogRead() Reference](https://docs.arduino.cc/language-reference/en/functions/analog-io/analogRead/)
 
 ---
 
-## Overview of Sensors
+## Today’s Goal in the Project Arc
 
-Your Tiny Screens project uses one or both of these sensors as input. Each produces a different kind of data and suits a different kind of interaction.
+From the [Tiny Screens project](../TinyScreens.md): your final piece must define an interaction using a preposition (toward, against, above, within, etc.), stay visually alive at all times, and connect physical input to purposeful visual output.
 
-| Sensor | Data Type | Range | Best For |
-|--------|-----------|-------|----------|
-| **HC-SR04 Distance Sensor** | Distance in cm | 2–400 cm (practical: 2–200 cm) | Contactless interaction — toward, away, above, through |
-| **Custom FSR (Velostat)** | Analog value | 0–1023 (raw ADC) | Contact interaction — against, upon, into, beneath |
+Today’s workshop is the first full step into that behavior:
 
-### Distance Sensor — How Does It Work?
+- **Class 05:** learned output tools (Simple LED, Animation, Canvas)
+- **Class 06:** connect distance and pressure input to those visuals
+- **Class 07+:** combine both into a clearer interaction narrative and enclosure
 
-The HC-SR04 sends an ultrasonic pulse (too high-pitched to hear) and measures how long it takes to bounce back. Each reading takes a small amount of time to send the pulse and listen for the echo. The library calculates the distance based on the speed of sound.
+By the end of this class, you should have two working mini-interactions (one per sensor), each with:
+- A one-sentence interaction description
+- Pseudocode of your logic
+- A tested sensor-to-screen behavior
+
+---
+
+## TinyFilmFestival Strategy for Class 06
+
+TinyFilmFestival supports four drawing modes overall:
+
+| Mode | Main Use | Key APIs |
+|------|----------|----------|
+| **Simple LED** | Individual LED on/off control | `ledWrite()`, `ledToggle()`, `ledClear()` |
+| **Animation** | Pre-made frame playback | `screen.play()`, `screen.setSpeed()`, `screen.update()` |
+| **Canvas** | Real-time drawing with code | `screen.beginDraw()`, drawing functions, `screen.endDraw()` |
+| **Hybrid/Overlay** | Draw over animations | `beginOverlay()`, `endOverlay()` |
+
+
+### What Changed Since Class 05
+
+In Class 05, motion often came from time tools like `oscillateInt()`. In Class 06, the same visual parameters are now controlled by sensor data.
+
+Example pattern:
+- Class 05: `int x = oscillateInt(0, 11, 2000);`
+- Class 06: `int x = map(distanceCM, 2, 100, 11, 0);`
+
+---
+
+## Coding Strategy
+
+Before coding examples, use this workflow every loop:
+
+1. **Read** sensor data
+2. **Translate** value using `map()` or thresholds
+3. **Draw** output using Animation or Canvas
+
+Before you write your interaction code, go through these pages in order from [Class 06 Code Patterns](class06-CodePatterns.md). Don’t skip this step — each section introduces a concept you will immediately use in the workshop:
+
+- [Planning Your Code](class06-CodePatterns.md#planning-your-code)  
+    Introduces the **read → translate → draw** structure, naming strategy, and parameter thinking.  
+    **Why it matters:** this prevents random trial-and-error code and gives you a clear logic path before you start.
+
+- [Writing Functions](class06-CodePatterns.md#writing-functions)  
+    Introduces splitting your sketch into small reusable functions (read, map/threshold, draw).  
+    **Why it matters:** this keeps `loop()` readable, makes debugging faster, and helps you reuse the same structure for both sensors.
+
+- [From Static to Dynamic](class06-CodePatterns.md#from-static-to-dynamic)  
+    Introduces how to replace hard-coded or time-driven values with sensor-driven values.  
+    **Why it matters:** this is the core shift from Class 05 output demos to Class 06 interactive behavior.
+
+### Choose Translation Type
+
+| Translation | Best For | Typical Code |
+|-------------|----------|--------------|
+| **Continuous** | Smooth control of size/position/speed | `map()` + `constrain()` |
+| **Threshold** | Distinct zones or states | `if / else if / else` |
+
+### Variable Naming Rule
+
+Name values by meaning, not by type:
+
+- Better: `distanceToFace`, `gripStrength`, `proximityZone`
+- Avoid: `val`, `reading`, `data`
+
+---
+
+## Sensor Foundations
+
+Before coding visuals, first confirm what each sensor measures and what value range it produces.
+
+### Sensor 1: Distance (HC-SR04)
+
+![HC-SR04 ultrasonic sensor echo reflection diagram](../assets/HC-SR04-Ultrasonic-Sensor-Working-Echo-reflected-from-Obstacle-1.gif)
+
+The HC-SR04 sends an ultrasonic pulse and measures echo time to return distance in centimeters.
+
+**Basic values to know:**
+- Typical working range: about 2–400 cm (use a smaller practical range in your project)
+- Returned value: distance in centimeters (`float`)
+- Closer object = smaller number, farther object = larger number
 
 **Wiring:**
 
-| HC-SR04 Pin | Arduino Pin | Notes |
-|-------------|-------------|-------|
-| VCC | 5V | Power |
-| GND | GND | Ground |
-| TRIG | A0 | Sends the pulse |
-| ECHO | A1 | Receives the echo |
-
-> To keep wiring tidy, the Trigger and Echo pins connect to **A0** and **A1**. All code examples assume these connections, but you can use any digital or analog pin.
+| HC-SR04 Pin | Arduino Pin |
+|-------------|-------------|
+| VCC | 5V |
+| GND | GND |
+| TRIG | A0 |
+| ECHO | A1 |
 
 ![Distance sensor wiring diagram](../assets/distanceSensorConnection.png)
 
-**Units:** Distance is returned in **centimeters** (cm) by default. The library also supports inches.
+Use `millis()` when reading values so the sketch samples at steady intervals without blocking. This keeps timing predictable and leaves room for responsive visuals later.
 
-#### Quick Serial Test — Distance
-
-Copy/paste this to confirm the distance sensor is wired correctly. Open **Tools → Serial Monitor** at 9600 baud.
+**Quick test (Serial only):**
 
 ```cpp
 #include <EasyUltrasonic.h>
 
 EasyUltrasonic ultrasonic;
 
-// --- Pin configuration ---
 int TRIG_PIN = A0;
 int ECHO_PIN = A1;
-
-// --- Sensor range ---
-int MIN_DISTANCE = 2;    // cm — closest reliable reading
-int MAX_DISTANCE = 100;  // cm — farthest we care about
-
-// --- Timing ---
-int READ_INTERVAL = 50;  // ms between readings
-unsigned long lastRead = 0;
-
-float distanceCM = 0;
-
-void setup()
-{
-    Serial.begin(9600);
-    ultrasonic.attach(TRIG_PIN, ECHO_PIN, MIN_DISTANCE, MAX_DISTANCE);
-}
-
-void loop()
-{
-
-    if (millis() - lastRead >= READ_INTERVAL)
-    {
-        lastRead = millis();
-
-        distanceCM = ultrasonic.getDistanceCM();
-
-        Serial.print("Distance (cm): ");
-        Serial.println(distanceCM);
-    }
-}
-```
-
-### Pressure Sensor — How Does It Work?
-
-A force-sensing resistor (FSR) changes its resistance based on how hard it is pressed. More pressure = lower resistance = higher analog reading. You are building **custom** FSRs using Velostat, copper tape, and conductive materials.
-
-![Custom FSR cross-section showing conductive layers, Velostat, and wiring](../assets/SensorLayers.png)
-
-> **Why custom?** The focus on building your own pressure sensors is the ability to **customize their size, shape, and material** to cleanly integrate into your object. A store-bought FSR has a fixed form — yours can be any shape and size your design needs.
-
-**Build Notes:**
-- Put **non-conductive layers on the outside** so the sensor is safe to touch and does not short against other surfaces.
-- It is crucial that the **5V side** and the **voltage divider side** cannot touch each other directly — keep the conductive layers separated by Velostat only.
-- Connect to the Arduino using **alligator clip jumper wires** for quick, reliable contact.
-
-**Wiring (Voltage Divider):**
-
-| Connection | Arduino Pin | Notes |
-|------------|-------------|-------|
-| One conductive layer | Analog pin (e.g. A0) + 10kΩ pull-down to GND | Signal side |
-| Other conductive layer | 5V | Power side |
-
-> Connect one side of the Velostat sandwich to 5V, the other to an analog pin. Add a 10kΩ resistor between the analog pin and GND (a pull-down resistor). This creates a voltage divider that lets `analogRead()` measure the change in resistance.
-
-**Units:** `analogRead()` returns a raw value between **0** (no pressure / open circuit) and **1023** (maximum pressure / lowest resistance). These are **not** in any physical unit — they represent the voltage at the analog pin as a 10-bit number.
-
-**Which pins?** Only the **analog** pins (A0–A5 on the UNO R4) can read this sensor.
-
-#### Quick Serial Test — Pressure
-
-Copy/paste this to confirm the pressure sensor is wired correctly. Open **Tools → Serial Monitor** at 9600 baud.
-
-```cpp
-// --- Pin configuration ---
-int FSR_PIN = A0;
-
-// --- Timing ---
-int READ_INTERVAL = 50;  // ms between readings
-unsigned long lastRead = 0;
-
-int pressure = 0;
-
-void setup()
-{
-    Serial.begin(9600);
-}
-
-void loop()
-{
-
-    if (millis() - lastRead >= READ_INTERVAL)
-    {
-        lastRead = millis();
-
-        pressure = analogRead(FSR_PIN);
-
-        Serial.print("Pressure: ");
-        Serial.println(pressure);
-    }
-}
-```
-
----
-
-## Planning Your Code
-
-Before writing code, plan in plain language. Think of your sketch as having three layers: **read** (get the sensor value), **translate** (decide what it means), and **draw** (update the screen). Naming things well at each layer makes everything easier.
-
-### Input Language
-
-When writing code, refer to data by **what it actually is** in your system rather than generic numbers. Good variable names describe the data's meaning:
-
-**Distance Examples:**
-
-```cpp
-// ❌ Generic — what does "val" mean?
-int val = ultrasonic.getDistanceCM();
-
-// ✅ Descriptive — names say what the data IS
-int distanceToHand = ultrasonic.getDistanceCM();    // "toward" concept
-int proximityLevel = ultrasonic.getDistanceCM();    // "above" concept
-int gapBetween = ultrasonic.getDistanceCM();        // "between" concept
-```
-
-**Pressure Examples:**
-
-```cpp
-// ❌ Generic
-int reading = analogRead(A0);
-
-// ✅ Descriptive
-int gripStrength = analogRead(A0);     // "against" concept
-int squeezeForce = analogRead(A0);     // "into" concept
-int weightOnSurface = analogRead(A0);  // "upon" concept
-```
-
-### Output Language
-
-The same approach applies to output. Describe what the screen *should do* before worrying about exact code:
-
-```
-Plain Language:                          Code:
-─────────────────────────────────────    ──────────────────────────────────
-"The circle grows as pressure            int diameter = map(squeezeForce,
- increases"                                  0, 1023, 1, 7);
-                                         screen.circle(5, 3, diameter);
-
-"The circle moves toward the edge         int circleX = map(distanceToHand,
- as I get closer"                            5, 100, 11, 0);
-                                         screen.circle(circleX, 4, 3);
-```
-
-> **Tip:** Comments are free. Use them as your plain-language plan right in the code. Future-you will thank present-you.
-
-### Parameters — The Bridge Between Input and Output
-
-A **parameter** is any value in your output code that *could* change based on input. When you identify parameters, you find the connection points between sensors and the screen:
-
-| Output Description | Fixed Code | Parameter | What Could Drive It |
-|---|---|---|---|
-| A circle at position x | `screen.circle(5, 4, 3)` | `5` (x position) | Distance sensor |
-| A circle with diameter d | `screen.circle(5, 3, 4)` | `4` (diameter) | Pressure sensor |
-| Animation at speed s | `screen.setSpeed(1.0)` | `1.0` (speed) | Either sensor |
-| Rectangle with width w | `screen.rect(0, 0, 8, 8)` | `8` (width) | Either sensor |
-
-### The Loop Pattern
-
-Every pass through `loop()` does the same thing: **read** the sensor, **translate** the value, **draw** to the screen. There are two ways to translate:
-
-**`map()` — Continuous:** The sensor smoothly controls a visual parameter (position, size, speed):
-
-```cpp
-void loop()
-{
-    // READ
-    int distance = ultrasonic.getDistanceCM();
-
-    // TRANSLATE — map sensor range to screen range
-    int circleX = map(distance, 2, 100, 11, 0);
-    circleX = constrain(circleX, 0, 11);
-
-    // DRAW
-    screen.beginDraw();
-    screen.background(OFF);
-    screen.stroke(ON);
-    screen.fill(ON);
-    screen.circle(circleX, 4, 3);
-    screen.endDraw();
-}
-```
-
-**`if/else` — Threshold:** The sensor switches between distinct behaviors at a boundary:
-
-```cpp
-void loop()
-{
-    // READ
-    int distance = ultrasonic.getDistanceCM();
-
-    // TRANSLATE + DRAW — check threshold and respond
-    if (distance < CLOSE_THRESHOLD)
-    {
-        screen.play(alert, LOOP);
-    }
-    else
-    {
-        screen.play(calm, LOOP);
-    }
-
-    screen.update();
-}
-```
-
-#### Name Your Thresholds
-
-Use **named variables** instead of raw numbers so your code explains the decision:
-
-```cpp
-// ❌ What does 15 mean? Hard to understand.
-if (distanceToHand < 15)
-{
-    ...
-}
-
-// ✅ The variable name explains the decision
-int personalSpace = 15;  // cm — closer than this feels "too close"
-if (distanceToHand < personalSpace)
-{
-    ...
-}
-```
-
-The same idea works for pressure:
-
-```cpp
-// ❌ Magic number
-if (gripStrength > 200)
-{
-    ...
-}
-
-// ✅ Clear intent
-int firmGrip = 200;  // analog reading when user grips firmly
-if (gripStrength > firmGrip)
-{
-    ...
-}
-```
-
-More thresholds create more zones. One threshold = two zones; two thresholds = three zones:
-
-```
-Distance:  0 cm ──────── 15 cm ──────── 40 cm ──────── 100+ cm
-Zone:       [  CLOSE  ]   [  NEAR  ]     [   FAR    ]
-```
-
-## Writing Functions
-
-A **function** is a named block of code that performs a specific task. You've already been using them — `setup()`, `loop()`, `analogRead()`, and `map()` are all functions. Now you'll write your own.
-
-### Why Use Functions?
-
-- **Organize** — Each step of your logic gets its own clearly labeled block
-- **Reuse** — Write it once, call it anywhere
-- **Readability** — `loop()` reads like a plain-language plan
-
-### Structure of a Function
-
-```cpp
-returnType functionName(parameterType parameterName)
-{
-    // Code that does the work
-    return value;  // Send a result back (if needed)
-}
-```
-
-### Key Words
-
-| Word | What it means |
-|------|---------------|
-| **Return type** | What kind of data the function sends back: `int`, `float`, `String`, `bool`, or `void` (nothing) |
-| **Parameters** | Values you pass *into* the function — listed inside the parentheses |
-| **`return`** | Sends a value back to wherever the function was called and exits the function |
-| **Call** | Using the function by writing its name with parentheses: `readDistance()` |
-
-### Types of Functions
-
-| Type | Example | Use when... |
-|------|---------|-------------|
-| **Returns a value** | `int distanceToX(int dist)` | You need a calculation back |
-| **Does something (void)** | `void drawCircle(int x)` | You want to trigger an action, no result needed |
-| **No parameters** | `int readDistance()` | The function gets its own data internally |
-| **Multiple parameters** | `int clampValue(int val, int lo, int hi)` | You need to pass in several pieces of info |
-
-### Example: Functions for Each Step
-
-```cpp
-// --- Sensor range ---
 int MIN_DISTANCE = 2;
 int MAX_DISTANCE = 100;
 
-// --- Screen bounds ---
-int SCREEN_MIN_X = 0;
-int SCREEN_MAX_X = 11;
+int READ_INTERVAL = 50;          // Read every 50ms
+unsigned long lastRead = 0;     // Stores last read time
 
-// ── STEP 1 FUNCTION: Get new data ──
-// Returns an int, takes no parameters
-int readDistance()
+void setup()
 {
-    return ultrasonic.getDistanceCM();
+    Serial.begin(9600);          // Open Serial Monitor at 9600 baud
+    ultrasonic.attach(TRIG_PIN, ECHO_PIN, MIN_DISTANCE, MAX_DISTANCE);
 }
 
-// ── STEP 2 FUNCTION: Map to output ──
-// Returns an int, takes an int parameter
-int distanceToX(int distance)
-{
-    int x = map(distance, MIN_DISTANCE, MAX_DISTANCE, SCREEN_MAX_X, SCREEN_MIN_X);
-    return constrain(x, SCREEN_MIN_X, SCREEN_MAX_X);
-}
-
-// ── STEP 3 FUNCTION: Draw ──
-// Returns nothing (void), takes an int parameter
-void drawCircle(int x)
-{
-    screen.beginDraw();
-    screen.background(OFF);
-    screen.stroke(ON);
-    screen.fill(ON);
-    screen.circle(x, 4, 3);
-    screen.endDraw();
-}
-
-// ── loop() reads like a plan ──
 void loop()
 {
-    int distance = readDistance();       // Step 1: Get data
-    int circleX = distanceToX(distance); // Step 2: Map to output
-    drawCircle(circleX);                 // Step 3: Draw
+    // Read sensor only when interval has passed (non-blocking timing)
+    if (millis() - lastRead >= READ_INTERVAL)
+    {
+        lastRead = millis();
+
+        float distanceCM = ultrasonic.getDistanceCM();  // Current distance value
+
+        Serial.print("Distance (cm): ");               // Label for readability
+        Serial.println(distanceCM);                     // Print measured value
+    }
 }
 ```
 
-> **Tip:** Notice how `loop()` now reads almost like plain English. Each function name describes *what* happens; the function body describes *how*.
+### Sensor 2: Pressure (Custom FSR)
 
----
+Your custom FSR is a variable resistor made from conductive layers plus Velostat. `analogRead()` returns a raw value from 0–1023.
 
-## From Static to Dynamic
+**Basic values to know:**
+- Returned value: raw analog reading from 0–1023 (`int`)
+- No pressure usually reads near your baseline value
+- More pressure usually gives higher readings (after calibration)
 
-The key shift in this class is going from **fixed values** (hard-coded numbers) to **dynamic values** (driven by sensor input). Here's how to think through that transformation:
+**Build + Wiring (Voltage Divider):**
 
-### Step 1: Start with a Class 05 Sketch
+| Connection | Arduino Pin |
+|------------|-------------|
+| Conductive layer 1 | 5V |
+| Conductive layer 2 | A0 + 220Ω resistor to GND |
 
-In Class 05, you wrote an [Animated Circle](class05-Feb06.md#example-animated-circle-with-expanding-diameter) that used `oscillateInt()` to grow and shrink the diameter on a timer:
+![Custom FSR cross-section showing conductive layers, Velostat, and wiring](../assets/SensorLayers.png)
 
-```cpp
-// Class 05 — Animated Circle with Expanding Diameter
-int diameter = oscillateInt(1, 7, 2000); // Grows and shrinks over 2 seconds
+**Construction steps (build before code):**
+1. Make two conductive layers (copper tape or conductive material) that match your sensor shape.
+2. Place Velostat between those conductive layers so they do not touch directly.
+3. Add non-conductive outer layers for durability and to prevent accidental shorts.
+4. Attach one conductive side to 5V.
+5. Attach the other conductive side to `A0`, and add a 220Ω resistor from `A0` to GND.
+6. Test in Serial Monitor before writing any screen behavior.
 
-screen.beginDraw();
-screen.background(OFF);
-screen.stroke(ON);
-screen.noFill();
-screen.circle(5, 3, diameter);
-screen.endDraw();
-```
+Step-by-step build walkthrough (slides): [Pressure Sensor Build Guide](https://ocaduniversity-my.sharepoint.com/:p:/g/personal/npuckett_ocadu_ca/IQDYsUiYlF8yRb__hAp87OaEAWPpRofjDa1qJFUw5RcqAOo?e=HIesQu)
 
-### Step 2: Identify the Parameter
+Why this construction matters: poor layer separation or weak electrical contact causes unstable readings. If the copper tape pieces touch each other directly, it no longer works as a sensor.
 
-Which value could a sensor control instead of `oscillateInt()`?
+Use `millis()` for pressure reads for the same reason as distance: regular sampling without freezing the sketch.
 
-```cpp
-//                  ↓ this one — diameter
-int diameter = oscillateInt(1, 7, 2000);
-screen.circle(5, 3, diameter);
-```
-
-### Step 3: Replace with a Named Variable
-
-Pull it out so it's easy to swap the source:
+**Quick test (Serial only):**
 
 ```cpp
-int diameter = 4;   // fixed for now
-screen.circle(5, 3, diameter);
-```
+int FSR_PIN = A0;
 
-### Step 4: Drive the Variable with Sensor Data
+int READ_INTERVAL = 50;          // Read every 50ms
+unsigned long lastRead = 0;     // Stores last read time
 
-Replace the fixed value with a `map()` call that reads from a sensor:
+void setup()
+{
+    Serial.begin(9600);          // Open Serial Monitor at 9600 baud
+}
 
-```cpp
-int pressure = analogRead(FSR_PIN);
-int diameter = map(pressure, 50, 800, 1, 7);
-diameter = constrain(diameter, 1, 7);
-screen.circle(5, 3, diameter);
-```
-
-The circle that used to grow and shrink on a timer now grows and shrinks based on how hard you press.
-
-### The Same Pattern Works Everywhere
-
-Each Class 06 example below follows this same transformation — find the parameter, replace its source with sensor data:
-
-| Class 05 (time-driven) | Class 06 (sensor-driven) | Example below |
-|---|---|---|
-| `oscillateInt(0, 11, 2000)` for circle position | `map(distance, ...)` for circle position | [Distance-Controlled Circle](#example-distance-mapped-to-canvas) |
-| `oscillateInt(1, 7, 2000)` for circle diameter | `map(pressure, ...)` for circle diameter | [Pressure-Controlled Circle](#example-pressure-mapped-to-canvas) |
-| `screen.setSpeed(1.0)` fixed speed | `map(sensor, ...)` for dynamic speed | [Distance Controls Speed](#example-distance-controls-animation-speed) / [Pressure Controls Speed](#example-pressure-controls-animation-speed) |
-| `screen.play(anim, LOOP)` one animation | Threshold `if/else` picks which animation | [Distance Threshold](#example-distance-threshold--switch-animations) / [Pressure Threshold](#example-pressure-threshold--switch-animations) |
-
-### Combining Sensor Data with Library Animation Tools
-
-You don't have to choose one or the other. In Class 05, [Two Dots Moving in Opposite Directions](class05-Feb06.md#example-two-dots-moving-in-opposite-directions) used two `oscillateInt()` calls. Here, the distance sensor replaces one axis while `oscillateInt()` still handles the other:
-
-```cpp
 void loop()
 {
-    float distance = ultrasonic.getDistanceCM();
+    // Read sensor only when interval has passed (non-blocking timing)
+    if (millis() - lastRead >= READ_INTERVAL)
+    {
+        lastRead = millis();
 
-    // Sensor controls horizontal position
-    int xPos = map(distance, 2, 100, 0, 11);
-    xPos = constrain(xPos, 0, 11);
+        int pressure = analogRead(FSR_PIN);             // Current pressure value
 
-    // oscillateInt controls vertical bounce — independent of sensor
-    int yPos = oscillateInt(1, 6, 1000);
-
-    screen.beginDraw();
-    screen.background(OFF);
-    screen.stroke(ON);
-    screen.fill(ON);
-    screen.circle(xPos, yPos, 3);
-    screen.endDraw();
+        Serial.print("Pressure: ");                    // Label for readability
+        Serial.println(pressure);                       // Print measured value
+    }
 }
 ```
+
+![Pressure sensor wiring diagram](../assets/pressureSensorWiring.png)
+
 
 
 ---
 
-## Distance Sensor — HC-SR04
-
-### Placement Considerations
-
-The HC-SR04 has two cylindrical components on its face: one is the **emitter** (sends the ultrasonic pulse) and the other is the **microphone** (listens for the echo). **Both must be exposed and unobstructed** for the sensor to work. If either one is blocked by your enclosure, the sensor will return incorrect or zero readings.
-
-Other things to keep in mind:
-- **Orientation** — The direction the sensor faces defines the axis of interaction. Pointing up = hand-over detection; pointing forward = approach detection.
-- **Material** — Hard, flat surfaces reflect sound best. Soft fabrics and angled surfaces absorb or deflect sound and reduce accuracy.
-- **Range** — Minimum: **2 cm**, Maximum: **400 cm**, Accuracy: **3 mm**. In practice, keep your interaction zone within **2–100 cm** for reliable readings.
-
-### Using Serial Monitor to Find Your Values
-
-Before writing any screen code, use the [Quick Serial Test](#quick-serial-test--distance) to observe your sensor’s actual output. Move your hand (or object) through the interaction zone and note:
-
-1. **The closest value** you reliably get — this is your practical minimum
-2. **The farthest value** before readings become erratic — this is your practical maximum
-3. **Threshold distances** where you want behavior to change — these become your named threshold variables
-
-These real-world numbers go directly into your `map()` calls and `if` threshold comparisons. Don’t guess — **measure first, code second.**
-
-### A Note on Animation Files
-
-Several examples below `#include` animation header files like `"idle.h"` or `"landscape.h"`. These come from the [TinyFilmFestival example animations](https://github.com/DigitalFuturesOCADU/TinyFilmFestival/tree/main/exampleAnimations) — or you can create your own. You have three options:
-
-1. **Create your own** using the [LED Matrix Editor](https://ledmatrix-editor.arduino.cc/) and export as a `.h` file
-2. **Copy from the Class 05 examples** you already made
-3. **Download ready-made ones** from the [TinyFilmFestival example animations](https://github.com/DigitalFuturesOCADU/TinyFilmFestival/tree/main/exampleAnimations)
-
-Place the `.h` file in the **same folder** as your `.ino` sketch so the `#include` can find it.
-
-### Example: Distance Threshold — Switch Animations
-
-In Class 05, your sketch played a [single animation on a loop](class05-Feb06.md#example-play-animation-in-boomerang-mode-at-half-speed). Now a threshold divides the sensor range into zones, and each zone plays a different animation. The `lastMood` check prevents `screen.play()` from restarting on every pass through `loop()`:
-
-> Animation files: [Download from exampleAnimations](https://github.com/DigitalFuturesOCADU/TinyFilmFestival/tree/main/exampleAnimations) or create your own with the [LED Matrix Editor](https://ledmatrix-editor.arduino.cc/)
-
-```cpp
-#include "TinyFilmFestival.h"
-#include <EasyUltrasonic.h>
-#include "idle.h"       // download from exampleAnimations or create your own
-#include "fiz.h"        // download from exampleAnimations or create your own
-
-TinyScreen screen;
-EasyUltrasonic ultrasonic;
-
-Animation calm = animation;     // from idle.h
-Animation alert = animation;    // from fiz.h
-
-// --- Pin configuration ---
-int TRIG_PIN = A0;
-int ECHO_PIN = A1;
-
-// --- Sensor range ---
-int MIN_DISTANCE = 2;    // cm
-int MAX_DISTANCE = 100;  // cm
-
-// --- Threshold (set from Serial Monitor) ---
-int CLOSE_THRESHOLD = 20;  // cm — closer than this = "close"
-
-// --- Timing ---
-int READ_INTERVAL = 20;  // ms between sensor reads
-unsigned long lastRead = 0;
-
-// --- Track animation ---
-String mood = "calm";
-String lastMood = "";
-
-void setup()
-{
-    Serial.begin(9600);
-    screen.begin();
-    ultrasonic.attach(TRIG_PIN, ECHO_PIN, MIN_DISTANCE, MAX_DISTANCE);
-    screen.play(calm, LOOP);
-}
-
-void loop()
-{
-
-    if (millis() - lastRead >= READ_INTERVAL)
-    {
-        lastRead = millis();
-
-        float distance = ultrasonic.getDistanceCM();
-
-        // Check threshold
-        if (distance < CLOSE_THRESHOLD)
-        {
-            mood = "alert";
-        }
-        else
-        {
-            mood = "calm";
-        }
-
-        // Only switch animation when mood changes
-        if (mood != lastMood)
-        {
-            if (mood == "alert")
-            {
-                screen.play(alert, LOOP);
-                screen.setSpeed(2.0);
-            }
-            else
-            {
-                screen.play(calm, LOOP);
-                screen.setSpeed(1.0);
-            }
-            lastMood = mood;
-        }
-    }
-
-    screen.update();
-}
-```
-
-> **Tip:** You can add more zones — like a mid-range "curious" zone — by adding `else if` branches with more thresholds.
-
-### Example: Distance Mapped to Canvas
-
-In Class 05, the [Bouncing Dot](class05-Feb06.md#example-bouncing-dot-using-oscillateint) used `oscillateInt()` to move a dot back and forth on a timer. Here, `map()` replaces `oscillateInt()` — the circle's position is driven by the distance sensor instead of time:
-
-```cpp
-#include "TinyFilmFestival.h"
-#include <EasyUltrasonic.h>
-
-TinyScreen screen;
-EasyUltrasonic ultrasonic;
-
-// --- Pin configuration ---
-int TRIG_PIN = A0;
-int ECHO_PIN = A1;
-
-// --- Sensor range (from Serial Monitor) ---
-int MIN_DISTANCE = 2;    // cm
-int MAX_DISTANCE = 100;  // cm
-
-// --- Screen bounds ---
-int SCREEN_MIN_X = 0;
-int SCREEN_MAX_X = 11;
-
-// --- Timing ---
-int READ_INTERVAL = 20;  // ms between sensor reads
-unsigned long lastRead = 0;
-
-void setup()
-{
-    Serial.begin(9600);
-    screen.begin();
-    ultrasonic.attach(TRIG_PIN, ECHO_PIN, MIN_DISTANCE, MAX_DISTANCE);
-}
-
-void loop()
-{
-    if (millis() - lastRead >= READ_INTERVAL)
-    {
-        lastRead = millis();
-
-        float distance = ultrasonic.getDistanceCM();
-
-        // Map distance to x position: close = right side, far = left side
-        int circleX = map(distance, MIN_DISTANCE, MAX_DISTANCE, SCREEN_MAX_X, SCREEN_MIN_X);
-        circleX = constrain(circleX, SCREEN_MIN_X, SCREEN_MAX_X);
-
-        screen.beginDraw();
-        screen.background(OFF);
-        screen.stroke(ON);
-        screen.fill(ON);
-        screen.circle(circleX, 4, 3);
-        screen.endDraw();
-    }
-}
-```
-
-> **Note:** `map()` does linear interpolation — it scales the input range to the output range proportionally. `constrain()` ensures the result stays within safe screen coordinates even if the sensor returns unexpected values.
-
-### Example: Distance Controls Animation Speed
-
-In Class 05, you set a fixed speed with `screen.setSpeed(1.0)`. Now `map()` connects the sensor to the speed parameter — closer means faster:
-
-> Animation files: [Download from exampleAnimations](https://github.com/DigitalFuturesOCADU/TinyFilmFestival/tree/main/exampleAnimations) or create your own with the [LED Matrix Editor](https://ledmatrix-editor.arduino.cc/)
-
-```cpp
-#include "TinyFilmFestival.h"
-#include <EasyUltrasonic.h>
-#include "landscape.h"  // download from exampleAnimations or create your own
-
-TinyScreen screen;
-EasyUltrasonic ultrasonic;
-Animation anim = animation;  // from landscape.h
-
-// --- Pin configuration ---
-int TRIG_PIN = A0;
-int ECHO_PIN = A1;
-
-// --- Sensor range (from Serial Monitor) ---
-int MIN_DISTANCE = 2;    // cm
-int MAX_DISTANCE = 100;  // cm
-
-// --- Speed range ---
-int SPEED_MIN = 50;   // 50% speed when far
-int SPEED_MAX = 300;  // 300% speed when close
-
-// --- Timing ---
-int READ_INTERVAL = 20;  // ms between sensor reads
-unsigned long lastRead = 0;
-
-void setup()
-{
-    Serial.begin(9600);
-    screen.begin();
-    ultrasonic.attach(TRIG_PIN, ECHO_PIN, MIN_DISTANCE, MAX_DISTANCE);
-    screen.play(anim, LOOP);
-}
-
-void loop()
-{
-    if (millis() - lastRead >= READ_INTERVAL)
-    {
-        lastRead = millis();
-
-        float distance = ultrasonic.getDistanceCM();
-
-        // Closer = faster, farther = slower
-        int speedPercent = map(distance, MIN_DISTANCE, MAX_DISTANCE, SPEED_MAX, SPEED_MIN);
-        float speed = speedPercent / 100.0;
-
-        screen.setSpeed(speed);
-    }
-
-    screen.update();
-}
-```
-
-### Example: Distance Moves an Animation
-
-In Class 05, your animations played at a fixed position on the matrix. Using `setPosition()`, you can shift a pre-made animation's location based on the distance sensor:
-
-> Animation files: [Download from exampleAnimations](https://github.com/DigitalFuturesOCADU/TinyFilmFestival/tree/main/exampleAnimations) or create your own with the [LED Matrix Editor](https://ledmatrix-editor.arduino.cc/)
-
-```cpp
-#include "TinyFilmFestival.h"
-#include <EasyUltrasonic.h>
-#include "go.h"         // download from exampleAnimations or create your own
-
-TinyScreen screen;
-EasyUltrasonic ultrasonic;
-Animation anim = animation;  // from go.h
-
-// --- Pin configuration ---
-int TRIG_PIN = A0;
-int ECHO_PIN = A1;
-
-// --- Sensor range (from Serial Monitor) ---
-int MIN_DISTANCE = 2;    // cm
-int MAX_DISTANCE = 100;  // cm
-
-// --- Position range ---
-int POS_MIN = 0;
-int POS_MAX = 8;
-
-// --- Timing ---
-int READ_INTERVAL = 20;  // ms between sensor reads
-unsigned long lastRead = 0;
-
-void setup()
-{
-    Serial.begin(9600);
-    screen.begin();
-    ultrasonic.attach(TRIG_PIN, ECHO_PIN, MIN_DISTANCE, MAX_DISTANCE);
-    screen.play(anim, LOOP);
-}
-
-void loop()
-{
-    if (millis() - lastRead >= READ_INTERVAL)
-    {
-        lastRead = millis();
-
-        float distance = ultrasonic.getDistanceCM();
-
-        // Map distance to horizontal position on the matrix
-        int xPos = map(distance, MIN_DISTANCE, MAX_DISTANCE, POS_MIN, POS_MAX);
-        xPos = constrain(xPos, POS_MIN, POS_MAX);
-
-        screen.setPosition(xPos, 0);
-    }
-
-    screen.update();
-}
-```
-
----
-
-## Pressure Sensor — Custom FSR
-
-### Using Serial Monitor to Find Your Values
-
-Before writing screen code, use the [Quick Serial Test](#quick-serial-test--pressure) to observe your sensor's output. Press at different levels and note:
-
-1. **The resting value** when nothing is pressing — this is your baseline minimum
-2. **The maximum value** at your hardest press — this is your practical maximum
-3. **Threshold values** where you want behavior to change — these become your named threshold variables
-
-These numbers go directly into your `map()` calls and `if` comparisons. Every custom FSR is different — **always calibrate your own sensor.**
-
-### Using a Baseline from `setup()`
-
-Because every custom FSR has a slightly different resting value, you can read the sensor once during `setup()` and use that as your baseline. This way your thresholds are **relative** to the sensor's actual resting state rather than a hard-coded guess:
-
-```cpp
-int FSR_PIN = A0;
-int baseline = 0;          // Will be set in setup()
-int PRESS_OFFSET = 100;    // How far above baseline counts as "pressed"
-
-void setup()
-{
-    Serial.begin(9600);
-    baseline = analogRead(FSR_PIN);  // Read resting value once
-    Serial.print("Baseline: ");
-    Serial.println(baseline);
-}
-
-void loop()
-{
-    int pressure = analogRead(FSR_PIN);
-    int adjusted = pressure - baseline;  // Relative to resting state
-
-    if (adjusted > PRESS_OFFSET)
-    {
-        // Sensor is being pressed
-    }
-}
-```
-
-### Key Functions
-
-| Function | Description |
-|----------|-------------|
-| `analogRead(pin)` | Read the analog value (0–1023) |
-| `map(value, inMin, inMax, outMin, outMax)` | Remap a value to a new range |
-| `constrain(value, min, max)` | Clamp a value to stay within a range |
-
-### A Note on Animation Files
-
-As with the distance examples, any `#include` for an animation header file (like `"idle.h"`) requires you to create or download that file. See the [note above](#a-note-on-animation-files) for options.
-
-### Example: Pressure Threshold — Switch Animations
-
-In Class 05, your sketch played a [single animation on a loop](class05-Feb06.md#example-play-animation-in-boomerang-mode-at-half-speed). Now a threshold divides the pressure range into zones, and each zone plays a different animation. The `lastMood` check prevents `screen.play()` from restarting on every pass through `loop()`:
-
-> Animation files: [Download from exampleAnimations](https://github.com/DigitalFuturesOCADU/TinyFilmFestival/tree/main/exampleAnimations) or create your own with the [LED Matrix Editor](https://ledmatrix-editor.arduino.cc/)
-
-```cpp
-#include "TinyFilmFestival.h"
-#include "idle.h"       // download from exampleAnimations or create your own
-#include "fiz.h"        // download from exampleAnimations or create your own
-
-TinyScreen screen;
-
-Animation idle = animation;     // from idle.h
-Animation pressed = animation;  // from fiz.h
-
-// --- Pin configuration ---
-int FSR_PIN = A0;
-
-// --- Threshold (set from Serial Monitor) ---
-int PRESS_THRESHOLD = 200;  // Adjust based on your sensor!
-
-// --- Track animation ---
-String mood = "idle";
-String lastMood = "";
-
-void setup()
-{
-    Serial.begin(9600);
-    screen.begin();
-    screen.play(idle, LOOP);
-}
-
-void loop()
-{
-    int pressure = analogRead(FSR_PIN);
-
-    // Check threshold
-    if (pressure > PRESS_THRESHOLD)
-    {
-        mood = "pressed";
-    }
-    else
-    {
-        mood = "idle";
-    }
-
-    // Only switch animation when mood changes
-    if (mood != lastMood)
-    {
-        if (mood == "pressed")
-        {
-            screen.play(pressed, LOOP);
-        }
-        else
-        {
-            screen.play(idle, LOOP);
-        }
-        lastMood = mood;
-    }
-
-    screen.update();
-}
-```
-
-### Example: Pressure Mapped to Canvas
-
-In Class 05, the [Animated Circle](class05-Feb06.md#example-animated-circle-with-expanding-diameter) used `oscillateInt()` to grow and shrink the diameter on a timer. Here, `map()` replaces `oscillateInt()` — the circle's size is driven by pressure instead of time:
-
-```cpp
-#include "TinyFilmFestival.h"
-
-TinyScreen screen;
-
-// --- Pin configuration ---
-int FSR_PIN = A0;
-
-// --- Calibration (adjust to YOUR sensor!) ---
-int PRESSURE_MIN = 50;   // Your sensor's resting value
-int PRESSURE_MAX = 800;  // Your sensor's max press value
-
-// --- Output range ---
-int DIAMETER_MIN = 1;
-int DIAMETER_MAX = 7;
-
-void setup()
-{
-    Serial.begin(9600);
-    screen.begin();
-}
-
-void loop()
-{
-    int pressure = analogRead(FSR_PIN);
-
-    // Map pressure to circle diameter
-    int diameter = map(pressure, PRESSURE_MIN, PRESSURE_MAX, DIAMETER_MIN, DIAMETER_MAX);
-    diameter = constrain(diameter, DIAMETER_MIN, DIAMETER_MAX);
-
-    screen.beginDraw();
-    screen.background(OFF);
-    screen.stroke(ON);
-    screen.noFill();
-    screen.circle(5, 3, diameter); // Circle grows with pressure
-    screen.endDraw();
-}
-```
-
-### Example: Pressure Controls Number of Active Pixels
-
-In Class 05, you used a [`for` loop](class05-Feb06.md#the-for-loop) to light up a row of LEDs all at once. Here, the same `for` loop draws a variable number of pixels — pressure controls how many light up, creating a visual meter:
-
-```cpp
-#include "TinyFilmFestival.h"
-
-TinyScreen screen;
-
-// --- Pin configuration ---
-int FSR_PIN = A0;
-
-// --- Calibration (from Serial Monitor) ---
-int PRESSURE_MIN = 50;
-int PRESSURE_MAX = 800;
-
-// --- Output range ---
-int MAX_PIXELS = 12;
-
-void setup()
-{
-    Serial.begin(9600);
-    screen.begin();
-}
-
-void loop()
-{
-    int pressure = analogRead(FSR_PIN);
-
-    // Map pressure to number of lit pixels (0–12)
-    int numPixels = map(pressure, PRESSURE_MIN, PRESSURE_MAX, 0, MAX_PIXELS);
-    numPixels = constrain(numPixels, 0, MAX_PIXELS);
-
-    screen.beginDraw();
-    screen.background(OFF);
-    screen.stroke(ON);
-
-    // Draw a bar along the bottom row
-    for (int x = 0; x < numPixels; x++)
-    {
-        screen.point(x, 7);
-    }
-
-    screen.endDraw();
-}
-```
-
-### Example: Pressure Controls Animation Speed
-
-Same idea as the [distance speed example](#example-distance-controls-animation-speed), but driven by pressure — harder press means faster playback:
-
-> Animation files: [Download from exampleAnimations](https://github.com/DigitalFuturesOCADU/TinyFilmFestival/tree/main/exampleAnimations) or create your own with the [LED Matrix Editor](https://ledmatrix-editor.arduino.cc/)
-
-```cpp
-#include "TinyFilmFestival.h"
-#include "landscape.h"  // download from exampleAnimations or create your own
-
-TinyScreen screen;
-Animation anim = animation;  // from landscape.h
-
-// --- Pin configuration ---
-int FSR_PIN = A0;
-
-// --- Calibration (from Serial Monitor) ---
-int PRESSURE_MIN = 50;
-int PRESSURE_MAX = 800;
-
-// --- Speed range ---
-int SPEED_MIN = 50;   // 50% speed at rest
-int SPEED_MAX = 300;  // 300% speed at full press
-
-void setup()
-{
-    Serial.begin(9600);
-    screen.begin();
-    screen.play(anim, LOOP);
-}
-
-void loop()
-{
-    int pressure = analogRead(FSR_PIN);
-
-    // More pressure = faster animation
-    int speedPercent = map(pressure, PRESSURE_MIN, PRESSURE_MAX, SPEED_MIN, SPEED_MAX);
-    float speed = speedPercent / 100.0;
-
-    screen.setSpeed(speed);
-    screen.update();
-}
-```
-
-### Design Considerations for Custom FSRs
-
-When building your own pressure sensor, you can make it **any shape or size** your design needs. Keep these rules in mind:
-
-**Layer Structure:**
-
-```
-┌──────────────────────────┐
-│  Non-conductive outer    │  ← Tape, paper, fabric — protects the outside
-├──────────────────────────┤
-│  Copper tape (5V side)   │  ← Connects to 5V
-├──────────────────────────┤
-│       Velostat           │  ← Pressure-sensitive layer
-├──────────────────────────┤
-│  Copper tape (signal)    │  ← Connects to analog pin + pull-down resistor
-├──────────────────────────┤
-│  Non-conductive outer    │  ← Protects the outside
-└──────────────────────────┘
-```
-
-**Key Rules:**
-
-- **Outer layers must be non-conductive** — tape, paper, fabric, or any insulating material. This prevents shorts against other surfaces and makes the sensor safe to touch.
-- **Copper tape layers must be separated by Velostat only** — they must never touch each other directly or you'll get a short circuit instead of a reading.
-- **Offset the two wire connections** — place the 5V connection point and the signal connection point on **opposite sides or corners** of the sensor. This makes it physically harder for them to accidentally touch.
-- **Shape is up to you** — cut the Velostat and copper tape to match your object. Circles, strips, large pads, small buttons — as long as the layers are in the right order, it will work.
+## Step-by-Step Method Library (8 Files)
+
+These 8 files are not just examples to copy — they are **step-by-step methods** you can reuse and expand for your project.
+
+How they connect to your other sections:
+- **Sensor Foundations:** gives you trustworthy input values first
+- **Coding Strategy:** each file follows the same `read → translate → draw` structure
+- **Tiny Screens project goals:** each pattern helps you design a clearer preposition-based interaction that stays alive and responsive
+
+Think of them as building blocks. Start with one method, get it working, then combine methods to build richer behavior.
+
+### Distance Sensor Patterns
+
+- [distance_map_canvas](class06-distance_map_canvas.md)
+    - **What:** maps distance continuously to a simple canvas parameter.
+    - **Why:** best first method for seeing smooth sensor-to-visual response.
+    - **Method steps:**
+        1. Read distance in cm.
+        2. Map distance to one canvas parameter (position/size).
+        3. Constrain the mapped value.
+        4. Draw and update every loop.
+
+- [distance_map_animation](class06-distance_map_animation.md)
+    - **What:** maps distance continuously to animation behavior (e.g., speed/position).
+    - **Why:** shows how the same input can control pre-made animation playback.
+    - **Method steps:**
+        1. Play one animation.
+        2. Read distance continuously.
+        3. Map distance to animation parameter(s) like speed or position.
+        4. Call `screen.update()` every loop.
+
+- [distance_threshold_canvas](class06-distance_threshold_canvas.md)
+    - **What:** splits distance into zones and draws different canvas states.
+    - **Why:** useful when interaction needs clear state changes, not just smooth motion.
+    - **Method steps:**
+        1. Define threshold boundaries.
+        2. Read current distance.
+        3. Decide zone with `if / else if / else`.
+        4. Draw a different visual per zone.
+
+- [distance_threshold_animation](class06-distance_threshold_animation.md)
+    - **What:** uses distance zones to switch animation behavior.
+    - **Why:** gives a stronger narrative structure (idle/near/close) for interactive pieces.
+    - **Method steps:**
+        1. Define distance zones.
+        2. Read and classify current distance.
+        3. Trigger animation/state changes only when zone changes.
+        4. Keep playback running with `screen.update()`.
+
+### Pressure Sensor Patterns
+
+- [pressure_map_canvas](class06-pressure_map_canvas.md)
+    - **What:** maps pressure continuously to a simple canvas parameter.
+    - **Why:** fastest way to confirm your custom FSR can drive visual change smoothly.
+    - **Method steps:**
+        1. Read pressure with `analogRead()`.
+        2. Map pressure to one canvas parameter.
+        3. Constrain to safe drawing range.
+        4. Draw continuously.
+
+- [pressure_map_animation](class06-pressure_map_animation.md)
+    - **What:** maps pressure continuously to animation behavior.
+    - **Why:** good for translating force into expressive motion or pacing.
+    - **Method steps:**
+        1. Start one animation.
+        2. Read pressure each loop.
+        3. Map pressure to speed/position parameters.
+        4. Update animation each frame.
+
+- [pressure_threshold_canvas](class06-pressure_threshold_canvas.md)
+    - **What:** uses pressure zones to draw different canvas outputs.
+    - **Why:** useful for discrete responses like light/medium/firm press states.
+    - **Method steps:**
+        1. Define pressure thresholds from calibration.
+        2. Read current pressure.
+        3. Select zone/state with conditionals.
+        4. Draw a distinct visual for each zone.
+
+- [pressure_threshold_animation](class06-pressure_threshold_animation.md)
+    - **What:** uses pressure thresholds to switch animation states.
+    - **Why:** supports interaction storytelling by clearly separating behavioral phases.
+    - **Method steps:**
+        1. Define pressure zones.
+        2. Read pressure and classify current zone.
+        3. Switch animation/state only on zone change.
+        4. Maintain continuous playback and responsiveness.
+
+Suggested progression:
+1. Start with `*_map_canvas` (one sensor → one visual parameter).
+2. Move to `*_threshold_canvas` (clear states and transitions).
+3. Advance to `*_map_animation` and `*_threshold_animation` once behavior is stable.
 
 ---
 
 ## Putting It All Together
 
-You now have the tools to connect sensors to the LED matrix. Each part of the workshop uses one sensor type with one output method:
+You now have what you need to build two clear sensor-to-screen interactions for Workshop 2.
 
 | Workshop Part | What to Do |
 |--------------|------------|
-| Part 1 — Distance Sensor | Wire the HC-SR04, read values in Serial Monitor, create a `map()` or threshold example that drives the screen |
-| Part 2 — Pressure Sensor | Build a custom FSR from Velostat/copper tape, read values in Serial Monitor, create a `map()` or threshold example that drives the screen |
-| Part 3 — Concept Sketch | Choose your preposition and sketch (on paper or in comments) how your sensor data will connect to your screen output |
+| Part 1 — Distance Sensor | Run the distance Serial test, choose one distance method file, and build one interaction from it |
+| Part 2 — Pressure Sensor | Run the pressure Serial test, choose one pressure method file, and build one interaction from it |
+| Part 3 — Concept Link | Write your one-sentence interaction statement and pseudocode using `read → translate → draw` |
 
-Use the examples above as starting points, but make the interaction your own. Think about your [preposition](../TinyScreens.md#interaction-as-preposition) — **how** the sensor data relates to the visual response is the core of your project.
+Use the method files as structured starting points, then adapt them to your chosen preposition and behavior goals in [Tiny Screens](../TinyScreens.md#interaction-as-preposition).
 
-### Tips
+### Practical Tips
 
-- **Calibrate first.** Use Serial Monitor to find your sensor's actual min/max values before using `map()`.
-- **Name your variables well.** `distanceToHand` tells you more than `val`.
-- **Start simple.** Get one sensor driving one parameter, then add complexity.
-- **Use `constrain()`** after `map()` to prevent out-of-range screen coordinates.
-- **Don't use `delay()` in `loop()`** — it blocks sensor reading. Use `millis()` if you need timing.
+- Calibrate first in Serial Monitor before mapping or thresholds.
+- Keep variable names descriptive (`distanceToFace`, `gripStrength`, `interactionZone`).
+- Start with one parameter, then add complexity after behavior is stable.
+- Prefer `millis()` timing instead of `delay()` so the interaction stays responsive.
 
-## Deliverable
+---
 
-Workshop 2 submission due at end of class. Submit via the Canvas link as a Discussion Post.
+## Submission
+
+Post the following to the Discussion on Canvas. Workshop 2 submission is due by the end of class unless otherwise announced.
+
+### Distance Sensor
+
+- One-sentence interaction description
+- Pseudocode (text or image)
+- Image/video showing sensor input + screen response
+
+### Pressure Sensor
+
+- One-sentence interaction description
+- Pseudocode (text or image)
+- Image/video showing sensor input + screen response
+
+---
+
+## Checklist Before You Submit
+
+- I tested **both** sensors with Serial Monitor
+- I created one interaction per sensor
+- My two visuals are meaningfully different
+- My code follows read → translate → draw
+- I used naming and structure from [Class 06 Code Patterns](class06-CodePatterns.md)
+- My visual behavior supports my project preposition in [Tiny Screens](../TinyScreens.md#interaction-as-preposition)
