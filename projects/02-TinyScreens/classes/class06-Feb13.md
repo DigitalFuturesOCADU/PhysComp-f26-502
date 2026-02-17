@@ -50,7 +50,7 @@ Today’s workshop is the first full step into that behavior:
 - **Class 06:** connect distance and pressure input to those visuals
 - **Class 07+:** combine both into a clearer interaction narrative and enclosure
 
-By the end of this class, you should have two working mini-interactions (one per sensor), each with:
+By next class, you should have two working mini-interactions (one per sensor), each with:
 - A one-sentence interaction description
 - Pseudocode of your logic
 - A tested sensor-to-screen behavior
