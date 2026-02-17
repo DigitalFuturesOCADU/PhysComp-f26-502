@@ -27,10 +27,6 @@ This page is organized in three phases:
 6. [Putting It All Together](#putting-it-all-together)
 7. [Submission](#submission)
 
-## Lecture Slides
-
-*Link to slides*
-
 ## Resources
 
 - [TinyFilmFestival Documentation](https://digitalfuturesocadu.github.io/TinyFilmFestival/docs/#home)
