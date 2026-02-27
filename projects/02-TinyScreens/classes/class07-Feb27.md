@@ -129,6 +129,11 @@ The examples below use ready-made `.h` files from the [TinyFilmFestival example 
     - **Why:** Introduces state tracking and completion detection. The automatic trigger (`isComplete()`) can easily be swapped for a sensor threshold to make transitions interactive.
     - **Key concepts:** `ONCE` play mode, `isComplete()`, state variable for tracking
 
+- [Hybrid Mode — Canvas Overlay on Animation](class07-hybrid_overlay.md)
+    - **What:** The `landscape` animation plays as a looping background while Canvas drawing commands (`circle`, `line`) add a moving overlay on top using `beginOverlay()` / `endOverlay()`.
+    - **Why:** Shows how to combine animation and code-drawn graphics in the same sketch. The key difference: `beginOverlay()` preserves the animation frame, while `beginDraw()` clears it.
+    - **Key concepts:** `beginOverlay()`, `endOverlay()`, Hybrid Mode, overlay compositing
+
 ---
 
 ## Enclosure & Fabrication

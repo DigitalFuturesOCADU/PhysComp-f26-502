@@ -28,7 +28,7 @@ This sketch uses a ready-made `.h` file from the [TinyFilmFestival example anima
 // ============================================================
 
 #include "TinyFilmFestival.h"
-#include "characterScroll.h"   // download from exampleAnimations folder
+#include "fiz.h"              // download from exampleAnimations folder
 
 TinyScreen screen;
 
@@ -38,7 +38,7 @@ int SLIDE_PERIOD = 3000;   // ms — how long one slide cycle takes
 void setup()
 {
     screen.begin();
-    screen.play(characterScroll, LOOP);
+    screen.play(fiz, LOOP);
 }
 
 void loop()
