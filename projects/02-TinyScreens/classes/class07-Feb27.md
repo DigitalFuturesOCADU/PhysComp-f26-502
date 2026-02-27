@@ -129,11 +129,6 @@ The examples below use ready-made `.h` files from the [TinyFilmFestival example 
     - **Why:** Introduces state tracking and completion detection. The automatic trigger (`isComplete()`) can easily be swapped for a sensor threshold to make transitions interactive.
     - **Key concepts:** `ONCE` play mode, `isComplete()`, state variable for tracking
 
-- [Hybrid Mode — Canvas Overlay on Animation](class07-hybrid_overlay.md)
-    - **What:** The `landscape` animation plays as a looping background while Canvas drawing commands (`circle`, `line`) add a moving overlay on top using `beginOverlay()` / `endOverlay()`.
-    - **Why:** Shows how to combine animation and code-drawn graphics in the same sketch. The key difference: `beginOverlay()` preserves the animation frame, while `beginDraw()` clears it.
-    - **Key concepts:** `beginOverlay()`, `endOverlay()`, Hybrid Mode, overlay compositing
-
 ---
 
 ## Enclosure & Fabrication
@@ -156,6 +151,28 @@ The LED matrix must be covered — no bare LEDs visible. Two options that can be
 - **Diffuser** — translucent material (vellum, parchment paper, thin fabric, frosted acrylic) placed over the matrix softens the dots into glowing regions. Creates a softer, more ambient display. Thicker or more layers = more diffusion.
 
 Combine both: diffuser directly on the matrix, magnifier on top for a large, soft display.
+
+#### DIY Lens & Diffuser Examples
+
+- [DIY Camera Obscura (Adafruit)](https://blog.adafruit.com/2015/03/14/diy-camera-obscura-saturdaymorningcartoons/)
+- [Arducam Obscura (GitHub)](https://github.com/nylki/Arducam-Obscura)
+- [Making a Lens from Scratch (YouTube)](https://www.youtube.com/watch?v=zd4F-N301bk)
+- [How to Make Your Own Camera Obscura (Black Creek)](https://blackcreek.ca/how-to-make-your-own-camera-obscura/)
+- [3D Printed Curved Lens (Google Search)](https://www.google.com/search?q=3d+printed+curved+lens)
+- [Making Custom Lenses (Instructables)](https://www.instructables.com/Making-Custom-Lenses/)
+- [Home Lens Manufacturing (Hackaday)](https://hackaday.com/2014/07/12/one-small-step-for-magnification-one-giant-leap-for-home-lens-manufacturing/)
+- [Plastic Lenses (McMaster-Carr)](https://www.mcmaster.com/products/plastic-lens/?s=plastic-lens)
+- [Small Condenser Lenses (Amazon)](https://www.amazon.ca/PATIKIL-Condenser-Flashlight-Spotlight-Transparent/dp/B0DSG37RH1/)
+- [Fresnel Magnifier Sheet (Amazon)](https://www.amazon.ca/yueton-Magnifying-Magnifier-Fresnel-Reading/dp/B01KA26RCW)
+- [Print Your Own Adjustable Lenses (Hackaday)](https://hackaday.com/2013/03/06/print-your-own-adjustable-lenses/)
+- [Liquid-Filled Lens Patent (Google Patents)](https://patents.google.com/patent/US4129628A/en)
+- [Creating Camera Lenses with SLA (Formlabs)](https://formlabs.com/blog/creating-camera-lenses-with-stereolithography/)
+- [Lowest Effort 3D Printed Lenses (Hackaday)](https://hackaday.com/2025/02/04/the-lowest-effort-way-yet-to-make-3d-printed-lenses-clear/)
+- [Computational Caustic Lenses (ACM)](https://dl.acm.org/doi/10.1145/3472749.3474815)
+- [3D Printed Magnifying Glass (Printables)](https://www.printables.com/model/642142-3d-printed-magnifying-glass-with-3d-printed-optica)
+- [Magnifying Glass from Recycled Bottles (Instructables)](https://www.instructables.com/Magnifying-Glass-Using-Recycled-Bottles/)
+- [Easy Cardboard Magnifying Glass (Crafting a Fun Life)](https://craftingafunlife.com/how-to-make-an-easy-cardboard-magnifying-glass/)
+- [DIY Magnifying Glass (PBS Parents)](https://www.pbs.org/parents/crafts-and-experiments/observe-with-a-diy-magnifying-glass)
 
 ### Sensor Placement
 
