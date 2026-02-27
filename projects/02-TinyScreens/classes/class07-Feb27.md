@@ -173,10 +173,10 @@ Combine both: diffuser directly on the matrix, magnifier on top for a large, sof
 
 Form a group of 2–4 people. Choose **one** starting point:
 
-| Starting Point | What’s Missing | Your Task |
-|---|---|---|
-| An [Advanced Sensor Technique](#advanced-sensor-techniques) example | Screen output | Add a Canvas drawing or Animation that responds to the sensor values |
-| An [Advanced Matrix Example](#advanced-matrix-examples) | Sensor input | Replace `oscillateInt()` values with sensor-driven values |
+| Starting Point | What's Missing |
+|---|---|
+| An [Advanced Sensor Technique](#advanced-sensor-techniques) example | Screen output |
+| An [Advanced Matrix Example](#advanced-matrix-examples) | Sensor input |
 
 **How to think through it step by step:**
 
