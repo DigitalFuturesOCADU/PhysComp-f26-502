@@ -105,9 +105,14 @@ These examples use **no sensor input** — they demonstrate more complex Canvas 
     - **Why:** The circular buffer is the same pattern used in [rolling average smoothing](class07-pressure_smoothing.md) — learning it here gives you two uses for one concept. A trail also makes motion history visible.
     - **Key concepts:** Circular buffer, `millis()` timing for snapshots, `for` loop to draw history
 
+- [Smooth Motion with Ease](class07-canvas_ease_motion.md)
+    - **What:** A circle eases between target positions with smooth acceleration/deceleration, pausing briefly at each stop. Size also eases — shrinking while moving, growing when stopped.
+    - **Why:** Unlike `oscillateInt()` which cycles forever, `Ease` moves to a target once and stops — making it ideal for state-driven or sensor-triggered motion.
+    - **Key concepts:** `Ease` class, `.to(target, duration)`, `.done()` for sequencing, `.intValue()` for pixel coordinates
+
 ### Animation Examples
 
-The examples below require animation `.h` files exported from the [LED Matrix Editor](https://ledmatrix-editor.arduino.cc/). If you need a refresher on creating and exporting animations, see [Class 05 — Creating an Animation](class05-Feb06.md#creating-an-animation).
+The examples below use ready-made `.h` files from the [TinyFilmFestival example animations](https://github.com/DigitalFuturesOCADU/TinyFilmFestival/tree/main/exampleAnimations). Download the ones you need and place them in the same folder as your `.ino` sketch. Each example includes a note on how to swap in a different animation — just change the `#include` and variable name. See the [Animation Mode guide](https://digitalfuturesocadu.github.io/TinyFilmFestival/docs/#animation-mode) for full documentation.
 
 - [Layered Animations](class07-animation_layers.md)
     - **What:** Two animations play simultaneously on separate layers, each at its own speed.

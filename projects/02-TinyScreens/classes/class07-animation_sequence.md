@@ -4,9 +4,9 @@
 
 Two (or more) animations play one after another in a sequence. When the first finishes, the second starts, then it cycles back. This is useful for telling a visual story or for state-based feedback.
 
-This example requires two animation `.h` files exported from the [LED Matrix Editor](https://ledmatrix-editor.arduino.cc/). If you need a refresher on creating and exporting animations, see [Class 05 — Creating an Animation](class05-Feb06.md#creating-an-animation).
+This sketch uses ready-made `.h` files from the [TinyFilmFestival example animations](https://github.com/DigitalFuturesOCADU/TinyFilmFestival/tree/main/exampleAnimations). Download them and place them in the same folder as your `.ino` file.
 
-In the code below, `myAnimA` and `myAnimB` are placeholder names — replace them with the actual variable names from your exported `.h` files.
+> **Swapping animations:** Change the `#include` lines to different `.h` files and update the variable names in `screen.play()` to match (the variable name is the filename without `.h`). You can use any file from the [example animations folder](https://github.com/DigitalFuturesOCADU/TinyFilmFestival/tree/main/exampleAnimations), or create your own with the [LED Matrix Editor](https://ledmatrix-editor.arduino.cc/). See the [Animation Mode guide](https://digitalfuturesocadu.github.io/TinyFilmFestival/docs/#animation-mode) for full documentation.
 
 ---
 
@@ -27,8 +27,8 @@ In the code below, `myAnimA` and `myAnimB` are placeholder names — replace the
 // ============================================================
 
 #include "TinyFilmFestival.h"
-#include "myAnimA.h"    // ← replace with your animation files
-#include "myAnimB.h"
+#include "idle.h"        // download from exampleAnimations folder
+#include "go.h"          // download from exampleAnimations folder
 
 TinyScreen screen;
 
@@ -38,7 +38,7 @@ int currentAnim = 0;    // 0 = playing A, 1 = playing B
 void setup()
 {
     screen.begin();
-    screen.play(myAnimA, ONCE);
+    screen.play(idle, ONCE);
     currentAnim = 0;
 }
 
@@ -49,12 +49,12 @@ void loop()
     {
         if (currentAnim == 0)
         {
-            screen.play(myAnimB, ONCE);
+            screen.play(go, ONCE);
             currentAnim = 1;
         }
         else
         {
-            screen.play(myAnimA, ONCE);
+            screen.play(idle, ONCE);
             currentAnim = 0;
         }
     }

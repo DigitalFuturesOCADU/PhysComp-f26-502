@@ -4,9 +4,9 @@
 
 An animation plays while `oscillateInt()` moves it across the screen like a sprite. The animation's visual content stays the same, but its position on the matrix changes over time.
 
-This example requires an animation `.h` file exported from the [LED Matrix Editor](https://ledmatrix-editor.arduino.cc/). If you need a refresher on creating and exporting animations, see [Class 05 — Creating an Animation](class05-Feb06.md#creating-an-animation).
+This sketch uses a ready-made `.h` file from the [TinyFilmFestival example animations](https://github.com/DigitalFuturesOCADU/TinyFilmFestival/tree/main/exampleAnimations). Download it and place it in the same folder as your `.ino` file.
 
-In the code below, `myAnimA` is a placeholder name — replace it with the actual variable name from your exported `.h` file.
+> **Swapping animations:** Change the `#include` line to a different `.h` file and update the variable name in `screen.play()` to match (the variable name is the filename without `.h`). You can use any file from the [example animations folder](https://github.com/DigitalFuturesOCADU/TinyFilmFestival/tree/main/exampleAnimations), or create your own with the [LED Matrix Editor](https://ledmatrix-editor.arduino.cc/). See the [Animation Mode guide](https://digitalfuturesocadu.github.io/TinyFilmFestival/docs/#animation-mode) for full documentation.
 
 ---
 
@@ -28,7 +28,7 @@ In the code below, `myAnimA` is a placeholder name — replace it with the actua
 // ============================================================
 
 #include "TinyFilmFestival.h"
-#include "myAnimA.h"    // ← replace with your animation file
+#include "characterScroll.h"   // download from exampleAnimations folder
 
 TinyScreen screen;
 
@@ -38,7 +38,7 @@ int SLIDE_PERIOD = 3000;   // ms — how long one slide cycle takes
 void setup()
 {
     screen.begin();
-    screen.play(myAnimA, LOOP);
+    screen.play(characterScroll, LOOP);
 }
 
 void loop()
