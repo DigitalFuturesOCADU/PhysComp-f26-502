@@ -38,17 +38,6 @@ A key skill when working with electronics is learning how to use generic compone
 
 ---
 
-## Lecture Slides
-
-| Class | Slides |
-|-------|--------|
-| Class 05 | *Link to slides* |
-| Class 06 | *Link to slides* |
-| Class 07 | *Link to slides* |
-| Class 08 | *Link to slides* |
-
----
-
 ## Interaction as Preposition
 
 You are creating a relationship between the visual information on the LED Matrix and a person or thing. Describe that relationship through a simple preposition.
