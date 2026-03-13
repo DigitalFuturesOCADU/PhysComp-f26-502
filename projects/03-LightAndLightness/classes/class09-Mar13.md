@@ -6,7 +6,7 @@
 
 ## Overview
 
-The LDRs have not arrived yet, so today's workshop pivots to focus entirely on the **servo motor**. You will wire a servo, control it with a variable, add smooth oscillation, and then build a sequenced timed-move pattern. The light sensor concepts covered below are still relevant context — we will connect the two in the next workshop.
+Today's workshop pivots to focus entirely on the **servo motor**. You will wire a servo, control it with a variable, add smooth oscillation, and then build a sequenced timed-move pattern. The light sensor concepts covered below are still relevant context — we will connect the two in the next workshop.
 
 ### Building on Project 2
 
