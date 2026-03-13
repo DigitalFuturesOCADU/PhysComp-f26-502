@@ -107,7 +107,6 @@ Follow the step-by-step guide:
 
 **[Servo Motor — Step by Step](class09-ServoBasics.md)**
 
-The light sensor step-by-step guide is ready for when the parts arrive: [Light Sensor to Servo — Step by Step](class09-LDR-to-Servo.md)
 
 
 ### Project Design V1

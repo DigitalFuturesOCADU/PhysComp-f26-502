@@ -207,51 +207,53 @@ Because `moveServoA()` uses `static` variables inside the function to remember t
 
 ### Step 8 — Replace the Oscillation Variables
 
-Above `setup()`, replace the three oscillation variables with:
+Above `setup()`, replace the three oscillation variables with three:
 
 ```cpp
-int sequenceStep = 0;
+int startAngle   = 90;
+int targetAngle  = 170;
+int moveDuration = 2000;
 ```
 
 **What is happening here:**
-- We no longer need `minAngle`, `maxAngle`, or `cycleMs` — the target angles and durations will go directly into the `switch/case` in `loop()`.
-- `sequenceStep` tracks where we are in a sequence of moves. We will step through it using `switch/case`.
+- `startAngle` is where the servo will be positioned when the sketch starts. This matters because `moveServoA()` uses `myServo.read()` to find the current position when a move begins — and `read()` only knows what you last wrote. Setting a known starting angle in `setup()` means the first move always has a reliable start point.
+- `targetAngle` is where we want the servo to go — any value from 0 to 180.
+- `moveDuration` is how many milliseconds the move should take. `2000` means two seconds.
+- Putting them as named variables at the top means you can adjust and re-upload without touching `loop()` or `setup()`.
 
-### Step 9 — Update loop()
+### Step 9 — Set the Start Position in setup()
+
+Inside `setup()`, after `myServo.attach(servoPin)`, add one line:
+
+```cpp
+void setup() {
+  myServo.attach(servoPin);
+  myServo.write(startAngle);
+}
+```
+
+**What is happening here:**
+- `myServo.write(startAngle)` moves the servo to your chosen starting position before `loop()` runs for the first time.
+- This is important because `moveServoA()` calls `myServo.read()` to find out where the servo currently is when a new move begins. `read()` returns the last value you wrote — so without this line, the first move would start from wherever the servo happened to be physically, which may not match what the code expects.
+- Using the variable `startAngle` here means you only need to change one number to shift the starting position.
+
+### Step 10 — Update loop()
 
 Replace the contents of `loop()` with:
 
 ```cpp
 void loop() {
-  int angle;
-
-  switch (sequenceStep) {
-    case 0:
-      angle = moveServoA(10, 1500);
-      if (angle == 10) sequenceStep = 1;
-      break;
-    case 1:
-      angle = moveServoA(170, 2000);
-      if (angle == 170) sequenceStep = 2;
-      break;
-    case 2:
-      angle = moveServoA(90, 500);
-      if (angle == 90) sequenceStep = 0;
-      break;
-  }
-
+  int angle = moveServoA(targetAngle, moveDuration);
   myServo.write(angle);
 }
 ```
 
 **What is happening here:**
-- `switch (sequenceStep)` checks which step we are on and runs only that `case`.
-- Each `case` calls `moveServoA()` with a target angle and a duration in milliseconds. The function returns the current position during the move, and returns the exact target angle when the move is complete.
-- `if (angle == 10) sequenceStep = 1;` watches for completion. When `moveServoA()` returns the exact target, we know the move is done and we advance to the next step.
-- `case 2` loops back to `sequenceStep = 0`, so the sequence runs endlessly.
-- We have removed `delay(20)` — `moveServoA()` handles its own timing without blocking the loop.
+- `moveServoA(targetAngle, moveDuration)` calls the function we are about to add. It receives your target and duration and returns the current position along the move.
+- We write whatever position the function returns directly to the servo each loop.
+- There is no `delay()` here — `moveServoA()` handles its own timing internally.
 
-### Step 10 — Add the moveServoA() Function
+### Step 11 — Add the moveServoA() Function
 
 Below the closing `}` of `loop()`, paste the function:
 
@@ -286,19 +288,77 @@ int moveServoA(int angle, unsigned long durationMs) {
 - The three `static` variables persist between function calls — they are created once and never reset. `startAngle` remembers where the move began, `targetAngle` remembers where it is heading, and `startTime` remembers when it started.
 - When a new target arrives (one that does not match the stored `targetAngle`), the function reads the servo's current position with `myServo.read()`, stores it as the new start, and records the current time as the new start time.
 - Each call after that calculates how far through the duration we are (`progress`, from 0.0 to 1.0), interpolates between the start and target, and returns the current position.
-- When `progress >= 1.0`, the move is complete. The function returns the exact target angle so the `if` check in `loop()` can detect it, then resets `targetAngle` to −1 so the next fresh call works correctly.
+- When `progress >= 1.0`, the move is complete. The function returns the exact target angle, then resets `targetAngle` to −1 so the next fresh call starts clean.
 
 ### Upload and Test
 
-Upload the sketch. The servo should move through a three-step sequence: snap to near 0°, move slowly to near 180°, then quickly return to 90°, and repeat.
+Upload the sketch. The servo should smoothly travel to `targetAngle` over `moveDuration` milliseconds, then hold there.
 
-Try adjusting the values directly in the `switch/case`:
+Try changing the two variables at the top and re-uploading:
 
-- Change the duration (second argument) — a larger number gives a slower, more deliberate move. A smaller number gives a quick snap.
-- Change the target angle (first argument) — any value between 0 and 180.
-- Add a `case 3` with another target to extend the sequence, and update `case 2` to step to `3` instead of `0`.
+- A large `moveDuration` (like `5000`) makes the move feel like a slow drift.
+- A small `moveDuration` (like `300`) makes it snap.
+- Change `targetAngle` to `10`, upload, then change it to `170` and upload again — the servo travels from wherever it currently is to the new target over the same duration.
 
-> **Check your sketch:** You should have `sequenceStep` at the top, a `loop()` with a `switch/case` that steps through moves, and `moveServoA()` defined below `loop()`. The servo should cycle through a repeating sequence.
+> **Check your sketch:** You should have three variables at the top, a `setup()` that attaches the servo and writes the start angle, a `loop()` with a single `moveServoA()` call, and the function defined below `loop()`. The servo should snap to `startAngle` when it powers on, then travel smoothly to `targetAngle` and hold.
+
+---
+
+### Step 12 — Build a Sequence with switch/case
+
+Right now the servo moves to one target and stays. To chain multiple moves in order — and loop through them — we use `switch/case` to track which step we are on.
+
+Above `setup()`, replace `targetAngle` and `moveDuration` with one new variable, keeping `startAngle`:
+
+```cpp
+int startAngle   = 90;
+int sequenceStep = 0;
+```
+
+**What is happening here:**
+- We keep `startAngle` because `setup()` still needs to write a known position to the servo before the sequence begins.
+- We no longer need `targetAngle` or `moveDuration` as global variables — those values will live directly inside the `switch/case` so each step can have its own.
+- `sequenceStep` tracks where we are in the sequence.
+
+Keep `setup()` as it is — `myServo.write(startAngle)` still runs before the first move.
+
+Replace the contents of `loop()` with:
+
+```cpp
+void loop() {
+  int angle;
+
+  switch (sequenceStep) {
+    case 0:
+      angle = moveServoA(10, 1500);
+      if (angle == 10) sequenceStep = 1;
+      break;
+    case 1:
+      angle = moveServoA(170, 2000);
+      if (angle == 170) sequenceStep = 2;
+      break;
+    case 2:
+      angle = moveServoA(90, 500);
+      if (angle == 90) sequenceStep = 0;
+      break;
+  }
+
+  myServo.write(angle);
+}
+```
+
+**What is happening here:**
+- `switch (sequenceStep)` checks which step we are on and runs only that `case`.
+- Each `case` calls `moveServoA()` with its own target and duration. The function returns the current position during the move, and returns the exact target angle when the move is complete.
+- `if (angle == 10) sequenceStep = 1;` detects completion and advances to the next step.
+- `case 2` loops back to `sequenceStep = 0`, so the sequence runs endlessly.
+
+Upload and watch the servo move through the three-step sequence. Then try:
+
+- Changing the target angles and durations in each `case`.
+- Adding a `case 3` with another target, and updating `case 2` to step to `3` instead of `0`.
+
+> **Check your sketch:** You should have `sequenceStep` at the top, a `loop()` with a `switch/case`, and `moveServoA()` defined below `loop()`. The servo should cycle through a repeating sequence.
 
 ---
 
