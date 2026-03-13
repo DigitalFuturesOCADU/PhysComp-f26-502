@@ -118,17 +118,19 @@ Right now the servo holds at a fixed angle. We want it to sweep back and forth c
 
 ### Step 5 — Add Range and Speed Variables
 
-Above `setup()`, replace `int angle = 90;` with three new variables:
+Above `setup()`, replace `int angle = 90;` with four variables:
 
 ```cpp
-int minAngle = 30;
-int maxAngle = 150;
-int cycleMs  = 2000;
+int angle       = 0;
+int sweepMin    = 30;
+int sweepMax    = 150;
+int sweepPeriod = 2000;
 ```
 
 **What is happening here:**
-- `minAngle` and `maxAngle` define the two ends of the sweep. The servo will oscillate between these two positions.
-- `cycleMs` is the time in milliseconds for one complete back-and-forth cycle. `2000` means the servo takes 2 seconds to sweep from one end to the other and back.
+- `angle` stays as a global — we keep it here because every part of the sketch needs it. We reset it to `0` as a neutral placeholder; the `oscillate()` call will set it immediately on the first loop.
+- `sweepMin` and `sweepMax` define the two ends of the sweep. The servo will oscillate between these two positions.
+- `sweepPeriod` is the time in milliseconds for one complete back-and-forth cycle. `2000` means the servo takes 2 seconds to sweep from one end to the other and back.
 - Having all three as named variables at the top means you can tune the feel of the movement without touching the function itself.
 
 ### Step 6 — Update loop()
@@ -137,15 +139,15 @@ Replace the contents of `loop()` with:
 
 ```cpp
 void loop() {
-  int angle = oscillate(minAngle, maxAngle, cycleMs);
+  angle = oscillate(sweepMin, sweepMax, sweepPeriod);
   myServo.write(angle);
   delay(20);
 }
 ```
 
 **What is happening here:**
-- `oscillate(minAngle, maxAngle, cycleMs)` calls the function we are about to add. It takes your three variables and returns a calculated angle based on the current time.
-- We store that result in a local variable called `angle` and pass it directly to `myServo.write()`.
+- `oscillate(sweepMin, sweepMax, sweepPeriod)` calls the function we are about to add. It takes your three variables and returns a calculated angle based on the current time.
+- We assign that result to the global `angle` and pass it to `myServo.write()`. Notice there is no `int` in front of `angle` — we are assigning to the variable we already declared, not creating a new one.
 - `delay(20)` adds a 20ms pause between updates. Without it the loop runs thousands of times per second, which provides no benefit to the servo and wastes processing time.
 
 ### Step 7 — Add the oscillate() Function
@@ -184,13 +186,13 @@ Upload the sketch. The servo should now sweep smoothly back and forth between `m
 
 Experiment with the three variables at the top:
 
-- **Speed up** — try `cycleMs = 500` for a fast back-and-forth, or `cycleMs = 5000` for a slow drift.
-- **Change the range** — try `minAngle = 85` and `maxAngle = 95` for a subtle tremor. Try `minAngle = 0` and `maxAngle = 180` for a full sweep.
-- **Offset the range** — try `minAngle = 60` and `maxAngle = 120` to keep movement centered without going to extremes.
+- **Speed up** — try `sweepPeriod = 500` for a fast back-and-forth, or `sweepPeriod = 5000` for a slow drift.
+- **Change the range** — try `sweepMin = 85` and `sweepMax = 95` for a subtle tremor. Try `sweepMin = 0` and `sweepMax = 180` for a full sweep.
+- **Offset the range** — try `sweepMin = 60` and `sweepMax = 120` to keep movement centered without going to extremes.
 
 Each combination gives the movement a different character. Upload after each change.
 
-> **Check your sketch:** You should have three range/speed variables above `setup()`, a `loop()` that calls `oscillate()` and writes the result, and the `oscillate()` function defined below `loop()`. The servo should be sweeping continuously.
+> **Check your sketch:** You should have four global variables including `angle`, a `loop()` that assigns the result of `oscillate()` to `angle` and writes it, and the `oscillate()` function defined below `loop()`. The servo should be sweeping continuously.
 
 ---
 
@@ -211,19 +213,20 @@ Because `moveServoA()` uses `static` variables inside the function to remember t
 
 ### Step 8 — Replace the Oscillation Variables
 
-Above `setup()`, replace the three oscillation variables with three:
+Above `setup()`, replace the three oscillation variables (`sweepMin`, `sweepMax`, `sweepPeriod`) with two new ones. Keep `angle`:
 
 ```cpp
-int startAngle   = 90;
-int targetAngle  = 170;
+int angle       = 0;
+int homeAngle   = 90;
+int goalAngle   = 170;
 int moveDuration = 2000;
 ```
 
 **What is happening here:**
-- `startAngle` is where the servo will be positioned when the sketch starts. This matters because `moveServoA()` uses `myServo.read()` to find the current position when a move begins — and `read()` only knows what you last wrote. Setting a known starting angle in `setup()` means the first move always has a reliable start point.
-- `targetAngle` is where we want the servo to go — any value from 0 to 180.
+- `angle` stays — same global we have been using.
+- `homeAngle` is where the servo will be positioned when the sketch starts. This matters because `moveServoA()` uses `myServo.read()` to find the current position when a move begins — and `read()` only knows what you last wrote. Setting a known starting position in `setup()` means the first move always has a reliable start point.
+- `goalAngle` is where we want the servo to go — any value from 0 to 180.
 - `moveDuration` is how many milliseconds the move should take. `2000` means two seconds.
-- Putting them as named variables at the top means you can adjust and re-upload without touching `loop()` or `setup()`.
 
 ### Step 9 — Set the Start Position in setup()
 
@@ -232,14 +235,14 @@ Inside `setup()`, after `myServo.attach(servoPin)`, add one line:
 ```cpp
 void setup() {
   myServo.attach(servoPin);
-  myServo.write(startAngle);
+  myServo.write(homeAngle);
 }
 ```
 
 **What is happening here:**
-- `myServo.write(startAngle)` moves the servo to your chosen starting position before `loop()` runs for the first time.
+- `myServo.write(homeAngle)` moves the servo to your chosen starting position before `loop()` runs for the first time.
 - This is important because `moveServoA()` calls `myServo.read()` to find out where the servo currently is when a new move begins. `read()` returns the last value you wrote — so without this line, the first move would start from wherever the servo happened to be physically, which may not match what the code expects.
-- Using the variable `startAngle` here means you only need to change one number to shift the starting position.
+- Using the variable `homeAngle` here means you only need to change one number to shift the starting position.
 
 ### Step 10 — Update loop()
 
@@ -247,14 +250,14 @@ Replace the contents of `loop()` with:
 
 ```cpp
 void loop() {
-  int angle = moveServoA(targetAngle, moveDuration);
+  angle = moveServoA(goalAngle, moveDuration);
   myServo.write(angle);
 }
 ```
 
 **What is happening here:**
-- `moveServoA(targetAngle, moveDuration)` calls the function we are about to add. It receives your target and duration and returns the current position along the move.
-- We write whatever position the function returns directly to the servo each loop.
+- `moveServoA(goalAngle, moveDuration)` calls the function we are about to add. It receives your target and duration and returns the current position along the move.
+- We assign that result to the global `angle` — no `int` in front, same variable as always — and write it to the servo.
 - There is no `delay()` here — `moveServoA()` handles its own timing internally.
 
 ### Step 11 — Add the moveServoA() Function
@@ -298,13 +301,13 @@ int moveServoA(int angle, unsigned long durationMs) {
 
 Upload the sketch. The servo should smoothly travel to `targetAngle` over `moveDuration` milliseconds, then hold there.
 
-Try changing the two variables at the top and re-uploading:
+Try changing the variables at the top and re-uploading:
 
 - A large `moveDuration` (like `5000`) makes the move feel like a slow drift.
 - A small `moveDuration` (like `300`) makes it snap.
-- Change `targetAngle` to `10`, upload, then change it to `170` and upload again — the servo travels from wherever it currently is to the new target over the same duration.
+- Change `goalAngle` to `10`, upload, then change it to `170` and upload again — the servo travels from `homeAngle` to the new goal over the same duration.
 
-> **Check your sketch:** You should have three variables at the top, a `setup()` that attaches the servo and writes the start angle, a `loop()` with a single `moveServoA()` call, and the function defined below `loop()`. The servo should snap to `startAngle` when it powers on, then travel smoothly to `targetAngle` and hold.
+> **Check your sketch:** You should have four global variables including `angle` and `homeAngle`, a `setup()` that attaches the servo and writes `homeAngle`, a `loop()` that assigns the result of `moveServoA()` to `angle` and writes it, and the function defined below `loop()`. The servo should snap to `homeAngle` when it powers on, then travel smoothly to `goalAngle` and hold.
 
 ---
 
@@ -312,26 +315,26 @@ Try changing the two variables at the top and re-uploading:
 
 Right now the servo moves to one target and stays. To chain multiple moves in order — and loop through them — we use `switch/case` to track which step we are on.
 
-Above `setup()`, replace `targetAngle` and `moveDuration` with one new variable, keeping `startAngle`:
+Above `setup()`, replace `goalAngle` and `moveDuration` with one new variable, keeping `angle` and `homeAngle`:
 
 ```cpp
-int startAngle   = 90;
+int angle        = 0;
+int homeAngle    = 90;
 int sequenceStep = 0;
 ```
 
 **What is happening here:**
-- We keep `startAngle` because `setup()` still needs to write a known position to the servo before the sequence begins.
-- We no longer need `targetAngle` or `moveDuration` as global variables — those values will live directly inside the `switch/case` so each step can have its own.
+- `angle` stays as the global we write to the servo.
+- We keep `homeAngle` because `setup()` still needs to write a known position before the sequence begins.
+- We no longer need `goalAngle` or `moveDuration` as globals — those values will live directly inside the `switch/case` so each step can have its own.
 - `sequenceStep` tracks where we are in the sequence.
 
-Keep `setup()` as it is — `myServo.write(startAngle)` still runs before the first move.
+Keep `setup()` as it is — `myServo.write(homeAngle)` still runs before the first move.
 
 Replace the contents of `loop()` with:
 
 ```cpp
 void loop() {
-  int angle;
-
   switch (sequenceStep) {
     case 0:
       angle = moveServoA(10, 1500);
@@ -356,13 +359,14 @@ void loop() {
 - Each `case` calls `moveServoA()` with its own target and duration. The function returns the current position during the move, and returns the exact target angle when the move is complete.
 - `if (angle == 10) sequenceStep = 1;` detects completion and advances to the next step.
 - `case 2` loops back to `sequenceStep = 0`, so the sequence runs endlessly.
+- `angle` is the same global variable we have used throughout — no redeclaration needed.
 
 Upload and watch the servo move through the three-step sequence. Then try:
 
 - Changing the target angles and durations in each `case`.
 - Adding a `case 3` with another target, and updating `case 2` to step to `3` instead of `0`.
 
-> **Check your sketch:** You should have `sequenceStep` at the top, a `loop()` with a `switch/case`, and `moveServoA()` defined below `loop()`. The servo should cycle through a repeating sequence.
+> **Check your sketch:** You should have `angle`, `homeAngle`, and `sequenceStep` at the top, a `loop()` with a `switch/case` that assigns to the global `angle`, and `moveServoA()` defined below `loop()`. The servo should cycle through a repeating sequence.
 
 ---
 
@@ -374,7 +378,7 @@ Attach something to the servo horn — a pipe cleaner, a strip of wire, a strip 
 
 ### Things to try
 
-- **Tight oscillation** — set `minAngle` and `maxAngle` only a few degrees apart with a short `cycleMs`. What does a small, rapid tremor feel like compared to a slow wide sweep?
+- **Tight oscillation** — set `sweepMin` and `sweepMax` only a few degrees apart with a short `sweepPeriod`. What does a small, rapid tremor feel like compared to a slow wide sweep?
 - **Slow timed move** — try a duration of 5000ms or longer. At what point does the motion feel more like drift than movement?
 - **Longer sequence** — build a five or six-step sequence using `switch/case`. Think about rhythm: some moves fast, some slow, some to the same position twice in a row.
 - **Reattach the horn at a different angle** — the horn clips onto the shaft with small splines, so you can pull it off and rotate it. This changes the physical start and end positions of the movement without changing any code.
