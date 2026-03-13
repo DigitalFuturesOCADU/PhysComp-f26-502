@@ -2,7 +2,7 @@
 <div style="margin-bottom: 24px; border: 1px solid #e5e5e5; background: #fff;">
     <div style="padding: 12px 16px; background: #ffffff; border-bottom: 1px solid #e5e5e5;"><span style="font-size: 18pt; color: #333333;">Workshop Goal</span></div>
     <div style="padding: 16px;">
-        <p style="margin: 0; font-size: 13pt; line-height: 1.6; color: #333333;">Get the parts working — wire a light sensor (photoresistor) on a breadboard, read its values in the Serial Monitor, and have a servo motor respond to those values. Nothing fancy — just the foundation.</p>
+        <p style="margin: 0; font-size: 13pt; line-height: 1.6; color: #333333;">Get the servo working and learn three ways to move it: a fixed angle you control with a variable, continuous smooth oscillation using a sine wave, and timed point-to-point moves you can chain in sequence. The LDRs are arriving soon — next workshop we connect the two.</p>
     </div>
 </div>
 
@@ -13,11 +13,9 @@
         <ul style="margin: 0; padding-left: 20px; font-size: 11pt; line-height: 1.8; color: #333333;">
             <li>Arduino UNO R4 WiFi</li>
             <li>Breadboard</li>
-            <li>Light-dependent resistor (LDR / photoresistor)</li>
-            <li>10 kΩ resistor</li>
             <li>Servo motor (standard hobby servo)</li>
             <li>Jumper wires</li>
-            <li><a href="class09-LDR-to-Servo.md" target="_blank" rel="noopener">Light Sensor to Servo — Step-by-Step Guide</a></li>
+            <li><a href="class09-ServoBasics.md" target="_blank" rel="noopener">Servo Motor — Step-by-Step Guide</a></li>
             <li><a href="class09-Mar13.md" target="_blank" rel="noopener">Class 09 Notes — New components and reference links</a></li>
             <li><a href="../servo-movement-reference.md" target="_blank" rel="noopener">Servo Movement Reference</a></li>
             <li><a href="../../02-TinyScreens/classes/class06-CodePatterns.md" target="_blank" rel="noopener">Code Patterns (from Project 2)</a></li>
@@ -33,13 +31,12 @@
         <p style="margin: 0 0 12px 0; font-size: 11pt; line-height: 1.6; color: #333333;">All workshops in Project 3 have two components: a <strong>working prototype</strong> and a <strong>design sketch</strong>. Over the three workshops you will develop both.</p>
 
         <!-- Part 1 -->
-        <p style="margin: 0 0 8px 0; font-size: 11pt; font-weight: 600; color: #333333;">Part 1 — Working Prototype: Control servo rotation with light</p>
+        <p style="margin: 0 0 8px 0; font-size: 11pt; font-weight: 600; color: #333333;">Part 1 — Working Prototype: Move a servo three ways</p>
         <ol style="margin: 0 0 16px 0; padding-left: 20px; font-size: 11pt; line-height: 1.8; color: #333333;">
-            <li>Follow the <a href="class09-LDR-to-Servo.md" target="_blank" rel="noopener">Light Sensor to Servo — Step-by-Step Guide</a>.</li>
-            <li>Wire the LDR on the breadboard and confirm it reads values in the Serial Monitor.</li>
-            <li>Wire the servo motor and confirm it moves to an angle you set in the code.</li>
-            <li>Connect the sensor value to the servo angle using <code>constrain()</code> and <code>map()</code>.</li>
-            <li>Tune your <code>lightMin</code> / <code>lightMax</code> values using Serial Monitor readings from your environment.</li>
+            <li>Follow the <a href="class09-ServoBasics.md" target="_blank" rel="noopener">Servo Motor — Step-by-Step Guide</a>.</li>
+            <li>Wire the servo motor and confirm it moves to a fixed angle you set with a variable.</li>
+            <li>Add the <code>oscillate()</code> function and tune the range and speed variables.</li>
+            <li>Add the <code>moveServoA()</code> function and build a multi-step sequence using <code>switch/case</code>.</li>
             <li>Attach an additional object to the servo horn.</li>
         </ol>
 
@@ -54,7 +51,7 @@
             <li>How is it being powered?</li>
         </ol>
 
-        <p style="margin: 12px 0 0 0; font-size: 11pt; line-height: 1.6; color: #666666;"><strong>Tip:</strong> Use Serial Monitor to find your real sensor values before tuning the mapping. Don't guess — measure first, code second.</p>
+        <p style="margin: 12px 0 0 0; font-size: 11pt; line-height: 1.6; color: #666666;"><strong>Tip:</strong> Experiment with the range and speed variables for oscillation, and with the target angles and durations in your sequence. Small changes produce very different movement characters.</p>
 
     </div>
 </div>
@@ -65,7 +62,7 @@
     <div style="padding: 16px;">
         <p style="margin: 0 0 12px 0; font-size: 11pt; line-height: 1.6; color: #333333;">Create a post in the <a href="https://canvascloud.ocadu.ca/courses/13538/discussion_topics/212719" target="_blank" rel="noopener">Workshop 1 Discussion</a> on Canvas:</p>
         <ul style="margin: 0; padding-left: 20px; font-size: 11pt; line-height: 1.8; color: #333333;">
-            <li>A video of the interaction between the light sensor and the servo</li>
+            <li>A video of your servo moving — with something attached to the horn — demonstrating at least one of the movement patterns from the workshop</li>
             <li>An image of V1 of your design drawing</li>
             <li>1–2 sentence description of your design concept</li>
         </ul>

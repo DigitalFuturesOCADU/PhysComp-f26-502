@@ -6,7 +6,7 @@
 
 ## Overview
 
-This workshop is about getting the parts working. By the end of class you will have a light sensor (photoresistor) wired on a breadboard, reading values in the Serial Monitor, and a servo motor responding to those values. Nothing fancy — just the foundation.
+The LDRs have not arrived yet, so today's workshop pivots to focus entirely on the **servo motor**. You will wire a servo, control it with a variable, add smooth oscillation, and then build a sequenced timed-move pattern. The light sensor concepts covered below are still relevant context — we will connect the two in the next workshop.
 
 ### Building on Project 2
 
@@ -99,13 +99,15 @@ The three wires connect as follows:
 
 All workshops in Project 3 have two components: a **working prototype** and a **design sketch**. Over the three workshops you will develop both.
 
-### Working Prototype 1 — Control servo rotation with light
+### Working Prototype 1 — Servo movement
 
-The goal is the simplest possible input → output connection between the sensor and the servo. Follow the step-by-step guide above so that the light sensor value controls the servo rotation in real time. The servo horn must have an additional object attached to it.
+The goal this week is to get comfortable moving a servo in different ways: fixed angle, continuous oscillation, and timed point-to-point moves. The servo horn must have an additional object attached to it.
 
 Follow the step-by-step guide:
 
-**[Light Sensor to Servo — Step by Step](class09-LDR-to-Servo.md)**
+**[Servo Motor — Step by Step](class09-ServoBasics.md)**
+
+The light sensor step-by-step guide is ready for when the parts arrive: [Light Sensor to Servo — Step by Step](class09-LDR-to-Servo.md)
 
 
 ### Project Design V1
@@ -124,6 +126,6 @@ In parallel, create a drawing that shows your initial concept. Read the [project
 
 Create a post in the [Workshop 1 Discussion](https://canvascloud.ocadu.ca/courses/13538/discussion_topics/212719) that includes:
 
-- A video of the interaction between the light sensor and the servo
-- An image of V1 of your design
+- A video of your servo moving — with something attached to the horn — demonstrating at least one of the movement patterns from the workshop
+- An image of V1 of your design sketch
 - 1–2 sentence description of your design concept
