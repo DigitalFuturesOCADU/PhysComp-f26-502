@@ -335,36 +335,57 @@ Replace the contents of `loop()` with:
 
 ```cpp
 void loop() {
+
+  // Each case is one move in the sequence.
+  // The switch checks sequenceStep every loop and runs only the matching case.
   switch (sequenceStep) {
+
     case 0:
+      // Move to 10° over 1500ms (1.5 seconds)
       angle = moveServoA(10, 1500);
-      if (angle == 10) sequenceStep = 1;
+      // When the move is done, moveServoA returns exactly 10.
+      // That triggers the advance to the next step.
+      if (angle == 10) { sequenceStep = 1; }
       break;
+
     case 1:
+      // Move to 170° over 2000ms (2 seconds) — slow sweep to the other end
       angle = moveServoA(170, 2000);
-      if (angle == 170) sequenceStep = 2;
+      if (angle == 170) { sequenceStep = 2; }
       break;
+
     case 2:
+      // Move back to 90° over 500ms — a quick snap to centre
+      // Loop back to step 0 when done, so the sequence repeats
       angle = moveServoA(90, 500);
-      if (angle == 90) sequenceStep = 0;
+      if (angle == 90) { sequenceStep = 0; }
       break;
+
+    // To add another step:
+    //   1. Add a new case here with the target angle and duration.
+    //   2. Change the case above to advance to this new case number instead of looping back to 0.
+    //   3. Make the new case loop back to 0 (or to another step) when it finishes.
   }
 
+  // Write whatever angle the current move has reached to the servo.
+  // angle is the same global variable used throughout the sketch.
   myServo.write(angle);
 }
 ```
 
 **What is happening here:**
-- `switch (sequenceStep)` checks which step we are on and runs only that `case`.
-- Each `case` calls `moveServoA()` with its own target and duration. The function returns the current position during the move, and returns the exact target angle when the move is complete.
-- `if (angle == 10) sequenceStep = 1;` detects completion and advances to the next step.
-- `case 2` loops back to `sequenceStep = 0`, so the sequence runs endlessly.
-- `angle` is the same global variable we have used throughout — no redeclaration needed.
+- Every loop, `switch (sequenceStep)` checks which step we are on and runs only that `case`. All other cases are skipped entirely.
+- Each `case` calls `moveServoA()` with its own target angle and duration. The function returns the interpolated position during the move — so the servo actually travels smoothly — and returns the exact target angle only when the move is complete.
+- The `if` check after each call watches for that exact target value. When it matches, `sequenceStep` is incremented, and on the next loop the `switch` drops into the new case and begins a fresh move.
+- `case 2` sets `sequenceStep = 0` instead of advancing further, which makes the sequence loop back to the beginning and repeat indefinitely.
+- `angle` is the global variable from the top of the sketch — no `int` in front, just an assignment.
 
-Upload and watch the servo move through the three-step sequence. Then try:
+**Adding more steps:**
+1. Add a new `case` at the bottom of the `switch` block with the next number (`case 3:`, `case 4:`, etc.), giving it its own target and duration.
+2. In the case just before it, change the completion check to advance to the new number instead of looping back to 0.
+3. In your new final case, set `sequenceStep = 0` to loop back to the beginning.
 
-- Changing the target angles and durations in each `case`.
-- Adding a `case 3` with another target, and updating `case 2` to step to `3` instead of `0`.
+Upload and watch the servo move through the sequence. Each case is one move — think about the rhythm you are building: which moves are fast, which are slow, where does the servo pause or snap.
 
 > **Check your sketch:** You should have `angle`, `homeAngle`, and `sequenceStep` at the top, a `loop()` with a `switch/case` that assigns to the global `angle`, and `moveServoA()` defined below `loop()`. The servo should cycle through a repeating sequence.
 
