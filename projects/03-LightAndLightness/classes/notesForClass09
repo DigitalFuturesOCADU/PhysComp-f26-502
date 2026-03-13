@@ -1,0 +1,115 @@
+What is needed for this class
+
+# Building on Project 2
+- Moving from Screen to Material + Movement
+- New type of analog input, from tactile to environmental
+- Building on Coding Patterns and Methods
+- - map and thresholds as a robust method
+- - data smoothing and filtering
+- - managing multiple timings with a single loop
+
+# Introduction to new components
+## Breadboards
+- What are they
+- - Important prototyping tool that provides secure, but temporary connections between wires and components.
+- I tend to describe it as "connect the dots" when using breadboards to describe how electrical connections can take multiple forms to complete a circuit.
+- - How do the work? talk about the connected outer rails and interior connected columns
+https://en.wikipedia.org/wiki/Breadboard#/media/File:Breadboard.png
+- How are they useful for distributing power?
+- How are they useful for connecting components
+- Links
+Breadboard Tutorials
+
+SparkFun — How to Use a Breadboard
+https://learn.sparkfun.com/tutorials/how-to-use-a-breadboard/all
+Probably the gold standard beginner reference — covers internal connections, power rails, how rows and columns work, and builds up to a simple LED circuit with a button and resistor. SparkFun Learn This one is worth bookmarking for your students.
+Science Buddies — How to Use a Breadboard
+https://www.sciencebuddies.org/science-fair-projects/references/how-to-use-a-breadboard
+Includes a tutorial video plus detailed text explanations, covers full-size vs. half-size vs. mini boards, and explains breadboard diagrams vs. schematics — written for true beginners with no assumed knowledge. Science Buddies
+Build Electronic Circuits — Breadboard Beginner's Guide
+https://www.build-electronic-circuits.com/breadboard/
+Short and visual — explains horizontal vs. vertical connections, the center gap, power rail conventions, and walks through connecting an LED and resistor to a battery. Also has a quick intro video (~2:30). Build Electronic Circuits
+Adafruit — Breadboards for Beginners (PDF)
+https://cdn-learn.adafruit.com/downloads/pdf/breadboards-for-beginners.pdf
+Shows what's physically inside a breadboard — the metal clips with teeth that grip component leads — which is great for helping students understand why connections work the way they do. Adafruit
+Instructables — Breadboard Tutorial (7 Steps)
+https://www.instructables.com/Breadboard-Tutorial/
+Step-by-step format with video option, covers everything from the name's origin through to practical usage. Instructables
+Starting Electronics — Building a Circuit on Breadboard
+https://startingelectronics.org/beginners/start-electronics-now/tut1-breadboard-circuits/
+Walks through building a simple LED circuit and then explains the internal connections with annotated photos showing exactly which strips are connected. Starting Electronics
+
+
+## Light Dependant Resistor (LDR) aka Light Sensor
+- What is it, how does it work in plain language
+- How do you wire it up - link to diagram image
+- Compare / Contrast LDR vs pressure
+- Side by side images and shared description
+projects/02-TinyScreens/assets/pressureSensorWiring.png
+projects/03-LightAndLightness/assets/1LDR_breadboard_bb.png
+- Reminder of voltage divider and why this uses a 10K instead of a 220 on the pressure sensor
+
+- Other Links
+LDR / Photoresistor with Arduino
+
+Arduino Docs — Starting Electronics LDR Tutorial
+https://startingelectronics.org/beginners/arduino-tutorial-for-beginners/arduino-LDR-tutorial/
+Walks through connecting an LDR to an Uno or Mega, reading analog values, and using a voltage divider — good at explaining why you need the resistor. Starting Electronics
+Circuit Basics — Pairing an LDR with Arduino
+https://www.circuitbasics.com/pairing-a-light-dependent-resistor-ldr-with-an-arduino-uno/
+Covers the voltage divider concept clearly, explains why you can't just wire the LDR straight to the analog pin, and includes a downloadable quick-start guide. Circuit Basics
+ArduinoYard — LDR with Arduino Complete Guide
+https://arduinoyard.com/ldr-with-arduino/
+Goes from the basics of how resistance changes with light through to controlling an LED based on light intensity, with formulas kept accessible. ArduinoYard
+Instructables — Arduino and LDR (10 Steps)
+https://www.instructables.com/Arduino-and-a-LDR-Light-Dependent-Resistor/
+Step-by-step format that treats the LDR as a light sensor for detecting dim vs. bright conditions. Instructables
+
+
+## Servo Motors
+- What are they?
+- How do they work?
+- How are they different for standard DC motors. angle VS speed/direction
+- Note on Standard/Hobby Servos (which are what we are using) vs Continuous
+
+- Other Links
+Arduino Official Docs — Basic Servo Control
+https://docs.arduino.cc/tutorials/generic/basic-servo-control/
+The official tutorial covering the Servo library sweep example — minimal, clean, and uses the pre-installed library. Arduino
+Arduino Official Docs — Servo Motor Basics
+https://docs.arduino.cc/learn/electronics/servo-motors
+Arduino's own conceptual overview of connecting and controlling servos. Arduino
+Circuit Basics — How to Control Servos with Arduino
+https://www.circuitbasics.com/controlling-servo-motors-with-arduino/
+Includes push-button control and potentiometer control examples with wiring diagrams — good for students who want to try different input methods. Circuit Basics
+Maker Guides — Servo Arduino Tutorial
+https://www.makerguides.com/servo-arduino-tutorial/
+Covers position and speed control, potentiometer input, and multi-servo wiring, with clear notes about when you need external power. Maker Guides
+Last Minute Engineers — Servo Motor Arduino Tutorial
+https://lastminuteengineers.com/servo-motor-arduino-tutorial/
+Explains the internal components (DC motor, gearbox, potentiometer, control circuit) before getting into code — nice for students who want to understand what's actually inside. Last Minute Engineers
+
+
+# Project 3 Workshop 1 : Prototype V1
+## Overview
+All workshops in project 3 will have the same 2 components: A current working prototype and a design sketch for the final version. Over the course of the 3 workshops you will be developing both aspects of the project.
+
+## Working Prototype 1 - Control the rotation of the servo with light value
+The goal is to create the most simple input/output connection between the sensor and the servo as a starting point. Follow the step by step guide that leads to the light sensor value controlling the servo rotation in realtime. The servo horn must have an additional object attached to it.
+projects/03-LightAndLightness/classes/class09-LDR-to-Servo.md
+
+## Project Design V1
+In parallel to creating the first simple interaction, you should create a drawing that shows your intial concept for your project. Read the project brief carefully : https://canvascloud.ocadu.ca/courses/13538/pages/light-and-lightness . Yes, this is an early stage, but you will be improving it each week through iteration. The drawing should note
+- General concept of the interaction : How is light being used to effect movement
+- Position of Light Sensor
+- Servo motor(s): what are they attached to and what do they do?
+- Overall form factor and size: On a table, free standing, hanging, etc
+- How is it being powered? 
+
+## Submission
+Create a post that shows
+- Video of interaction between light sensor and servo
+- Image of V1 of your design
+- 1 - 2 sentence description of your design concept
+
+https://canvascloud.ocadu.ca/courses/13538/discussion_topics/212719
