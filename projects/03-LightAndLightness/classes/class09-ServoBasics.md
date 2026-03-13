@@ -37,6 +37,10 @@ The servo plug does not fit directly into the breadboard. Use the pin-to-pin jum
 
 ![Using jumper cables to connect the servo](../assets/servoPinsWjumpers.jpg)
 
+### Wiring Diagram
+
+![Servo breadboard wiring diagram](../assets/1Servo__breadboard_bb.png)
+
 > **Check before moving on:** The servo's brown wire should go to GND on the power rail, the red wire to 5V on the power rail, and the orange wire to pin 9 on the Arduino.
 
 ---
