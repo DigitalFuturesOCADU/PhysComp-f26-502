@@ -142,14 +142,12 @@ Replace the contents of `loop()` with:
 void loop() {
   angle = oscillate(sweepMin, sweepMax, sweepPeriod);
   myServo.write(angle);
-  delay(20);
 }
 ```
 
 **What is happening here:**
 - `oscillate(sweepMin, sweepMax, sweepPeriod)` calls the function we are about to add. It takes your three variables and returns a calculated angle based on the current time.
 - We assign that result to the global `angle` and pass it to `myServo.write()`. Notice there is no `int` in front of `angle` — we are assigning to the variable we already declared, not creating a new one.
-- `delay(20)` adds a 20ms pause between updates. Without it the loop runs thousands of times per second, which provides no benefit to the servo and wastes processing time.
 
 ### Step 7 — Add the oscillate() Function
 
