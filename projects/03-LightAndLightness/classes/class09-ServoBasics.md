@@ -62,7 +62,7 @@ At the very top of your sketch, before everything else, add:
 
 ### Step 2 — Create the Servo Object and Variables
 
-Below the include, add:
+Below the #include, but above setup() add:
 
 ```cpp
 Servo myServo;
@@ -71,6 +71,7 @@ int angle = 90;
 ```
 
 **What is happening here:**
+- `Global Variables` Declaring these variables before setup means that they are *global* meaning that they can be read anywhere in the program and are saved even between loop() 
 - `Servo myServo;` creates a servo object — a named thing we can send instructions to. Think of it as giving the servo a name so we can talk to it in the code.
 - `servoPin = 9` stores which pin the signal wire is connected to. Using a variable here means we only need to change one line if we move the wire later.
 - `angle = 90` is the target position. 90 is the midpoint of the servo's 0–180° range. We will use this variable to control where the servo goes.
