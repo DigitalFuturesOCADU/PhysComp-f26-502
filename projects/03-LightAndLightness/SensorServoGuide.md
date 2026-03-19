@@ -8,6 +8,33 @@ This page maps everything you can do with light sensors and servos in this proje
 
 ---
 
+## All Documents
+
+| Document | Description |
+|----------|-------------|
+| [Servo Movement Reference](servo-movement-reference.md) | Function documentation for `oscillate()`, `moveServoA()`, and `moveServoB()` |
+| [Light Sensor Guide](classes/LightSensorGuide.md) | How photoresistors work, reading values, smoothing, calibration, and sensor patterns |
+| [Light Sensor to Servo](classes/class10-LDR-to-Servo.md) | Core step-by-step walkthrough: wire sensor + servo, map, threshold, oscillation, timed moves |
+| [Servo Basics](classes/class09-ServoBasics.md) | Step-by-step: wire a servo, fixed angle, oscillation, timed moves, switch/case sequences |
+| [Multiple Servos](classes/MultipleServos.md) | Step-by-step: add a second servo, independent oscillations, independent timed moves, mixed modes |
+| [Multiple Light Sensors](classes/MultipleLDRs.md) | Step-by-step: add a second photoresistor, compare readings, directional threshold with deadband |
+| [Two LDRs + Two Servos](classes/TwoLDRsTwoServos.md) | Combinatory patterns for the full 2+2 setup: paired, crossed, comparison-driven, mixed, asymmetric |
+| [Physical Adjustments](classes/PhysicalAdjustments.md) | Extending servo and sensor wires with solid core wire for remote mounting |
+
+---
+
+## Contents
+
+- [Foundations](#foundations) — movement functions and sensor reading
+- [Connecting Sensor to Movement](#connecting-sensor-to-movement) — continuous mapping, threshold switching, two-sensor comparison
+- [Sequencing and Choreography](#sequencing-and-choreography) — switch/case and array sequences
+- [Sensor Techniques](#sensor-techniques) — smoothing and calibration
+- [Working with Multiples](#working-with-multiples) — multiple servos, multiple sensors, the full 2+2 setup
+- [Physical Adjustments](#physical-adjustments) — extending wires for remote mounting
+- [Design Considerations](#design-considerations) — movement, light, placement, materials
+
+---
+
 ## Foundations
 
 These two reference documents cover the building blocks for every pattern on this page.
