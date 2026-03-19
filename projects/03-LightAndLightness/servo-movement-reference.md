@@ -187,9 +187,77 @@ The final case loops back to step 0 — or to any earlier step — to create a r
 
 ---
 
+## 3. `moveServoB()` — Second Servo Timed Move
+
+When you add a second servo, it needs its own copy of the move function. The code is identical to `moveServoA()` — only the function name and the internal `read()` call change.
+
+### Why You Cannot Share One Function
+
+`moveServoA()` stores its state in `static` variables: where the move started, where it is going, and when it began. There is one copy of those variables per function. If two servos called the same function, the second call would overwrite the first servo's stored position and timing — the first servo's move would be lost.
+
+Each copy of the function has its own private set of `static` variables. `moveServoA()` has its whiteboard, `moveServoB()` has its own.
+
+### The Function
+
+```cpp
+/*
+ * moveServoB()
+ *
+ * Identical to moveServoA() but for a second servo.
+ * Uses myServoB.read() to track the second servo's position.
+ * Has its own static variables — independent state from moveServoA().
+ *
+ *   angle      — the target angle (0–180)
+ *   durationMs — how long the move should take in milliseconds
+ */
+int moveServoB(int angle, unsigned long durationMs) {
+
+  static float startAngle        = 0.0;
+  static int   targetAngle       = -1;
+  static unsigned long startTime = 0;
+
+  if (angle != targetAngle) {
+    startAngle  = myServoB.read();  // reads Servo B's position
+    targetAngle = angle;
+    startTime   = millis();
+  }
+
+  unsigned long elapsed = millis() - startTime;
+  float progress = (float)elapsed / (float)durationMs;
+
+  if (progress >= 1.0) {
+    targetAngle = -1;
+    return angle;
+  }
+
+  float current = startAngle + (angle - startAngle) * progress;
+  return (int)current;
+}
+```
+
+### What Changes from moveServoA()
+
+Two things:
+
+1. The function name: `moveServoB` instead of `moveServoA`
+2. The `read()` call: `myServoB.read()` instead of `myServo.read()`
+
+Everything else — the logic, the static variables, the return behavior — is exactly the same. Call it the same way:
+
+```cpp
+angleB = moveServoB(goalAngleB, moveDurationB);
+myServoB.write(angleB);
+```
+
+If you add a third servo, create `moveServoC()` with `myServoC.read()`. The pattern repeats.
+
+**Step-by-step guide for two servos:** [Multiple Servos](classes/MultipleServos.md)
+
+---
+
 ## Key Concepts Comparison
 
-| | `oscillate()` | `moveServoA()` |
+| | `oscillate()` | `moveServoA()` / `moveServoB()` |
 |---|---|---|
 | **Motion type** | Continuous back-and-forth | Point-to-point |
 | **State** | Stateless — calculates from `millis()` each call | Stateful — uses `static` variables to track progress |
