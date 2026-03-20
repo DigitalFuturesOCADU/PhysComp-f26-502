@@ -6,11 +6,37 @@
 
 ## Review — Class 09
 
-Last week we introduced the servo motor and three ways to move it: a fixed angle from a variable, continuous oscillation with `oscillate()`, and timed point-to-point moves with `moveServoA()` chained using `switch/case`.
+Last week we introduced the **servo motor** — a motor that rotates to a specific angle (0–180°) and holds that position. Unlike a regular DC motor that just spins, a servo lets you control exactly where it points.
+
+### The Servo Motor
+
+![Servo motor components](../assets/ServoComponents.jpg)
+
+The servo has three wires bundled into a single plug:
+
+| Wire Colour | Connection |
+|---|---|
+| **Brown** | GND |
+| **Red** | 5 V |
+| **Orange** | Signal (pin 9) |
+
+The plug does not fit directly into the breadboard — use the pin-to-pin jumper cables from your kit to connect each wire:
+
+![Using jumper cables to connect the servo](../assets/servoPinsWjumpers.jpg)
+
+### Three Ways to Move
+
+We explored three movement approaches:
+
+1. **Fixed angle** — set a position with a variable, the servo moves there and holds
+2. **Oscillation** — `oscillate()` sweeps the servo back and forth continuously using a sine wave
+3. **Timed moves** — `moveServoA()` sends the servo to a target angle over a set duration; chain multiple moves with `switch/case` to build a movement sequence
+
+### Links from Last Week
 
 - [Class 09 — Workshop 1](class09-Mar13.md) — components, wiring, and reference links
 - [Servo Basics — Step-by-Step Guide](class09-ServoBasics.md) — the walkthrough from last week
-- [Workshop 1 Slides](https://canvascloud.ocadu.ca/courses/13538) <!-- replace with actual slide link if different -->
+- [Workshop 1 Slides](https://ocaduniversity-my.sharepoint.com/:p:/g/personal/npuckett_ocadu_ca/IQCRdXq5WRVBRaCU5SAnemYhAdRAXyRIbA_zSgWEFeJ2jPI?e=NxrFij)
 
 ---
 
@@ -41,6 +67,14 @@ The [Kinetic Joy](https://paper.gatech.edu/kinetic-joy/welcome) project from the
 ## Workshop Goal
 
 Connect the light sensor to the servo so that light controls movement. Explore three ways to link them: continuous mapping with `map()`, threshold-triggered oscillation, and threshold-triggered timed moves. Throughout the workshop, keep something attached to the servo horn — it makes the motion readable.
+
+### Today's Wiring
+
+Today we combine the light sensor and the servo on one breadboard:
+
+![1 Servo + 1 LDR breadboard wiring diagram](../assets/1Servo_1LDR_breadboard_bb.png)
+
+The servo stays wired to **pin 9** from last week. The photoresistor connects through a **10 kΩ resistor** to analog pin **A0**. The step-by-step guide walks you through building up to this circuit.
 
 ---
 
