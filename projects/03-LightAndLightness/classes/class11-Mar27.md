@@ -48,7 +48,7 @@ Use the remaining class time to work on your prototype. This is the last full wo
 **If you are ahead**, explore:
 - Adding a second servo or sensor — [Multiple Servos](MultipleServos.md), [Multiple Light Sensors](MultipleLDRs.md)
 - More complex sensor-to-movement patterns — [Two LDRs + Two Servos](TwoLDRsTwoServos.md)
-- Smoothing or calibration to improve reliability — [Light Sensor Guide](LightSensorGuide.md#3-smoothing--stabilizing-noisy-readings)
+- Smoothing or calibration to improve reliability — [Light Sensor Guide](LightSensorGuide.md#3-smoothing--rolling-average)
 
 ### Check-In
 

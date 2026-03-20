@@ -191,7 +191,7 @@ You now have two light sensors producing a directional signal. The design work i
 
 - **Drive a servo to follow light** — map the difference value to a servo angle. The servo points toward whichever side is brighter. Use `map(lightDifference, -maxDiff, maxDiff, 0, 180)` where `maxDiff` is the largest difference you observe.
 - **Three oscillation profiles** — use the directional threshold to select different `oscillate()` parameters: one profile when the left side is brighter, another when the right side is brighter, a third when balanced.
-- **Smoothing** — apply `rollingAverage()` to each sensor before comparing. See the [Light Sensor Guide — Smoothing](LightSensorGuide.md#3-smoothing--stabilizing-noisy-readings) section.
+- **Smoothing** — apply `rollingAverage()` to each sensor before comparing. See the [Light Sensor Guide — Smoothing](LightSensorGuide.md#3-smoothing--rolling-average) section.
 - **Calibration** — use `calibrateSensor()` at startup to establish baselines for both sensors. Thresholds become relative to the baseline rather than hardcoded. See the [Light Sensor Guide — Calibration](LightSensorGuide.md#4-calibration--measuring-ambient-light-at-startup) section.
 - **Sensor placement** — where you mount the two sensors determines what the comparison means. On opposite sides of an object, it detects direction. At different heights, it reads vertical light distribution. Inside and outside an enclosure, it compares internal shadow to ambient room light.
 

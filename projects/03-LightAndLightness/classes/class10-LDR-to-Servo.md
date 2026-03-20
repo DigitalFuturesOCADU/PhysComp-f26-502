@@ -1,6 +1,6 @@
 # Light Sensor to Servo — Step by Step
 
-[← Back to Workshop 1](class09-Mar13.md) · [← Back to Light & Lightness](../LightAndLightness.md)
+[← Back to Sensor + Servo Guide](../SensorServoGuide.md) · [← Back to Light & Lightness](../LightAndLightness.md)
 
 ---
 

@@ -108,7 +108,7 @@ Once the core walkthrough is working, pick one of the following based on your de
 - [Multiple Light Sensors](MultipleLDRs.md) — add a second photoresistor, compare readings for directional sensing
 - [Two LDRs + Two Servos](TwoLDRsTwoServos.md) — combinatory patterns for the full 2+2 setup
 - [Physical Adjustments](PhysicalAdjustments.md) — extending wires to mount sensors and servos away from the breadboard
-- [Light Sensor Guide — Smoothing](LightSensorGuide.md#3-smoothing--stabilizing-noisy-readings) — stabilize noisy readings with a rolling average
+- [Light Sensor Guide — Smoothing](LightSensorGuide.md#3-smoothing--rolling-average) — stabilize noisy readings with a rolling average
 - [Light Sensor Guide — Calibration](LightSensorGuide.md#4-calibration--measuring-ambient-light-at-startup) — adapt thresholds to any environment automatically
 
 ---

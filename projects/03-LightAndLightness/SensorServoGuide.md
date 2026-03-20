@@ -122,7 +122,7 @@ These techniques apply to any photoresistor reading, regardless of what you do w
 
 A rolling average reduces noise from the sensor by averaging recent readings. One function call wraps the raw `analogRead()` and returns a stable value. Useful when small fluctuations cause the servo to jitter.
 
-**Reference:** [Light Sensor Guide — Smoothing](classes/LightSensorGuide.md#3-smoothing--stabilizing-noisy-readings)
+**Reference:** [Light Sensor Guide — Smoothing](classes/LightSensorGuide.md#3-smoothing--rolling-average)
 
 ### Calibration
 

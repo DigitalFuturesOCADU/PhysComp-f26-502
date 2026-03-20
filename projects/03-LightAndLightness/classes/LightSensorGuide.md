@@ -1,6 +1,6 @@
 # Light Sensor — Photoresistor Reference
 
-[← Back to Light & Lightness](../LightAndLightness.md)
+[← Back to Sensor + Servo Guide](../SensorServoGuide.md) · [← Back to Light & Lightness](../LightAndLightness.md)
 
 ---
 

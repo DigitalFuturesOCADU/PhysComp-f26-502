@@ -1,7 +1,5 @@
 # Light & Lightness
 
-<!-- TODO: Add main project image (light/shadow kinetic object) -->
-
 ## Project Overview
 
 This project focuses on creating responsive kinetic objects that manipulate light and shadow through movement. You will use servo motors to control mechanisms built primarily from lightweight materials — paper, vellum, fabric — and read input from a light sensor to affect and change its behavior over time. You should consider its behavior for the entire 30 minute span of the open exhibition. How can it adapt and change over that time? How can you accentuate and expand the physical and visual properties of your chosen material by controlling it with the servo?
@@ -27,7 +25,6 @@ Rather than working with a complicated library, you will build the servo respons
 - [Hardware](#hardware)
 - [Coding Concepts](#coding-concepts)
 - [Iterative Prototyping](#iterative-prototyping)
-- [Lecture Slides](#lecture-slides)
 
 ---
 
@@ -35,26 +32,15 @@ Rather than working with a complicated library, you will build the servo respons
 
 | Date | Topic |
 |------|-------|
-| March 13 | [Class 09 - Workshop 1](classes/class09-Mar20.md) |
-| March 20 | [Class 10 - Workshop 2](classes/class10-Mar27.md) |
-| March 27 | [Class 11 - Workshop 3](classes/class11-Apr03.md) |
+| March 13 | [Class 09 - Workshop 1](classes/class09-Mar13.md) |
+| March 20 | [Class 10 - Workshop 2](classes/class10-Mar20.md) |
+| March 27 | [Class 11 - Workshop 3](classes/class11-Mar27.md) |
 | April 3 | [Class 12 - Project Exhibition](classes/class12-Apr03.md) |
 | April 8 | Documentation Due |
 
 ---
 
-## Lecture Slides
-
-| Class | Slides |
-|-------|--------|
-| Class 09 | *Link to slides* |
-| Class 10 | *Link to slides* |
-| Class 11 | *Link to slides* |
-| Class 12 | *Link to slides* |
-
----
-
-## From Screen to Space : Changes and Similarities from Project 2
+---\n\n## From Screen to Space : Changes and Similarities from Project 2
 
 ### Physical Output vs. Screen Output
 
@@ -86,8 +72,6 @@ A servo rotates back and forth. That is the raw material. What you build with it
 
 Think about the movement your object makes and describe it in words before writing code:
 
-<!-- TODO: Consider adding specific examples linking quality words to oscillate() / moveServo() parameter choices -->
-
 | Quality | Description | Code Lever |
 |---|---|---|
 | **Speed** | fast / slow / accelerating / decelerating | Cycle duration, move duration |
@@ -105,8 +89,6 @@ Your object does not just move — it casts shadows, blocks light, creates patte
 - Can you position a light source to amplify or direct the shadow?
 - Does the object's own movement change the light reaching its sensor? (this creates a feedback loop)
 
-<!-- TODO: Add visual examples/reference images of kinetic shadow art -->
-
 ### Lightness of Materials
 
 The word "lightness" has a double meaning in this project:
@@ -115,14 +97,10 @@ The word "lightness" has a double meaning in this project:
 
 2. **Optical lightness** — These same materials interact with light in specific ways. Vellum is translucent. Paper reflects and shadows sharply. Fabric diffuses. Your material choices determine the *quality of light* your piece produces.
 
-<!-- TODO: Add material examples with photos — paper, vellum, fabric, wire, thread -->
-<!-- TODO: Consider adding references to kinetic art artists (Calder, Tinguely, Theo Jansen, etc.) -->
-
 ### Mechanisms
 
 Mechanisms are another key tool in shaping the character of motion. Servos output rotational movement, but this can be amplified or altered through mechanisms. Well-designed mechanisms provide opportunities that aren't possible with code alone, such as converting rotational movement into linear.
 
-<!-- TODO: Add diagrams or references for basic mechanism types (crank-slider, four-bar linkage, cam, etc.) -->
 
 ---
 
@@ -158,11 +136,11 @@ Rather than working with a complicated library, you will build the servo respons
 | Function | Motion Type | State | Multi-Servo | Use Case |
 |---|---|---|---|---|
 | `oscillate()` | Continuous sine-wave sweep | Stateless — calculates from `millis()` | One function for all servos | Ongoing, rhythmic motion |
-| `moveServo()` | Timed point-to-point | Stateful — uses `static` variables | One copy per servo | Sequenced, choreographed moves |
+| `moveServoA()` | Timed point-to-point | Stateful — uses `static` variables | One copy per servo | Sequenced, choreographed moves |
 
 - **`oscillate(minAngle, maxAngle, cycleMs)`** — Returns an angle that sweeps smoothly between two values. The motion naturally slows at extremes, like a pendulum. Set-and-forget: call it every loop and it runs forever.
 
-- **`moveServo(angle, durationMs)`** — Moves from the current position to a target angle over a set duration. Returns the target angle when complete, allowing you to chain moves using `switch`/`case`.
+- **`moveServoA(angle, durationMs)`** — Moves from the current position to a target angle over a set duration. Returns the target angle when complete, allowing you to chain moves using `switch`/`case`.
 
 ### Mapping Sensor Data to Movement
 
@@ -201,7 +179,7 @@ See: [Code Patterns — Thresholds](../02-TinyScreens/classes/class06-CodePatter
 
 ### Timing with millis()
 
-Both `oscillate()` and `moveServo()` are already non-blocking — they use `millis()` internally. This means your `loop()` can read sensors, update servos, and manage state without anything waiting or blocking.
+Both `oscillate()` and `moveServoA()` are already non-blocking — they use `millis()` internally. This means your `loop()` can read sensors, update servos, and manage state without anything waiting or blocking.
 
 If you need additional timed events (pauses between movements, periodic sensor reads, state transitions on a timer), use the same `millis()`-based timing pattern from previous projects.
 
@@ -209,7 +187,7 @@ See: [Delay vs Millis](../01-AltController/DelayVsMillis.md)
 
 ### State Machines for Movement Sequences
 
-Use `switch`/`case` with `moveServo()` completion to choreograph movement sequences. The light sensor can drive state transitions — changing which sequence plays, how fast it runs, or when it switches:
+Use `switch`/`case` with `moveServoA()` completion to choreograph movement sequences. The light sensor can drive state transitions — changing which sequence plays, how fast it runs, or when it switches:
 
 ```cpp
 switch (movementState) {
@@ -228,8 +206,6 @@ switch (movementState) {
 }
 ```
 
-<!-- TODO: Add an example showing light sensor input driving state transitions -->
-
 ---
 
 ## Iterative Prototyping
@@ -241,11 +217,9 @@ This project uses a deliberate iterative process to evolve your ideas over the 4
 **Goal:** Get the parts working independently.
 
 - Read the light sensor and observe values in Serial Monitor
-- Connect a servo and control it with `oscillate()` and/or `moveServo()`
+- Connect a servo and control it with `oscillate()` and/or `moveServoA()`
 - Begin connecting sensor input to servo output (basic mapping)
 - Sketch your concept: what moves? what material? what does light do?
-
-<!-- TODO: Link to class09-Mar20.md when workshop content is written -->
 
 ### Workshop 2 — Integration (March 20)
 
@@ -256,8 +230,6 @@ This project uses a deliberate iterative process to evolve your ideas over the 4
 - Develop at least two distinct movement behaviors (e.g., light vs. dark responses)
 - Test how your materials respond to the servo's motion
 - Begin considering light source and shadow placement
-
-<!-- TODO: Link to class10-Mar27.md when workshop content is written -->
 
 ### Workshop 3 — Refinement (March 27)
 
@@ -281,8 +253,6 @@ This project uses a deliberate iterative process to evolve your ideas over the 4
 
 - Full documentation on your website, covering concept, process, and final result
 
-<!-- TODO: Add documentation requirements and format expectations -->
-
 ---
 
 ## Design Constraints
@@ -305,8 +275,6 @@ This project uses a deliberate iterative process to evolve your ideas over the 4
 - Create an object that is based around stuffed animals
 - Create an object that is based around a weapon
 
-<!-- TODO: Review and expand this list — are there common student mistakes to preempt? -->
-
 ---
 
 ## Design Considerations
@@ -314,8 +282,6 @@ This project uses a deliberate iterative process to evolve your ideas over the 4
 ### Mechanism
 
 How does the rotational motion of a servo become the movement of your piece? A servo turns — but your object could wave, nod, flutter, pulse, or twist. Consider linkages, cams, cranks, pulleys, levers, or direct drive. The mechanism *is* the design.
-
-<!-- TODO: Add diagrams or references for basic mechanism types (crank-slider, four-bar linkage, cam, etc.) -->
 
 ### Responsiveness
 
@@ -332,8 +298,5 @@ Is light the subject of the work, or the medium? Are you sculpting shadow? Filte
 ### Craft & Finish
 
 The work should feel intentional and complete. Electronics are enclosed. Wires are managed. Materials are cut and attached with care. The servo and mechanism work reliably. The overall presentation communicates that every choice was deliberate.
-
-<!-- TODO: Add references to enclosure techniques, wire management strategies -->
-<!-- TODO: Consider adding exhibition setup requirements (table, power, lighting) -->
 
 ---

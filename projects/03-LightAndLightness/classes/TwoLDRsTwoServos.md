@@ -14,14 +14,14 @@ Each pattern below describes a way to connect sensor readings to servo behaviors
 
 Four components, one Arduino:
 
-| Component | Pin |
-|-----------|-----|
-| LDR A | A0 |
-| LDR B | A1 |
-| Servo A | Pin 9 |
-| Servo B | Pin 10 |
+| Component | Pin | Code Variable |
+|-----------|-----|---------------|
+| LDR A | A0 | `lightPinA` |
+| LDR B | A1 | `lightPinB` |
+| Left Servo | Pin 9 | `leftServo` |
+| Right Servo | Pin 10 | `rightServo` |
 
-All share the same 5V and GND rails.
+All share the same 5V and GND rails. The code examples below use the `leftServo`/`rightServo` naming from [Multiple Servos](MultipleServos.md).
 
 ---
 
@@ -34,16 +34,16 @@ Each sensor drives its own servo independently. LDR A controls Servo A. LDR B co
 lightValueA = analogRead(lightPinA);
 lightValueB = analogRead(lightPinB);
 
-angle  = map(lightValueA, lightMinA, lightMaxA, angleMinA, angleMaxA);
-angleB = map(lightValueB, lightMinB, lightMaxB, angleMinB, angleMaxB);
+leftAngle  = map(lightValueA, lightMinA, lightMaxA, angleMinA, angleMaxA);
+rightAngle = map(lightValueB, lightMinB, lightMaxB, angleMinB, angleMaxB);
 
-myServo.write(angle);
-myServoB.write(angleB);
+leftServo.write(leftAngle);
+rightServo.write(rightAngle);
 ```
 
 **What it feels like:** Two independent responsive elements. Each part of the object reacts to the light near it. Cover one sensor and only its servo responds — the other is unaffected.
 
-**Variation:** Use different mapping ranges for each channel. Servo A might sweep 0–180° while Servo B only moves 80–100°. Same sensor pattern, different physical character on each side.
+**Variation:** Use different mapping ranges for each channel. The left servo might sweep 0–180° while the right servo only moves 80–100°. Same sensor pattern, different physical character on each side.
 
 ---
 
@@ -56,11 +56,11 @@ Swap the connections: LDR A drives Servo B, LDR B drives Servo A. The sensor on 
 lightValueA = analogRead(lightPinA);
 lightValueB = analogRead(lightPinB);
 
-angle  = map(lightValueB, lightMinB, lightMaxB, angleMinA, angleMaxA);  // B drives A
-angleB = map(lightValueA, lightMinA, lightMaxA, angleMinB, angleMaxB);  // A drives B
+leftAngle  = map(lightValueB, lightMinB, lightMaxB, angleMinA, angleMaxA);  // B drives left
+rightAngle = map(lightValueA, lightMinA, lightMaxA, angleMinB, angleMaxB);  // A drives right
 
-myServo.write(angle);
-myServoB.write(angleB);
+leftServo.write(leftAngle);
+rightServo.write(rightAngle);
 ```
 
 **What it feels like:** Indirect, counterintuitive response. Covering the left sensor moves the right side. The object seems to look away from whatever is happening to it — or to lean toward the opposite stimulus. This disconnect between cause and effect can produce surprisingly interesting behavior.
@@ -78,20 +78,20 @@ lightValueB = analogRead(lightPinB);
 
 if (lightValueA > lightValueB + deadband) {
   // A is brighter — both servos use one oscillation profile
-  angle  = oscillate(30, 150, 2000);
-  angleB = oscillate(60, 120, 2000);
+  leftAngle  = oscillate(30, 150, 2000);
+  rightAngle = oscillate(60, 120, 2000);
 } else if (lightValueB > lightValueA + deadband) {
   // B is brighter — both servos change character
-  angle  = oscillate(60, 120, 500);
-  angleB = oscillate(30, 150, 500);
+  leftAngle  = oscillate(60, 120, 500);
+  rightAngle = oscillate(30, 150, 500);
 } else {
   // Balanced — neutral behavior
-  angle  = oscillate(85, 95, 3000);
-  angleB = oscillate(85, 95, 3000);
+  leftAngle  = oscillate(85, 95, 3000);
+  rightAngle = oscillate(85, 95, 3000);
 }
 
-myServo.write(angle);
-myServoB.write(angleB);
+leftServo.write(leftAngle);
+rightServo.write(rightAngle);
 ```
 
 **What it feels like:** The object has a unified reaction to a directional stimulus. It doesn't just react to *how much* light there is — it reacts to *where the light is coming from*. Both servos shift character together, giving the object a sense of coordinated attention.
@@ -109,22 +109,22 @@ Each servo uses a *different type* of movement function, and each is driven by a
 lightValueA = analogRead(lightPinA);
 lightValueB = analogRead(lightPinB);
 
-// Servo A: oscillation controlled by LDR A threshold
+// Left servo: oscillation controlled by LDR A threshold
 if (lightValueA < thresholdA) {
-  angle = oscillate(30, 150, 3000);   // dark: slow sweep
+  leftAngle = oscillate(30, 150, 3000);   // dark: slow sweep
 } else {
-  angle = oscillate(80, 100, 300);    // bright: fast tremor
+  leftAngle = oscillate(80, 100, 300);    // bright: fast tremor
 }
 
-// Servo B: timed moves controlled by LDR B threshold
+// Right servo: timed moves controlled by LDR B threshold
 if (lightValueB < thresholdB) {
-  angleB = moveServoB(20, 2000);      // dark: move to 20°
+  rightAngle = moveRightServo(20, 2000);      // dark: move to 20°
 } else {
-  angleB = moveServoB(160, 2000);     // bright: move to 160°
+  rightAngle = moveRightServo(160, 2000);     // bright: move to 160°
 }
 
-myServo.write(angle);
-myServoB.write(angleB);
+leftServo.write(leftAngle);
+rightServo.write(rightAngle);
 ```
 
 **What it feels like:** Two parts of the same object with different temperaments. One part breathes and responds fluidly; the other deliberates and repositions. The combination creates a layered behavior — the object is doing two things at once, each driven by a different aspect of the light environment.
@@ -147,15 +147,15 @@ int period = map(lightValueA, lightMinA, lightMaxA, 300, 4000);
 
 // LDR B selects the range for both servos
 if (lightValueB < thresholdB) {
-  angle  = oscillate(20, 160, period);   // wide sweep at mapped speed
-  angleB = oscillate(20, 160, period);
+  leftAngle  = oscillate(20, 160, period);   // wide sweep at mapped speed
+  rightAngle = oscillate(20, 160, period);
 } else {
-  angle  = oscillate(80, 100, period);   // narrow tremor at mapped speed
-  angleB = oscillate(80, 100, period);
+  leftAngle  = oscillate(80, 100, period);   // narrow tremor at mapped speed
+  rightAngle = oscillate(80, 100, period);
 }
 
-myServo.write(angle);
-myServoB.write(angleB);
+leftServo.write(leftAngle);
+rightServo.write(rightAngle);
 ```
 
 **What it feels like:** One sensor acts as a continuous dial (speed), the other as a switch (character). The two inputs layer on top of each other — brightness on one side makes the movement faster or slower, brightness on the other side makes it dramatic or subtle. The object integrates two aspects of its light environment into a single coordinated behavior.
@@ -177,6 +177,6 @@ The most interesting behaviors often come from asymmetry — where the two sides
 
 ### Reference
 
-- [Servo Movement Reference](../servo-movement-reference.md) — function documentation for `oscillate()`, `moveServoA()`, `moveServoB()`
+- [Servo Movement Reference](../servo-movement-reference.md) — function documentation for `oscillate()`, `moveServoA()`, `moveServoB()` (renamed to `moveLeftServo()`/`moveRightServo()` in your sketch)
 - [Light Sensor Guide](LightSensorGuide.md) — smoothing, calibration, and sensor patterns
 - [Sensor + Servo Guide](../SensorServoGuide.md) — overview of all topics

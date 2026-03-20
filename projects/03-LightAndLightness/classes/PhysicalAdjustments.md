@@ -82,7 +82,7 @@ The photoresistors are shown at the ends of their extended wires, away from the 
 
 ## Practical Notes
 
-- **Wire length** — For servo signals, runs up to about 1 meter work fine. For the LDR voltage divider, longer wires add a tiny amount of resistance but this is negligible for the distances you will use in this project (under 2 meters). If you notice reading instability with very long runs, add a smoothing function. See [Light Sensor Guide — Smoothing](LightSensorGuide.md#3-smoothing--stabilizing-noisy-readings).
+- **Wire length** — For servo signals, runs up to about 1 meter work fine. For the LDR voltage divider, longer wires add a tiny amount of resistance but this is negligible for the distances you will use in this project (under 2 meters). If you notice reading instability with very long runs, add a smoothing function. See [Light Sensor Guide — Smoothing](LightSensorGuide.md#3-smoothing--rolling-average).
 
 - **Strain relief** — Where the wire exits the breadboard or enters your physical form, secure it so that tugging on the wire does not pull the connection out of the breadboard. A small loop of tape at the exit point works.
 
