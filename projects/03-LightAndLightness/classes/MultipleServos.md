@@ -17,7 +17,7 @@ Two stages:
 
 Your first servo is already connected to pin 9. The second servo connects to a different signal pin but shares the same 5V and GND rails.
 
-| Servo B Wire | Purpose | Arduino Connection |
+| Right Servo Wire | Purpose | Arduino Connection |
 |------------|---------|-------------------|
 | **Brown** | GND | GND power rail (shared) |
 | **Red** | Power | 5V power rail (shared) |
@@ -29,7 +29,7 @@ Use jumper cables to connect each wire, same as the first servo.
 
 ![Two servos on a breadboard](../assets/2Servos__breadboard_bb.png)
 
-> **Check before moving on:** Both servos share the same 5V and GND rails. Servo A signal goes to pin 9, Servo B signal goes to pin 10.
+> **Check before moving on:** Both servos share the same 5V and GND rails. The left servo signal goes to pin 9, the right servo signal goes to pin 10.
 
 ---
 
@@ -37,20 +37,27 @@ Use jumper cables to connect each wire, same as the first servo.
 
 Start from your working single-servo sketch. You need a second `Servo` object, a second pin variable, and a second angle variable.
 
-### Step 1 — Add the Second Servo Object and Variables
+### Step 1 — Rename and Add Servo Variables
 
-Below your existing global variables, add the new ones for Servo B:
+Rename your existing servo variables to reflect their physical orientation (left/right, top/bottom — whatever matches your design). Then add matching variables for the second servo:
 
 ```cpp
-Servo myServoB;
-int servoPinB = 10;
-int angleB    = 90;
+#include <Servo.h>
+
+Servo leftServo;              // renamed from myServo to match physical layout
+int leftServoPin = 9;         // renamed from servoPin
+int leftAngle    = 90;        // renamed from angle
+
+Servo rightServo;             // NEW
+int rightServoPin = 10;       // NEW
+int rightAngle    = 90;       // NEW
 ```
 
 **What is happening here:**
-- `myServoB` is a separate servo object. The Arduino talks to each servo through its own object.
-- `servoPinB` stores the signal pin for the second servo.
-- `angleB` tracks the second servo's position independently from `angle` (which tracks Servo A).
+- The existing servo variables are renamed from `myServo`/`servoPin`/`angle` to `leftServo`/`leftServoPin`/`leftAngle`. The names now reflect where each servo sits in your physical design. Use whatever orientation fits — `topServo`/`bottomServo`, `frontServo`/`backServo`, etc.
+- `rightServo` is a separate servo object. The Arduino talks to each servo through its own object.
+- `rightAngle` tracks the right servo's position independently from `leftAngle`.
+- If you have `moveServoA()` from [Servo Basics](class09-ServoBasics.md), rename it to `moveLeftServo()` and change `myServo.read()` to `leftServo.read()` inside it. This keeps the function name consistent with the servo it controls.
 
 ### Step 2 — Attach Both Servos in setup()
 
@@ -59,8 +66,8 @@ Add the attach call for Servo B:
 ```cpp
 void setup() {
   Serial.begin(9600);
-  myServo.attach(servoPin);
-  myServoB.attach(servoPinB);
+  leftServo.attach(leftServoPin);
+  rightServo.attach(rightServoPin);
 }
 ```
 
@@ -72,8 +79,8 @@ void setup() {
 Make sure your `loop()` writes to both servos:
 
 ```cpp
-myServo.write(angle);
-myServoB.write(angleB);
+leftServo.write(leftAngle);
+rightServo.write(rightAngle);
 ```
 
 **What is happening here:**
@@ -81,7 +88,7 @@ myServoB.write(angleB);
 
 ### Upload and Test
 
-Upload. Both servos should move to 90° and hold. Try changing `angleB` to a different value and re-uploading to confirm the second servo responds independently.
+Upload. Both servos should move to 90° and hold. Try changing `rightAngle` to a different value and re-uploading to confirm the second servo responds independently.
 
 > **Check your sketch:** You should have two `Servo` objects, two pin variables, and two angle variables. Both servos are attached in `setup()` and written in `loop()`.
 
@@ -96,32 +103,42 @@ Both servos can use the same `oscillate()` function simultaneously because it is
 Above `setup()`, create a set of sweep variables for each servo:
 
 ```cpp
-// Servo A — slow, wide sweep
-int sweepMinA    = 30;
-int sweepMaxA    = 150;
-int sweepPeriodA = 3000;
+#include <Servo.h>
 
-// Servo B — fast, narrow tremor
-int sweepMinB    = 80;
-int sweepMaxB    = 100;
-int sweepPeriodB = 400;
+Servo leftServo;
+int leftServoPin = 9;
+int leftAngle    = 90;
+
+Servo rightServo;
+int rightServoPin = 10;
+int rightAngle    = 90;
+
+// Left servo — slow, wide sweep
+int leftSweepMin    = 30;     // NEW
+int leftSweepMax    = 150;    // NEW
+int leftSweepPeriod = 3000;   // NEW
+
+// Right servo — fast, narrow tremor
+int rightSweepMin    = 80;    // NEW
+int rightSweepMax    = 100;   // NEW
+int rightSweepPeriod = 400;   // NEW
 ```
 
 ### Step 5 — Call oscillate() Twice in loop()
 
 ```cpp
 void loop() {
-  angle  = oscillate(sweepMinA, sweepMaxA, sweepPeriodA);
-  angleB = oscillate(sweepMinB, sweepMaxB, sweepPeriodB);
+  leftAngle  = oscillate(leftSweepMin, leftSweepMax, leftSweepPeriod);
+  rightAngle = oscillate(rightSweepMin, rightSweepMax, rightSweepPeriod);
 
-  myServo.write(angle);
-  myServoB.write(angleB);
+  leftServo.write(leftAngle);
+  rightServo.write(rightAngle);
 }
 ```
 
 **What is happening here:**
 - Each call to `oscillate()` gets its own set of parameters. The function does not know or care which servo will receive the result — it just returns a number.
-- Servo A sweeps slowly across a wide arc. Servo B trembles rapidly in a narrow range. Both run simultaneously in the same `loop()`.
+- The left servo sweeps slowly across a wide arc. The right servo trembles rapidly in a narrow range. Both run simultaneously in the same `loop()`.
 
 Upload and observe. Two servos moving with completely different characters from the same function.
 
@@ -135,19 +152,19 @@ Upload and observe. Two servos moving with completely different characters from 
 
 The solution: give each servo its own copy of the function. The code inside is identical — only the function name and the `myServo.read()` call change.
 
-### Step 6 — Add moveServoB()
+### Step 6 — Add moveRightServo()
 
-You already have `moveServoA()` in your sketch (from [Servo Basics](class09-ServoBasics.md)). Below it, add a second copy for Servo B:
+You already have `moveLeftServo()` in your sketch (renamed from `moveServoA()` in Step 1). Below it, add a second copy for the right servo:
 
 ```cpp
-int moveServoB(int angle, unsigned long durationMs) {
+int moveRightServo(int angle, unsigned long durationMs) {
 
   static float startAngle        = 0.0;
   static int   targetAngle       = -1;
   static unsigned long startTime = 0;
 
   if (angle != targetAngle) {
-    startAngle  = myServoB.read();  // reads Servo B's position
+    startAngle  = rightServo.read();  // reads the right servo's position
     targetAngle = angle;
     startTime   = millis();
   }
@@ -166,8 +183,8 @@ int moveServoB(int angle, unsigned long durationMs) {
 ```
 
 **What is happening here:**
-- This is an exact copy of `moveServoA()` with two changes: the function name is `moveServoB` and the internal `read()` call uses `myServoB` instead of `myServo`.
-- The `static` variables inside `moveServoB()` are entirely separate from those inside `moveServoA()`. Each function has its own private whiteboard. Neither can see or overwrite the other's state.
+- This is an exact copy of `moveLeftServo()` with two changes: the function name is `moveRightServo` and the internal `read()` call uses `rightServo` instead of `leftServo`.
+- The `static` variables inside `moveRightServo()` are entirely separate from those inside `moveLeftServo()`. Each function has its own private whiteboard. Neither can see or overwrite the other's state.
 
 ### Step 7 — Set Start Positions in setup()
 
@@ -176,22 +193,32 @@ Both servos need a known starting position so that `read()` returns a reliable v
 ```cpp
 void setup() {
   Serial.begin(9600);
-  myServo.attach(servoPin);
-  myServoB.attach(servoPinB);
-  myServo.write(homeAngle);
-  myServoB.write(homeAngleB);
+  leftServo.attach(leftServoPin);
+  rightServo.attach(rightServoPin);
+  leftServo.write(leftHome);
+  rightServo.write(rightHome);
 }
 ```
 
-Add `homeAngleB` to your global variables if you want the two servos to start at different positions.
+Add `leftHome` and `rightHome` to your global variables if you want the two servos to start at different positions.
 
 ### Step 8 — Run Independent Sequences
 
 Each servo can run its own `switch/case` sequence with its own step counter. In your global variables:
 
 ```cpp
-int sequenceStepA = 0;
-int sequenceStepB = 0;
+#include <Servo.h>
+
+Servo leftServo;
+int leftServoPin = 9;
+int leftAngle    = 90;
+
+Servo rightServo;
+int rightServoPin = 10;
+int rightAngle    = 90;
+
+int leftStep  = 0;            // NEW
+int rightStep = 0;            // NEW
 ```
 
 In `loop()`, the two sequences run side by side:
@@ -199,38 +226,38 @@ In `loop()`, the two sequences run side by side:
 ```cpp
 void loop() {
 
-  // Servo A sequence
-  switch (sequenceStepA) {
+  // Left servo sequence
+  switch (leftStep) {
     case 0:
-      angle = moveServoA(10, 1500);
-      if (angle == 10) { sequenceStepA = 1; }
+      leftAngle = moveLeftServo(10, 1500);
+      if (leftAngle == 10) { leftStep = 1; }
       break;
     case 1:
-      angle = moveServoA(170, 2000);
-      if (angle == 170) { sequenceStepA = 0; }
+      leftAngle = moveLeftServo(170, 2000);
+      if (leftAngle == 170) { leftStep = 0; }
       break;
   }
 
-  // Servo B sequence
-  switch (sequenceStepB) {
+  // Right servo sequence
+  switch (rightStep) {
     case 0:
-      angleB = moveServoB(160, 800);
-      if (angleB == 160) { sequenceStepB = 1; }
+      rightAngle = moveRightServo(160, 800);
+      if (rightAngle == 160) { rightStep = 1; }
       break;
     case 1:
-      angleB = moveServoB(20, 3000);
-      if (angleB == 20) { sequenceStepB = 0; }
+      rightAngle = moveRightServo(20, 3000);
+      if (rightAngle == 20) { rightStep = 0; }
       break;
   }
 
-  myServo.write(angle);
-  myServoB.write(angleB);
+  leftServo.write(leftAngle);
+  rightServo.write(rightAngle);
 }
 ```
 
 **What is happening here:**
 - The two `switch/case` blocks are completely independent. Each advances its own step counter based on its own move function's return value.
-- Servo A moves at its own pace with its own targets. Servo B does the same. They run in parallel — both are updated every loop, but each is on its own timeline.
+- The left servo moves at its own pace with its own targets. The right servo does the same. They run in parallel — both are updated every loop, but each is on its own timeline.
 - The sequences do not need the same number of steps or the same durations. One can be fast and simple, the other slow and complex.
 
 ---
@@ -243,29 +270,29 @@ The two servos do not need to use the same movement approach. One can oscillate 
 
 ```cpp
 void loop() {
-  // Servo A: continuous oscillation
-  angle = oscillate(sweepMinA, sweepMaxA, sweepPeriodA);
+  // Left servo: continuous oscillation
+  leftAngle = oscillate(leftSweepMin, leftSweepMax, leftSweepPeriod);
 
-  // Servo B: timed move sequence
-  switch (sequenceStepB) {
+  // Right servo: timed move sequence
+  switch (rightStep) {
     case 0:
-      angleB = moveServoB(30, 2000);
-      if (angleB == 30) { sequenceStepB = 1; }
+      rightAngle = moveRightServo(30, 2000);
+      if (rightAngle == 30) { rightStep = 1; }
       break;
     case 1:
-      angleB = moveServoB(150, 1000);
-      if (angleB == 150) { sequenceStepB = 0; }
+      rightAngle = moveRightServo(150, 1000);
+      if (rightAngle == 150) { rightStep = 0; }
       break;
   }
 
-  myServo.write(angle);
-  myServoB.write(angleB);
+  leftServo.write(leftAngle);
+  rightServo.write(rightAngle);
 }
 ```
 
 **What is happening here:**
-- Servo A uses `oscillate()` — set-and-forget, runs forever.
-- Servo B uses `moveServoB()` with `switch/case` — a choreographed sequence that loops.
+- The left servo uses `oscillate()` — set-and-forget, runs forever.
+- The right servo uses `moveRightServo()` with `switch/case` — a choreographed sequence that loops.
 - Both run in the same `loop()` without interfering. The movement functions handle their own timing internally.
 
 This is the core principle: each servo gets its own angle variable, its own movement function call, and its own parameters. You compose behaviors by deciding what drives each servo independently.

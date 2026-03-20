@@ -20,9 +20,9 @@ Your first photoresistor is connected to analog pin A0 with a 10kΩ resistor for
 
 | Component | Connection |
 |-----------|------------|
-| **Photoresistor B — Leg 1** | 5V power rail (shared) |
-| **Photoresistor B — Leg 2** | Same row as the wire to **A1** and one leg of a second 10kΩ resistor |
-| **10kΩ Resistor B — other leg** | GND power rail (shared) |
+| **Right photoresistor — Leg 1** | 5V power rail (shared) |
+| **Right photoresistor — Leg 2** | Same row as the wire to **A1** and one leg of a second 10kΩ resistor |
+| **Right 10kΩ resistor — other leg** | GND power rail (shared) |
 
 Each sensor needs its own 10kΩ resistor. Both sensors share the same 5V and GND rails.
 
@@ -30,7 +30,7 @@ Each sensor needs its own 10kΩ resistor. Both sensors share the same 5V and GND
 
 ![Two LDRs on a breadboard](../assets/2LDR_breadboard_bb.png)
 
-> **Check before moving on:** Each photoresistor has one leg at 5V and one leg connecting to both its analog pin wire and one leg of its own 10kΩ resistor. The other leg of each resistor goes to GND. Sensor A reads on A0, Sensor B reads on A1.
+> **Check before moving on:** Each photoresistor has one leg at 5V and one leg connecting to both its analog pin wire and one leg of its own 10kΩ resistor. The other leg of each resistor goes to GND. The left sensor reads on A0, the right sensor reads on A1.
 
 ---
 
@@ -38,21 +38,22 @@ Each sensor needs its own 10kΩ resistor. Both sensors share the same 5V and GND
 
 Start from your working single-sensor sketch, or create a new one.
 
-### Step 1 — Add Variables for the Second Sensor
+### Step 1 — Rename and Add Sensor Variables
 
-Above `setup()`, add the new pin and value variables alongside the existing ones:
+Above `setup()`, rename your existing sensor variables to reflect their physical orientation, then add matching variables for the second sensor:
 
 ```cpp
-int lightPinA   = A0;
-int lightValueA = 0;
+int leftLightPin   = A0;       // renamed from lightPin to match physical layout
+int leftLightValue = 0;        // renamed from lightValue
 
-int lightPinB   = A1;
-int lightValueB = 0;
+int rightLightPin   = A1;      // NEW
+int rightLightValue = 0;       // NEW
 ```
 
 **What is happening here:**
 - Each sensor gets its own pin variable and value variable.
-- We renamed `lightPin` and `lightValue` to `lightPinA` and `lightValueA` so the names clearly indicate which sensor is which. If you are adding to an existing sketch, rename the originals to match.
+- We renamed `lightPin` and `lightValue` to `leftLightPin` and `leftLightValue` so the names reflect the sensor's position in your design. Use whatever orientation fits — `topLightPin`/`bottomLightPin`, `insideLightPin`/`outsideLightPin`, etc.
+- If you are adding to an existing sketch, rename the originals to match.
 
 ### Step 2 — Read and Print Both
 
@@ -60,13 +61,13 @@ In `loop()`, read both sensors and print them side by side:
 
 ```cpp
 void loop() {
-  lightValueA = analogRead(lightPinA);
-  lightValueB = analogRead(lightPinB);
+  leftLightValue = analogRead(leftLightPin);
+  rightLightValue = analogRead(rightLightPin);
 
-  Serial.print("A: ");
-  Serial.print(lightValueA);
-  Serial.print(" | B: ");
-  Serial.println(lightValueB);
+  Serial.print("Left: ");
+  Serial.print(leftLightValue);
+  Serial.print(" | Right: ");
+  Serial.println(rightLightValue);
 }
 ```
 
@@ -76,7 +77,7 @@ void loop() {
 
 ### Upload and Test
 
-Upload and open the Serial Monitor. Cover sensor A — its value drops, B stays the same. Cover sensor B — the reverse. Cover both — both drop. Move a light source between them and watch the values shift.
+Upload and open the Serial Monitor. Cover the left sensor — its value drops, the right stays the same. Cover the right sensor — the reverse. Cover both — both drop. Move a light source between them and watch the values shift.
 
 Note the typical ranges each sensor produces. They may not be identical even in the same light — manufacturing variation is normal. What matters is the relative relationship between them.
 
@@ -93,24 +94,30 @@ With two sensor values, you can ask relational questions: which side is brighter
 Add a variable above `setup()`:
 
 ```cpp
-int lightDifference = 0;
+int leftLightPin    = A0;
+int leftLightValue  = 0;
+
+int rightLightPin   = A1;
+int rightLightValue = 0;
+
+int lightDifference = 0;       // NEW
 ```
 
 In `loop()`, after reading both sensors:
 
 ```cpp
-lightDifference = lightValueA - lightValueB;
+lightDifference = leftLightValue - rightLightValue;
 
-Serial.print("A: ");
-Serial.print(lightValueA);
-Serial.print(" | B: ");
-Serial.print(lightValueB);
+Serial.print("Left: ");
+Serial.print(leftLightValue);
+Serial.print(" | Right: ");
+Serial.print(rightLightValue);
 Serial.print(" | Diff: ");
 Serial.println(lightDifference);
 ```
 
 **What is happening here:**
-- A positive difference means A is brighter. A negative difference means B is brighter. Zero means they are equal.
+- A positive difference means the left sensor is brighter. A negative difference means the right sensor is brighter. Zero means they are equal.
 - The magnitude tells you how *much* brighter one side is. A difference of 10 is a slight edge; a difference of 300 is a strong directional signal.
 - This single number — the difference — collapses two sensor readings into one value that represents direction and intensity.
 
@@ -129,7 +136,15 @@ A direct comparison can flicker when both sensors read nearly the same value —
 Above `setup()`:
 
 ```cpp
-int deadband = 30;
+int leftLightPin    = A0;
+int leftLightValue  = 0;
+
+int rightLightPin   = A1;
+int rightLightValue = 0;
+
+int lightDifference = 0;
+
+int deadband = 30;             // NEW
 ```
 
 **What is happening here:**
@@ -141,12 +156,12 @@ int deadband = 30;
 In `loop()`, after reading both sensors:
 
 ```cpp
-if (lightValueA > lightValueB + deadband) {
-  Serial.println("  → A is brighter");
-  // do something for the A-is-brighter state
-} else if (lightValueB > lightValueA + deadband) {
-  Serial.println("  → B is brighter");
-  // do something for the B-is-brighter state
+if (leftLightValue > rightLightValue + deadband) {
+  Serial.println("  → Left is brighter");
+  // do something for the left-is-brighter state
+} else if (rightLightValue > leftLightValue + deadband) {
+  Serial.println("  → Right is brighter");
+  // do something for the right-is-brighter state
 } else {
   Serial.println("  → balanced");
   // do something for the neutral state
@@ -154,13 +169,13 @@ if (lightValueA > lightValueB + deadband) {
 ```
 
 **What is happening here:**
-- The first condition requires A to beat B by *more than the deadband* — not just by 1 or 2 counts. This prevents noise from triggering the condition.
-- The second condition is the mirror: B must beat A by the same margin.
+- The first condition requires the left sensor to beat the right by *more than the deadband* — not just by 1 or 2 counts. This prevents noise from triggering the condition.
+- The second condition is the mirror: the right must beat the left by the same margin.
 - The `else` catches everything in between — the zone where both sensors are close enough to be considered equal. This is the stable, neutral state.
 
 ### Upload and Test
 
-Cover sensor A — the output should switch to "B is brighter." Cover sensor B — "A is brighter." Even lighting — "balanced." The deadband should prevent flickering when both sensors read similar values.
+Cover the left sensor — the output should switch to “Right is brighter.” Cover the right sensor — “Left is brighter.” Even lighting — “balanced.” The deadband should prevent flickering when both sensors read similar values.
 
 Adjust `deadband` up or down based on what you observe. There is no single correct value — it depends on the noise in your environment and how sensitive you want the comparison to be.
 
@@ -175,7 +190,7 @@ You now have two light sensors producing a directional signal. The design work i
 ### Things to try
 
 - **Drive a servo to follow light** — map the difference value to a servo angle. The servo points toward whichever side is brighter. Use `map(lightDifference, -maxDiff, maxDiff, 0, 180)` where `maxDiff` is the largest difference you observe.
-- **Three oscillation profiles** — use the directional threshold to select different `oscillate()` parameters: one profile when A is brighter, another when B is brighter, a third when balanced.
+- **Three oscillation profiles** — use the directional threshold to select different `oscillate()` parameters: one profile when the left side is brighter, another when the right side is brighter, a third when balanced.
 - **Smoothing** — apply `rollingAverage()` to each sensor before comparing. See the [Light Sensor Guide — Smoothing](LightSensorGuide.md#3-smoothing--stabilizing-noisy-readings) section.
 - **Calibration** — use `calibrateSensor()` at startup to establish baselines for both sensors. Thresholds become relative to the baseline rather than hardcoded. See the [Light Sensor Guide — Calibration](LightSensorGuide.md#4-calibration--measuring-ambient-light-at-startup) section.
 - **Sensor placement** — where you mount the two sensors determines what the comparison means. On opposite sides of an object, it detects direction. At different heights, it reads vertical light distribution. Inside and outside an enclosure, it compares internal shadow to ambient room light.

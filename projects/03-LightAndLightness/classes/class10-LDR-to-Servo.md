@@ -124,11 +124,12 @@ At the very top of your sketch, before your existing variables, add the library 
 ```cpp
 #include <Servo.h>
 
-// lightPin and lightValue stay here ...
+int lightPin   = A0;
+int lightValue = 0;
 
-Servo myServo;
-int servoPin = 9;
-int angle    = 90;
+Servo myServo;           // NEW
+int servoPin = 9;        // NEW
+int angle    = 90;       // NEW
 ```
 
 **What is happening here:**
@@ -180,10 +181,19 @@ The sensor and servo both work, but `angle` is still a fixed `90`. Now we make t
 Above `setup()`, add four variables. Replace the placeholder numbers with the actual low and high values you noted from the Serial Monitor:
 
 ```cpp
-int lightMin = 200;   // sensor covered — replace with your observed low value
-int lightMax = 800;   // sensor uncovered — replace with your observed high value
-int angleMin = 0;
-int angleMax = 180;
+#include <Servo.h>
+
+int lightPin   = A0;
+int lightValue = 0;
+
+Servo myServo;
+int servoPin = 9;
+int angle    = 90;
+
+int lightMin = 200;   // NEW — sensor covered, replace with your observed low value
+int lightMax = 800;   // NEW — sensor uncovered, replace with your observed high value
+int angleMin = 0;     // NEW
+int angleMax = 180;   // NEW
 ```
 
 **What is happening here:**
@@ -232,10 +242,19 @@ Instead of mapping the sensor value continuously to an angle, we can check wheth
 
 ### Step 7 — Replace the Range Variables with a Threshold
 
-Above `setup()`, remove the four range variables and replace them with one:
+Above `setup()`, remove the four range variables (`lightMin`, `lightMax`, `angleMin`, `angleMax`) and replace them with one:
 
 ```cpp
-int lightThreshold = 512;
+#include <Servo.h>
+
+int lightPin       = A0;
+int lightValue     = 0;
+
+Servo myServo;
+int servoPin       = 9;
+int angle          = 90;
+
+int lightThreshold = 512;  // NEW — replaces lightMin, lightMax, angleMin, angleMax
 ```
 
 **What is happening here:**

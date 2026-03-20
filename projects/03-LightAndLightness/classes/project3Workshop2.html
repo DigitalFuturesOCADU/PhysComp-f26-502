@@ -1,0 +1,82 @@
+<!-- Workshop Goal -->
+<div style="margin-bottom: 24px; border: 1px solid #e5e5e5; background: #fff;">
+    <div style="padding: 12px 16px; background: #ffffff; border-bottom: 1px solid #e5e5e5;"><span style="font-size: 18pt; color: #333333;">Workshop Goal</span></div>
+    <div style="padding: 16px;">
+        <p style="margin: 0; font-size: 13pt; line-height: 1.6; color: #333333;">Connect the light sensor to the servo so that light controls movement. Explore three ways to link them: continuous mapping with <code>map()</code>, threshold-triggered oscillation, and threshold-triggered timed moves. Throughout the workshop, keep something attached to the servo horn — it makes the motion readable.</p>
+    </div>
+</div>
+
+<!-- Resources -->
+<div style="margin-bottom: 24px; border: 1px solid #e5e5e5; background: #fff;">
+    <div style="padding: 12px 16px; background: #ffffff; border-bottom: 1px solid #e5e5e5;"><span style="font-size: 18pt; color: #333333;">Resources</span></div>
+    <div style="padding: 16px;">
+        <ul style="margin: 0; padding-left: 20px; font-size: 11pt; line-height: 1.8; color: #333333;">
+            <li>Arduino UNO R4 WiFi</li>
+            <li>Breadboard</li>
+            <li>Servo motor (standard hobby servo)</li>
+            <li>Photoresistor (LDR) + 10kΩ resistor</li>
+            <li>Jumper wires</li>
+            <li><a href="https://github.com/DigitalFuturesOCADU/PhysComp-f26-502/blob/main/projects/03-LightAndLightness/classes/class10-LDR-to-Servo.md" target="_blank" rel="noopener">Light Sensor to Servo — Step-by-Step Guide</a></li>
+            <li><a href="https://github.com/DigitalFuturesOCADU/PhysComp-f26-502/blob/main/projects/03-LightAndLightness/classes/class10-Mar20.md" target="_blank" rel="noopener">Class 10 Notes — Components and reference links</a></li>
+            <li><a href="https://github.com/DigitalFuturesOCADU/PhysComp-f26-502/blob/main/projects/03-LightAndLightness/SensorServoGuide.md" target="_blank" rel="noopener">Sensor + Servo Guide — All patterns and techniques</a></li>
+            <li><a href="https://github.com/DigitalFuturesOCADU/PhysComp-f26-502/blob/main/projects/03-LightAndLightness/servo-movement-reference.md" target="_blank" rel="noopener">Servo Movement Reference</a></li>
+            <li><a href="https://github.com/DigitalFuturesOCADU/PhysComp-f26-502/blob/main/projects/03-LightAndLightness/classes/LightSensorGuide.md" target="_blank" rel="noopener">Light Sensor Guide</a></li>
+        </ul>
+    </div>
+</div>
+
+<!-- Activity -->
+<div style="margin-bottom: 24px; border: 1px solid #e5e5e5; background: #fff;">
+    <div style="padding: 12px 16px; background: #ffffff; border-bottom: 1px solid #e5e5e5;"><span style="font-size: 18pt; color: #333333;">Activity</span></div>
+    <div style="padding: 16px;">
+
+        <p style="margin: 0 0 12px 0; font-size: 11pt; line-height: 1.6; color: #333333;">All workshops in Project 3 have two components: a <strong>working prototype</strong> and a <strong>design sketch</strong>. Over the three workshops you will develop both.</p>
+
+        <!-- Part 1 -->
+        <p style="margin: 0 0 8px 0; font-size: 11pt; font-weight: 600; color: #333333;">Part 1 — Working Prototype: Light controls the servo</p>
+        <p style="margin: 0 0 8px 0; font-size: 11pt; line-height: 1.6; color: #333333;">Follow the <a href="https://github.com/DigitalFuturesOCADU/PhysComp-f26-502/blob/main/projects/03-LightAndLightness/classes/class10-LDR-to-Servo.md" target="_blank" rel="noopener">Light Sensor to Servo — Step-by-Step Guide</a> from beginning to end.</p>
+        <ol style="margin: 0 0 12px 0; padding-left: 20px; font-size: 11pt; line-height: 1.8; color: #333333;">
+            <li>Wire the photoresistor and confirm it sends values to the Serial Monitor.</li>
+            <li>Add the servo and confirm it moves to a fixed angle.</li>
+            <li>Use <code>map()</code> to connect the two — light level controls servo position continuously.</li>
+            <li>Replace <code>map()</code> with a threshold: switch between two different <code>oscillate()</code> profiles based on light level.</li>
+            <li>Swap <code>oscillate()</code> for <code>moveServoA()</code>: send the servo to different target angles when light crosses the threshold.</li>
+            <li>Have something attached to the servo horn throughout — a pipe cleaner, folded paper, or wire — so the motion is visible.</li>
+        </ol>
+        <p style="margin: 0 0 4px 0; font-size: 11pt; font-weight: 600; color: #333333;">Going further</p>
+        <p style="margin: 0 0 8px 0; font-size: 11pt; line-height: 1.6; color: #333333;">Once the core walkthrough is working, pick whichever guide is most relevant to your design direction:</p>
+        <ul style="margin: 0 0 16px 0; padding-left: 20px; font-size: 11pt; line-height: 1.8; color: #333333;">
+            <li><a href="https://github.com/DigitalFuturesOCADU/PhysComp-f26-502/blob/main/projects/03-LightAndLightness/classes/MultipleServos.md" target="_blank" rel="noopener">Multiple Servos</a> — add a second servo and run both independently</li>
+            <li><a href="https://github.com/DigitalFuturesOCADU/PhysComp-f26-502/blob/main/projects/03-LightAndLightness/classes/MultipleLDRs.md" target="_blank" rel="noopener">Multiple Light Sensors</a> — add a second photoresistor and compare readings for directional sensing</li>
+            <li><a href="https://github.com/DigitalFuturesOCADU/PhysComp-f26-502/blob/main/projects/03-LightAndLightness/classes/TwoLDRsTwoServos.md" target="_blank" rel="noopener">Two LDRs + Two Servos</a> — combinatory patterns for the full 2+2 setup</li>
+            <li><a href="https://github.com/DigitalFuturesOCADU/PhysComp-f26-502/blob/main/projects/03-LightAndLightness/classes/PhysicalAdjustments.md" target="_blank" rel="noopener">Physical Adjustments</a> — extending wires to mount sensors and servos away from the breadboard</li>
+        </ul>
+
+        <!-- Part 2 -->
+        <p style="margin: 0 0 8px 0; font-size: 11pt; font-weight: 600; color: #333333;">Part 2 — Project Design V2</p>
+        <p style="margin: 0 0 8px 0; font-size: 11pt; line-height: 1.6; color: #333333;">Now that you have experienced the sensor controlling the servo, revise your design concept. Read the <a href="https://github.com/DigitalFuturesOCADU/PhysComp-f26-502/blob/main/projects/03-LightAndLightness/LightAndLightness.md" target="_blank" rel="noopener">project brief</a> again. V2 can develop V1 with more detail and specificity, or it can be a new direction entirely. The drawing should show:</p>
+        <ol style="margin: 0 0 16px 0; padding-left: 20px; font-size: 11pt; line-height: 1.8; color: #333333;">
+            <li>Which sensing method you plan to use — continuous mapping, threshold switching, or comparison between two sensors.</li>
+            <li>Position and orientation of the sensor — what specific light condition will it be reading?</li>
+            <li>What the servo is attached to, and what that attachment does when it moves.</li>
+            <li>Overall form factor and scale — on a table, free-standing, hanging, mounted on a wall, etc.</li>
+            <li>How V2 develops or differs from V1 — what changed after working with the hardware?</li>
+        </ol>
+
+        <p style="margin: 12px 0 0 0; font-size: 11pt; line-height: 1.6; color: #666666;"><strong>Tip:</strong> You have now felt the difference between <code>map()</code> (fluid, continuous response) and a threshold (a sharp state change). One of those qualities is likely a better fit for your concept — let that inform the sketch.</p>
+
+    </div>
+</div>
+
+<!-- Submission -->
+<div style="margin-bottom: 24px; border: 1px solid #e5e5e5; background: #fff;">
+    <div style="padding: 12px 16px; background: #ffffff; border-bottom: 1px solid #e5e5e5;"><span style="font-size: 18pt; color: #333333;">Submission</span></div>
+    <div style="padding: 16px;">
+        <p style="margin: 0 0 12px 0; font-size: 11pt; line-height: 1.6; color: #333333;">Create a post in the <a href="https://canvascloud.ocadu.ca/courses/13538/discussion_topics/212720" target="_blank" rel="noopener">Workshop 2 Discussion</a> on Canvas:</p>
+        <ul style="margin: 0; padding-left: 20px; font-size: 11pt; line-height: 1.8; color: #333333;">
+            <li>A video of the servo responding to light changes — with something attached to the horn — demonstrating at least one of the sensing methods from the workshop</li>
+            <li>An image of V2 of your design drawing</li>
+            <li>1–2 sentence description of how your concept has developed since V1</li>
+        </ul>
+    </div>
+</div>
