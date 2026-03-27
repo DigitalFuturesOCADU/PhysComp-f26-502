@@ -6,11 +6,13 @@
 
 ## Overview
 
-This is the last full workshop before the exhibition. Today we introduce **soldering** — the practical skill you need to extend your sensor wires so your photoresistors can be mounted away from the breadboard, embedded in your design, and aimed at the light conditions that matter. After the demo, the rest of the class is work time: solder your sensors, extend your wiring, refine your movement code, and build the physical form your piece will take.
+This is the last full workshop before the exhibition. Today we introduce **soldering** — the practical skill you need to extend your sensor wires so your photoresistors can be mounted away from the breadboard, embedded in your design, and aimed at the light conditions that matter.
+
+This page also covers wire extension and mounting options, auto-calibrating your light thresholds for the exhibition environment, and an organized set of reference guides you will rely on from here forward. After the soldering demo, the rest of the class is work time: solder your sensors, extend your wiring, refine your code, and build the physical form your piece will take.
 
 ### Building on Workshop 2
 
-Last week you connected the light sensor to the servo and explored three ways to link them — continuous mapping, threshold-triggered oscillation, and threshold-triggered timed moves. This week the focus shifts from code to **physical integration**: getting the electronics out of the breadboard-on-the-desk configuration and into something that can stand on its own for the exhibition.
+Last week you connected the light sensor to the servo and explored three ways to link them — continuous mapping, threshold-triggered oscillation, and threshold-triggered timed moves. This week the focus shifts to **physical integration**: getting the electronics out of the breadboard-on-the-desk configuration and into something that can stand on its own for the exhibition.
 
 The coding patterns carry forward directly:
 
@@ -95,9 +97,9 @@ These are excellent references if you want to go deeper or revisit the fundament
 
 ---
 
-## Physical Adjustments — Extending Your Circuit
+## Physical Adjustments — Wiring and Mounting
 
-Once the sensor wires are soldered, you need to think about extending the servo connections as well. The full guide covers both approaches in detail:
+Once the sensor wires are soldered, you need to extend the servo connections and start thinking about how everything mounts in your design. The full guide covers wire extension in detail:
 
 **[Physical Adjustments — Extending Wires](PhysicalAdjustments.md)**
 
@@ -157,6 +159,8 @@ This is the last formal class. From here until the exhibition, these documents a
 ---
 
 ## Calibration and Relative Thresholds
+
+If your sketch uses thresholds to trigger different movements — and most of them do — this section shows you how to make those thresholds adapt to any room automatically. It is directly relevant to the exhibition, where the lighting will differ from the studio.
 
 Hard-coded threshold values like `if (lightValue < 400)` describe a specific voltage on a 0–1023 scale. They work in one environment — the one you measured them in — and quietly stop working when the room changes. A different time of day, a lamp turned on, a different exhibition space: any of these can shift the sensor's resting level by hundreds of counts and break your thresholds entirely.
 
@@ -284,7 +288,7 @@ Change only one offset at a time. Re-upload, reset the board (so calibration run
 
 All workshops in Project 3 have two components: a **working prototype** and a **design sketch**. This is the final iteration before the exhibition.
 
-### Part 1 — Working Prototype: Extended wiring and two-servo control
+### Part 1 — Working Prototype: Physical Integration
 
 The goal this week is to get your sensors physically separated from the breadboard and your movement code working with the full circuit. By the end of class your prototype should be close to exhibition-ready.
 
@@ -301,7 +305,7 @@ If your core prototype is working, explore:
 
 - [Multiple Light Sensors](MultipleLDRs.md) — add a second photoresistor for directional sensing
 - [Two LDRs + Two Servos](TwoLDRsTwoServos.md) — combinatory patterns for the full 2+2 setup
-- [Light Sensor Guide — Calibration](LightSensorGuide.md#4-calibration--measuring-ambient-light-at-startup) — adapt thresholds automatically to any environment
+- [Calibration and Relative Thresholds](#calibration-and-relative-thresholds) — full step-by-step walkthrough earlier on this page; see also [Light Sensor Guide — Section 4](LightSensorGuide.md#4-calibration--measuring-ambient-light-at-startup) for the compact reference
 
 ### Part 2 — Project Design V3
 
