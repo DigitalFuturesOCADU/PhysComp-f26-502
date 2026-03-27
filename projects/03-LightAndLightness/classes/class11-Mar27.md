@@ -43,6 +43,8 @@ The most common beginner mistake is melting solder onto the iron and then trying
 
 The correct approach: **heat the joint itself** (both surfaces simultaneously) for 2–3 seconds, then touch the solder to the *joint* and let it flow in. When you see the solder wick smoothly into the connection, remove the solder wire first, then the iron, and let it cool without moving it.
 
+[Soldering a Light Sensor](https://ocadu.yuja.com/V/Video?v=1295165&a=143944658)
+
 ### What You Need
 
 - **Soldering iron** — available in the XFab; a basic 25–40W temperature-controlled station is ideal
