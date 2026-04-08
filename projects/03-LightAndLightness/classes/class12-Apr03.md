@@ -122,6 +122,7 @@ If you want a more structured path beyond online tutorials:
 - [Toronto Tool Library](https://torontotoollibrary.com/) — lending library for tools including electronics equipment
 - [Site 3 coLaboratory](https://site3.ca/) — community makerspace with electronics workbenches, laser cutters, and a shared workshop
 - [Hacklab.TO](https://hacklab.to/) — Toronto's longest-running hackerspace. Regular open nights, member workshops, and shared tools.
+- [Creative Code Toronto](https://creativecodetoronto.github.io/) — community meetups focused on creative coding, generative art, and interactive media. Good way to connect with people working at the intersection of code and design.
 
 ---
 
