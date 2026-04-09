@@ -131,22 +131,10 @@ If you want to explore new sensors with minimal wiring, start here. Pick a Qwiic
 
 ---
 
-## Books Worth Reading
-
-If you want a more structured path beyond online tutorials:
-
-- **Getting Started with Arduino** by Massimo Banzi & Michael Shiloh — written by Arduino's co-founder. Short, accessible, and assumes no background
-- **Physical Computing** by Dan O'Sullivan & Tom Igoe — the foundational text for the field. Covers sensing, actuation, and interaction design
-- **Making Things Move** by Dustyn Roberts — focused on mechanisms, motors, and mechanical design. Useful if your work involves kinetic sculpture or robotics
-- **Programming Arduino** by Simon Monk — good intermediate reference once you are past the basics
-
----
-
 ## Local Resources (Toronto)
 
 - **OCAD XFab** — you already know this one. Continue using the fabrication lab for laser cutting, 3D printing, and electronics work while you have access.
 - [Toronto Tool Library](https://torontotoollibrary.com/) — lending library for tools including electronics equipment
-- [Site 3 coLaboratory](https://site3.ca/) — community makerspace with electronics workbenches, laser cutters, and a shared workshop
 - [Hacklab.TO](https://hacklab.to/) — Toronto's longest-running hackerspace. Regular open nights, member workshops, and shared tools.
 - [Creative Code Toronto](https://creativecodetoronto.github.io/) — community meetups focused on creative coding, generative art, and interactive media. Good way to connect with people working at the intersection of code and design.
 
