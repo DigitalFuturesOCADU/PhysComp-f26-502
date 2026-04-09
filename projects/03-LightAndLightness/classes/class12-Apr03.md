@@ -28,6 +28,8 @@ The best next step is to keep building. The Arduino ecosystem is enormous, and t
 
 - [Arduino](https://www.arduino.cc/) — official documentation, tutorials, language reference, and project ideas. The [Arduino Docs](https://docs.arduino.cc/) section is especially useful as a reference when you are working with a new board or library.
 
+- [The Arduino Library](https://thearduinolibrary.com/) — a curated directory of Arduino libraries organized by category. Browsing libraries is one of the best ways to discover new methods and capabilities you did not know existed — each library page shows what functions are available and links to examples. If you are wondering "can Arduino do X?", searching here is a good place to start.
+
 The board you used in this course (the Arduino UNO R4 WiFi) is just one option. Arduino makes boards with built-in WiFi, Bluetooth, more analog pins, faster processors, and smaller form factors. When your project outgrows the UNO, the answer is usually a different board — not a different platform.
 
 ### Component Suppliers and Learning Platforms
@@ -46,7 +48,18 @@ These companies sell sensors, actuators, and breakout boards — but more import
 
 ### Beyond Arduino
 
-Once you are comfortable with Arduino, you may want to explore platforms that offer more processing power, connectivity, or different programming languages:
+Once you are comfortable with Arduino, you may want to explore platforms that offer more processing power, connectivity, or different programming languages.
+
+It is also worth knowing that microcontroller boards come in many different form factors. The UNO is large and breadboard-friendly, but most projects beyond the prototyping stage benefit from something smaller, more portable, or more specialized:
+
+- [Arduino Nano](https://store.arduino.cc/collections/nano-family) — the same ATmega chip family as the UNO, but in a much smaller package that fits directly into a breadboard. Good for space-constrained projects.
+- [Adafruit Feather](https://www.adafruit.com/category/777) — a compact board format with built-in battery charging. Available in many variants (WiFi, Bluetooth, LoRa, etc.) and compatible with a large ecosystem of stackable add-on boards called Wings.
+- [Adafruit Circuit Playground](https://www.adafruit.com/category/888) — a round board with built-in sensors (accelerometer, light, temperature, sound), NeoPixel LEDs, buttons, and a speaker. No wiring needed to get started — great for wearables, costumes, and quick interactive prototypes.
+- [Adafruit QT Py](https://www.adafruit.com/category/595) — extremely small boards (thumbnail-sized) with USB-C and a Stemma QT connector for easy I2C wiring. Available in multiple chip variants. Good when you need a tiny brain for a project.
+- [Seeed XIAO](https://www.seeedstudio.com/xiao-series-page) — similar in size to the QT Py, with variants based on different processors (SAMD21, RP2040, ESP32). Very affordable and compact.
+- [ESP32 boards](https://www.espressif.com/en/products/socs/esp32) — powerful and inexpensive microcontrollers with built-in WiFi and Bluetooth. Available from many manufacturers in many form factors, including boards with built-in OLED or TFT screens like the [LilyGO T-Display](https://www.lilygo.cc/products/t-display-s3) and [Heltec WiFi Kit](https://heltec.org/project/wifi-kit-32-v3/). Popular for IoT and connected projects.
+
+All of these boards can be programmed with the Arduino IDE using the same language and patterns you already know. The skills transfer directly — what changes is the size, power, connectivity, and built-in features of the board.
 
 - [Raspberry Pi](https://www.raspberrypi.org/) — a full Linux computer the size of a credit card. Useful when your project needs image processing, machine learning, networking, or a graphical interface. Programs in Python, and can also run Arduino-style GPIO code. The [Raspberry Pi Pico](https://www.raspberrypi.com/products/raspberry-pi-pico/) is their microcontroller board — closer to an Arduino in function, but programmable in Python.
 
@@ -88,6 +101,19 @@ In this course you worked with buttons, pressure sensors, distance sensors, ligh
 | E-Paper Display | Low-power screen that holds image without power | Good for signage and slow-updating displays |
 
 You will notice that many of these sensors connect via **I2C** or **SPI** — these are communication protocols that let multiple devices share just a few pins. Learning I2C is a natural next step and opens up a huge range of components.
+
+### Qwiic / Stemma QT — Plug-and-Play I2C
+
+The Arduino UNO R4 WiFi you used in this course has a **Qwiic connector** built into the board — the small connector near the corner labeled "QWIIC." This is a standardized I2C connector system developed by SparkFun (called **Qwiic**) and adopted by Adafruit under the name **Stemma QT**. The two are fully compatible — same connector, same pinout, same cables.
+
+Instead of wiring SDA, SCL, power, and ground to a breadboard, you just plug in a small cable and the sensor is connected. You can also daisy-chain multiple sensors together on the same cable. This eliminates most wiring mistakes and makes it fast to try new sensors.
+
+Both SparkFun and Adafruit sell large catalogs of Qwiic / Stemma QT compatible boards:
+
+- [SparkFun Qwiic Ecosystem](https://www.sparkfun.com/qwiic) — accelerometers, environmental sensors, OLED displays, GPS modules, motor drivers, and more. Each product page includes an Arduino library and hookup guide.
+- [Adafruit Stemma QT Sensors](https://www.adafruit.com/category/1005) — similar range of I2C sensors and breakouts. Adafruit's learn guides walk through wiring, library installation, and example code for each board.
+
+If you want to explore new sensors with minimal wiring, start here. Pick a Qwiic/Stemma QT sensor, plug it into your R4 WiFi, install the library, and run the example sketch.
 
 ---
 
