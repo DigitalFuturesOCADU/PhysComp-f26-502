@@ -20,6 +20,38 @@ These are not project-specific skills. They transfer directly to any physical co
 
 ---
 
+## Ways to Interact with Your Arduino
+
+Throughout this course you used your Arduino in a few different modes without necessarily thinking of them as separate categories. But it is worth stepping back and recognizing what they are, because each one opens up a different kind of project.
+
+### Standalone / Mobile / Wearable
+
+This is how you used your Arduino in Projects 2 and 3 — powered by a battery or USB power bank, running its own code, with no computer attached. In this mode the Arduino is a self-contained device. It reads its sensors, makes decisions, and drives its outputs on its own. This is the foundation for portable instruments, wearable interactions, kinetic sculptures, and installations that need to run unattended.
+
+### Bluetooth
+
+In Project 1 you used the Arduino's built-in Bluetooth to connect to the Pong game running in a browser. That same Bluetooth connection can talk to any website or app that supports [Web Bluetooth](https://developer.mozilla.org/en-US/docs/Web/API/Web_Bluetooth_API). This means you can build a custom web page on your computer or phone that sends and receives data from your Arduino wirelessly. The Arduino becomes a wireless controller, sensor hub, or remote display — and the interface is whatever you design in the browser.
+
+### WiFi
+
+You did not do a WiFi project in this course, but your Arduino UNO R4 WiFi has full WiFi capability. You probably already have IoT or "smart" devices in your home — lights, plugs, sensors that connect to your network. You can build your own. With WiFi, your Arduino can serve a web page, send data to a cloud service, respond to requests from other devices on your network, or trigger actions based on information from the internet. This is the starting point for connected devices and home automation projects.
+
+### USB (Live Communication with Your Computer)
+
+You used the USB connection to upload code and read data in the Serial Monitor. But USB can also be a live two-way link between your Arduino and software running on your computer. Instead of just printing values to watch them, your Arduino can send and receive data in real time — acting as a custom input device, a sensor bridge, or a physical controller for software.
+
+This opens up a wide range of possibilities:
+
+- **[TouchDesigner](https://derivative.ca/)** — send sensor data from your Arduino to drive real-time visuals, projections, and interactive installations
+- **[Unity](https://unity.com/)** — use physical inputs to control game objects, or drive LEDs and motors based on events in a game or simulation
+- **[Processing](https://processing.org/)** — read Arduino sensor data directly into Processing sketches for visualization, sound, or interaction design
+- **Python** — use libraries like [pySerial](https://pyserial.readthedocs.io/) to read and write serial data from Python scripts, useful for data logging, automation, or connecting to machine learning tools
+- **[p5.js](https://p5js.org/) + [WebSerial](https://developer.mozilla.org/en-US/docs/Web/API/Web_Serial_API)** — if you are interested in web programming, WebSerial lets a browser-based p5.js sketch communicate directly with your Arduino over USB, no server needed
+
+In every case the pattern is the same: the Arduino sends and receives data over Serial, and the software on the other end reads and writes to that same serial connection. The code on both sides is straightforward once you understand the basics.
+
+---
+
 ## Where to Go from Here
 
 ### Learn More Arduino
